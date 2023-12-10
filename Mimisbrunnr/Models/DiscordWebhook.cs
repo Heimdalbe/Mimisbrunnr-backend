@@ -1,7 +1,9 @@
 ﻿namespace Mimisbrunnr.Models
 {
-    public class DiscordWebhooks: ModelBase
+    public class DiscordWebhook: ModelBase
     {
         public string Hook { get; set; }
+
+        public DiscordWebhook() { }
     }
 }

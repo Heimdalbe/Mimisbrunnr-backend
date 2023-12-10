@@ -1,7 +1,8 @@
 ﻿using Hangfire;
-using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using Mimisbrunnr.Data;
+using Mimisbrunnr.Services.Instances;
+using Mimisbrunnr.Services.Interfaces;
 
 namespace Mimisbrunnr
 {
@@ -29,6 +30,8 @@ namespace Mimisbrunnr
             });
             services.AddHangfireServer();
 
+            services.AddScoped<IJobService, JobService>();
+            services.AddScoped<IEventService, EventService>();
 
             services.AddScoped<DataInit>();
 

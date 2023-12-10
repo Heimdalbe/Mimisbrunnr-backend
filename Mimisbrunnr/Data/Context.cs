@@ -6,6 +6,15 @@ namespace Mimisbrunnr.Data
 {
     public class Context : IdentityDbContext
     {
+        public DbSet<CmsPage> CmsPage { get; set; }
+        public DbSet<Album> Album { get; set; }
+        public DbSet<Picture> Picture { get; set; }
+        public DbSet<PraesidiumFunction> PraesidiumFunction { get; set; }
+        public DbSet<PraesidiumMember> PraesidiumMember { get; set; }
+        public DbSet<PraesidiumYear> PraesidiumYear { get; set; }
+        public DbSet<Event> Event { get; set; }
+        public DbSet<DiscordWebhook> Webhooks { get; set; }
+
         public Context(DbContextOptions options) : base(options)
         {
         }
@@ -25,6 +34,7 @@ namespace Mimisbrunnr.Data
                 .HasOne(e => e.Owner)
                 .WithMany()
                 ;
+            mb.Entity<DiscordWebhook>();
         }
     }
 }
