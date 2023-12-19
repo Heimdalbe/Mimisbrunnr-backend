@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Mimisbrunnr.Data;
 using Mimisbrunnr.Services.Instances;
 using Mimisbrunnr.Services.Interfaces;
+using System.Runtime.InteropServices;
 
 namespace Mimisbrunnr
 {
@@ -20,10 +21,15 @@ namespace Mimisbrunnr
         {
             services.AddDbContext<Context>(options =>
             {
-                options.UseSqlServer(Configuration.GetConnectionString("Context")).LogTo(Console.WriteLine, LogLevel.Information);
+                if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+                    options.UseSqlite(Configuration.GetConnectionString("DatabaseFile"));
+                else
+                    options.UseSqlServer(Configuration.GetConnectionString("Context")).LogTo(Console.WriteLine, LogLevel.Information);
+
             });
 
-            services.AddHangfire(config => {
+            services.AddHangfire(config =>
+            {
                 config.UseSimpleAssemblyNameTypeSerializer()
                 .UseRecommendedSerializerSettings()
                 .UseSqlServerStorage(Configuration.GetConnectionString("Hangfire"));
@@ -55,13 +61,13 @@ namespace Mimisbrunnr
             app.UseHttpsRedirection();
 
             app.UseRouting();
-            
+
             app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseSwagger();
             app.UseSwaggerUI();
-     
+
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
