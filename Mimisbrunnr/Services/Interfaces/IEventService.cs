@@ -9,5 +9,6 @@ namespace Mimisbrunnr.Services.Interfaces
         public Task<Guid> CreateUpdateEvent(CreateUpdateEventRequest request);
         public Task<List<EventListItem>> GetAll();
         public Task<EventDetailItem> Get(Guid guid);
+        public Task Delete(Guid guid);
     }
 }

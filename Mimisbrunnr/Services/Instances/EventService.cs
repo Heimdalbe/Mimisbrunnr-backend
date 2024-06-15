@@ -58,6 +58,13 @@ namespace Mimisbrunnr.Services.Instances
             return new EventDetailItemMapper().EventToEventDetailItem(_event);
         }
 
+        public async Task Delete(Guid guid)
+        {
+            var _event = await _context.Event.SingleAsync(e => e.Guid == guid);
+            _context.Event.Remove(_event);
+            await _context.SaveChangesAsync();
+        }
+
         #region Privs
 
         private async Task<bool> UpdateJobIfNeeded(CreateUpdateEventRequest request, Event @event)

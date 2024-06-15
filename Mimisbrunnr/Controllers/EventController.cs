@@ -48,5 +48,11 @@ namespace Mimisbrunnr.Controllers
         {
             return await _service.Get(eventGuid);
         }
+
+        [HttpDelete("{guid:guid}")]
+        public async Task Delete(Guid guid)
+        {
+            await _service.Delete(guid);
+        }
     }
 }
