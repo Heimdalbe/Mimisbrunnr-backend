@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Mimisbrunnr.Contracts.DTO;
+using Mimisbrunnr.Contracts.Requests;
+using Mimisbrunnr.Contracts.Responses;
 using Mimisbrunnr.Data;
 using Mimisbrunnr.Mappers;
 using Mimisbrunnr.Models;
@@ -23,7 +24,7 @@ namespace Mimisbrunnr.Services.Instances
             // Create
             if (!request.Guid.HasValue)
             {
-                var mappedEvent = new EventMapper().CreateUpdateEventRequestToEvent(request);
+                var mappedEvent = new CreateUpdateEventMapper().CreateUpdateEventRequestToEvent(request);
                 var guid = Guid.NewGuid();
                 mappedEvent.Guid = guid;
                 var owner = await _context.PraesidiumMember.SingleOrDefaultAsync(p => p.Guid == request.OwnerGuid);
@@ -43,6 +44,21 @@ namespace Mimisbrunnr.Services.Instances
             await _context.SaveChangesAsync();
             return @event.Guid;
         }
+
+        public async Task<List<EventListItem>> GetAll()
+        {
+            var events = await _context.Event.AsNoTracking().OrderBy(e => e.StartDate).ToListAsync();
+            var mapper = new EventListItemMapper();
+            return events.Select(mapper.EventToEventListItem).ToList();
+        }
+
+        public async Task<EventDetailItem> Get(Guid guid)
+        {
+            var _event = await _context.Event.SingleOrDefaultAsync(e => e.Guid == guid) ?? throw new ArgumentException($"Event with Guid ");
+            return new EventDetailItemMapper().EventToEventDetailItem(_event);
+        }
+
+        #region Privs
 
         private async Task<bool> UpdateJobIfNeeded(CreateUpdateEventRequest request, Event @event)
         {
@@ -81,8 +97,11 @@ namespace Mimisbrunnr.Services.Instances
             @event.Intro = request.Intro;
             @event.VisibilityDate = request.VisibilityDate ?? DateTime.Now;
             @event.Owner = await _context.PraesidiumMember.SingleOrDefaultAsync(p => p.Guid == request.Guid);
+            @event.Location = request.Location;
 
             return @event;
         }
+
+        #endregion
     }
 }

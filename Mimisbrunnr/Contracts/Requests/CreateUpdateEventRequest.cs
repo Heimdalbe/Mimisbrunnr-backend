@@ -1,6 +1,6 @@
 ﻿using Mimisbrunnr.Models.Constants;
 
-namespace Mimisbrunnr.Contracts.DTO
+namespace Mimisbrunnr.Contracts.Requests
 {
     public class CreateUpdateEventRequest
     {
@@ -49,6 +49,10 @@ namespace Mimisbrunnr.Contracts.DTO
         /// Person that is responsible for the Event. Easy access for contact or administration. Optional.
         /// </summary>
         public Guid? OwnerGuid { get; set; }
+        /// <summary>
+        /// Location of the Event
+        /// </summary>
+        public string Location { get; set; }
     }
 
     public class PostToDiscordSettings

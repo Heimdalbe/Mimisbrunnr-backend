@@ -40,9 +40,25 @@ namespace Mimisbrunnr.Data
             var dbYear = await _context.PraesidiumYear.SingleAsync();
             var dbFunc = await _context.PraesidiumFunction.SingleAsync();
 
-            var member = new PraesidiumMember { Guid = _memberGuid, Function = dbFunc, Year = dbYear, PictureUrl = "" };
+            var member = new PraesidiumMember { Guid = _memberGuid, Function = dbFunc, Year = dbYear, PictureUrl = "", Name = "Test" };
             _context.PraesidiumMember.Add(member);
             await _context.SaveChangesAsync();
+
+            var _event = new Event
+            {
+                Description = "Test",
+                Name = "Test",
+                Guid = Guid.NewGuid(),
+                Intro = "Test",
+                EndDate = DateTime.Now.AddDays(1).AddMinutes(10),
+                StartDate = DateTime.Now.AddDays(1),
+                Location = "Test",
+                Owner = member,
+                Type = Models.Constants.EventType.None,
+                BannerUrl = "Test",
+            };
+            _context.Event.Add(_event);
+            await  _context.SaveChangesAsync();
         }
     }
 }

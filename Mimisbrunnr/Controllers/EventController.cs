@@ -1,9 +1,13 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Mimisbrunnr.Contracts.DTO;
+using Mimisbrunnr.Contracts.Requests;
+using Mimisbrunnr.Contracts.Responses;
 using Mimisbrunnr.Services.Interfaces;
 
 namespace Mimisbrunnr.Controllers
 {
+    /// <summary>
+    /// REST controller for Events
+    /// </summary>
     [Route("api/[controller]")]
     [ApiController]
     public class EventController : ControllerBase
@@ -22,8 +26,27 @@ namespace Mimisbrunnr.Controllers
         /// <returns>Guid of the Event</returns>
         [HttpPost]
         [Route("Post")]
-        public Task<Guid> Post([FromBody] CreateUpdateEventRequest request) {
+        public Task<Guid> Post([FromBody] CreateUpdateEventRequest request)
+        {
             return _service.CreateUpdateEvent(request);
+        }
+
+        /// <summary>
+        /// Returns a list of all Events, past and present. Ordered by StartDate.
+        /// </summary>
+        /// <returns>List of Events, minimal data for overview</returns>
+        [HttpGet]
+        [Route("GetAll")]
+        public async Task<List<EventListItem>> GetAll()
+        {
+            return await _service.GetAll();
+        }
+
+        [HttpGet]
+        [Route("Get")]
+        public async Task<EventDetailItem> Get([FromQuery] Guid eventGuid)
+        {
+            return await _service.Get(eventGuid);
         }
     }
 }

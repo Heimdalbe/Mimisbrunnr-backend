@@ -1,9 +1,11 @@
 ﻿using Mimisbrunnr.Models.Constants;
+using Mimisbrunnr.Models;
 
-namespace Mimisbrunnr.Models
+namespace Mimisbrunnr.Contracts.Responses
 {
-    public class Event: ModelBase
+    public class EventDetailItem
     {
+        public Guid Guid { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
         public string Name { get; set; }
@@ -14,19 +16,13 @@ namespace Mimisbrunnr.Models
         public DateTime VisibilityDate { get; set; }
         public string Location { get; set; }
 
-        /// <summary>
-        /// If this event has already been scheduled, this will be filled in and is used to retrieve the job if a reschedule is needed
-        /// </summary>
-        public string? JobId { get; set; }
         public DateTime? PostToDiscordDate { get; set; }
         public bool IsPostedToDiscord { get; set; }
         public DiscordWebhook? DiscordWebhook { get; set; }
         public int? DiscordWebhookId { get; set; }
-        public string? DiscordDescription {  get; set; }
+        public string? DiscordDescription { get; set; }
 
-        public PraesidiumMember? Owner { get; set; }
-        public int? OwnerId { get; set; }
-
-        public Event() { }
+        public string? OwnerName { get; set; }
+        public Guid? OwnerGuid { get; set; }
     }
 }
