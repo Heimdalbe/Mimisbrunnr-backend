@@ -1,4 +1,4 @@
-namespace Mimmisbrunnr_backend
+namespace Mimmisbrunnr.Api
 {
     public class WeatherForecast
     {

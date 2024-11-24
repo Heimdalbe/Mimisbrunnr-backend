@@ -1,9 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.12.35514.174 d17.12
+VisualStudioVersion = 17.12.35514.174
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mimmisbrunnr-backend", "Mimmisbrunnr-backend\Mimmisbrunnr-backend.csproj", "{F67BDA86-C351-42F5-A2B0-D75E84D6BB93}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mimmisbrunnr.Api", "Mimmisbrunnr-backend\Mimmisbrunnr.Api.csproj", "{F67BDA86-C351-42F5-A2B0-D75E84D6BB93}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Domain", "Domain", "{D8143FB9-B960-438C-BE44-3153C50B972D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mimmisbrunnr.Domain", "Mimmisbrunnr.Domain\Mimmisbrunnr.Domain.csproj", "{0C881A0A-9ABF-4BD5-B440-1CAF2045D0AD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,8 +19,15 @@ Global
 		{F67BDA86-C351-42F5-A2B0-D75E84D6BB93}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F67BDA86-C351-42F5-A2B0-D75E84D6BB93}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F67BDA86-C351-42F5-A2B0-D75E84D6BB93}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0C881A0A-9ABF-4BD5-B440-1CAF2045D0AD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0C881A0A-9ABF-4BD5-B440-1CAF2045D0AD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0C881A0A-9ABF-4BD5-B440-1CAF2045D0AD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0C881A0A-9ABF-4BD5-B440-1CAF2045D0AD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{0C881A0A-9ABF-4BD5-B440-1CAF2045D0AD} = {D8143FB9-B960-438C-BE44-3153C50B972D}
 	EndGlobalSection
 EndGlobal
