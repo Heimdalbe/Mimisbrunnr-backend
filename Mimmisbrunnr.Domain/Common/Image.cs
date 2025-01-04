@@ -10,6 +10,7 @@ namespace Mimmisbrunnr.Domain.Common
     public class Image
     {
         #region Fields
+        private Guid _id;
         private string _url;
         #endregion
 
