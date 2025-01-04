@@ -47,5 +47,35 @@ namespace Mimmisbrunnr.Domain.Tests.Common
             Assert.IsType<Image>(image);
             Assert.IsType<Image>(imageWithOnlyUrl);
         }
+
+        [Theory]
+        [InlineData(null)]
+        public void Image_SetDescription_ShouldThrow(string description)
+        {
+            // Arrange
+            Image image;
+
+            // Act
+            image = new Image("https://heimdal.be");
+
+            // Assert
+            Assert.Throws<ArgumentNullException>(() => image.Description = description);
+        }
+
+        [Theory]
+        [InlineData("")]
+        [InlineData("This is a description")]
+        public void Image_SetDescription_ShouldNotThrow(string description)
+        {
+            // Arrange
+            Image image;
+
+            // Act
+            image = new Image("https://heimdal.be");
+            image.Description = description;
+
+            // Assert
+            Assert.Equal(description, image.Description);
+        }
     }
 }
