@@ -27,6 +27,7 @@ namespace Mimmisbrunnr.Domain.Tests.Common
         {
             // Assert
             Assert.Throws<ArgumentException>(() => new Image(url, description));
+            Assert.Throws<ArgumentException>(() => new Image(url));
         }
 
         [Theory]
@@ -36,12 +37,15 @@ namespace Mimmisbrunnr.Domain.Tests.Common
         {
             // Arrange
             Image image;
+            Image imageWithOnlyUrl;
 
             // Act
             image = new Image(url, description);
+            imageWithOnlyUrl = new Image(url);
 
             // Assert
             Assert.IsType<Image>(image);
+            Assert.IsType<Image>(imageWithOnlyUrl);
         }
     }
 }
