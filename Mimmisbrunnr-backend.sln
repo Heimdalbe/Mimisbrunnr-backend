@@ -9,6 +9,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Domain", "Domain", "{D8143F
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mimmisbrunnr.Domain", "Mimmisbrunnr.Domain\Mimmisbrunnr.Domain.csproj", "{0C881A0A-9ABF-4BD5-B440-1CAF2045D0AD}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mimmisbrunnr.Domain.Tests", "Mimmisbrunnr.Domain.Tests\Mimmisbrunnr.Domain.Tests.csproj", "{31DED4A8-5B4D-4CA8-871A-85E28ED50BDD}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -23,11 +25,16 @@ Global
 		{0C881A0A-9ABF-4BD5-B440-1CAF2045D0AD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0C881A0A-9ABF-4BD5-B440-1CAF2045D0AD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0C881A0A-9ABF-4BD5-B440-1CAF2045D0AD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{31DED4A8-5B4D-4CA8-871A-85E28ED50BDD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{31DED4A8-5B4D-4CA8-871A-85E28ED50BDD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{31DED4A8-5B4D-4CA8-871A-85E28ED50BDD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{31DED4A8-5B4D-4CA8-871A-85E28ED50BDD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{0C881A0A-9ABF-4BD5-B440-1CAF2045D0AD} = {D8143FB9-B960-438C-BE44-3153C50B972D}
+		{31DED4A8-5B4D-4CA8-871A-85E28ED50BDD} = {D8143FB9-B960-438C-BE44-3153C50B972D}
 	EndGlobalSection
 EndGlobal
