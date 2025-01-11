@@ -20,6 +20,8 @@ namespace Mimmisbrunnr.Domain.Event
 
         private string _city;
         public string City { get => _city; set => _city = value; }
+
+        public ICollection<Event> Events { get; set; }
         #endregion
 
         public Location(string title, string address, string city) { 
