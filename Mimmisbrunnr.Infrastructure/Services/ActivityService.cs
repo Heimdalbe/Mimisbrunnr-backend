@@ -48,9 +48,19 @@ namespace Mimmisbrunnr.Infrastructure.Services
                     .ToListAsync();
         }
 
-        public Task<Activity> GetById(long id)
+        public async Task<Activity> GetByIdAsync(long id)
         {
-            throw new NotImplementedException();
+            var activity = await _activityStoreContext.Events
+                .Include(activity => activity.Location)
+                .Include(activity => activity.Banner)
+                .FirstOrDefaultAsync(activity => activity.Id == id);
+
+            if(activity == null)
+            {
+                throw new EntityNotFoundException($"Could not find Activity with Id: {id}");
+            }
+
+            return activity;
         }
 
         public Task<Activity> Update(long id, Activity DTO)

@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Mimmisbrunnr.Api.DTOs.Activities;
 using Mimmisbrunnr.Domain.Activities;
 using Mimmisbrunnr.Infrastructure.Context;
+using Mimmisbrunnr.Infrastructure.Exceptions;
 using Mimmisbrunnr.Infrastructure.Services;
 using Mimmisbrunnr.Infrastructure.Services.Interfaces;
 
@@ -50,9 +51,17 @@ namespace Mimmisbrunnr.Api.Controllers
 
         // GET api/<EventController>/5
         [HttpGet("{id}")]
-        public string Get(int id)
+        public async Task<IActionResult> Get(int id)
         {
-            return "value";
+            try
+            {
+                var activity = await _service.GetByIdAsync(id);
+                return Ok(activity);
+            } 
+            catch (EntityNotFoundException ex)
+            {
+                return NotFound(ex.InnerException.Message);
+            }
         }
 
         // POST api/<EventController>

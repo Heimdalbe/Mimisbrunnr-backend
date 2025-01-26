@@ -12,7 +12,7 @@ namespace Mimmisbrunnr.Infrastructure.Services.Interfaces
         // COMMON GET METHODS
         public Task<IEnumerable<Activity>> GetAllAsync();
         public Task<IEnumerable<Activity>> GetOverviewAsync(int amount);
-        public Task<Activity> GetById(long id);
+        public Task<Activity> GetByIdAsync(long id);
 
         public Task<Activity> Update(long id, Activity DTO);
 
