@@ -13,9 +13,8 @@ namespace Mimmisbrunnr.Infrastructure.Services.Interfaces
         public Task<IEnumerable<Activity>> GetAllAsync();
         public Task<IEnumerable<Activity>> GetOverviewAsync(int amount);
         public Task<Activity> GetByIdAsync(long id);
-
+        public Task<Activity> CreateAsync(Activity activity);
         public Task<Activity> Update(long id, Activity DTO);
-
         public Task<Activity> DeleteAsync(long id);
     }
 }

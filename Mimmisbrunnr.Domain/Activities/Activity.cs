@@ -63,6 +63,8 @@ namespace Mimmisbrunnr.Domain.Activities
 
         //TODO: Add price object containing price for heimies and non-heimies
         #region Constructors
+        protected Activity() { }
+
         public Activity(string name, 
             string description, 
             DateTime start, 

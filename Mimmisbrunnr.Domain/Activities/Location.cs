@@ -24,10 +24,14 @@ namespace Mimmisbrunnr.Domain.Activities
         public ICollection<Activity> Events { get; set; }
         #endregion
 
+        #region Constructors
+        public Location() { }
+
         public Location(string title, string address, string city) { 
             _title = Guard.Against.NullOrWhiteSpace(title, nameof(title));
             _address = Guard.Against.NullOrWhiteSpace(address, nameof(address));
             _city = Guard.Against.NullOrWhiteSpace(city, nameof(city));
         }
+        #endregion
     }
 }

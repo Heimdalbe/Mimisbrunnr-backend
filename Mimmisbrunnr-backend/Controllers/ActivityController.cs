@@ -29,7 +29,7 @@ namespace Mimmisbrunnr.Api.Controllers
             return await _service.GetAllAsync();
         }
 
-        [HttpGet]
+        [HttpGet("Overview")]
         public async Task<IEnumerable<ActivityOverviewDTO>> GetOverview(int amount)
         {
             var activities = await _service.GetOverviewAsync(amount);
@@ -66,8 +66,19 @@ namespace Mimmisbrunnr.Api.Controllers
 
         // POST api/<EventController>
         [HttpPost]
-        public void Post([FromBody] Activity newEvent)
+        [ProducesResponseType(typeof(Activity), StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> Post([FromBody] Activity newEvent)
         {
+            try
+            {
+                var activity = await _service.CreateAsync(newEvent);
+                return CreatedAtAction(nameof(Post), new { id = activity.Id }, activity);
+            } 
+            catch (Exception ex)
+            {
+                return BadRequest();
+            }
         }
 
         // PUT api/<EventController>/5

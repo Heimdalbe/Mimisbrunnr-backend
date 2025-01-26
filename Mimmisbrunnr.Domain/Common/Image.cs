@@ -23,6 +23,8 @@ namespace Mimmisbrunnr.Domain.Common
         #endregion
 
         #region Constructors
+        protected Image() { }
+
         public Image(string url, string description) : this(url)
         {
             Description = description;

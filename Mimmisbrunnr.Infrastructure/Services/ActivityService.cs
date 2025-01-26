@@ -63,6 +63,14 @@ namespace Mimmisbrunnr.Infrastructure.Services
             return activity;
         }
 
+        public async Task<Activity> CreateAsync(Activity activity)
+        {
+            await _activityStoreContext.Events.AddAsync(activity);
+            await _activityStoreContext.SaveChangesAsync();
+
+            return activity;
+        }
+
         public Task<Activity> Update(long id, Activity DTO)
         {
             throw new NotImplementedException();
