@@ -11,7 +11,7 @@ namespace Mimmisbrunnr.Domain.Activities
     public class Location : Entity
     {
         #region Fields
-        private string _title;
+        public string Title { get; protected set; }
         #endregion
 
         #region Properties
@@ -28,7 +28,7 @@ namespace Mimmisbrunnr.Domain.Activities
         public Location() { }
 
         public Location(string title, string address, string city) { 
-            _title = Guard.Against.NullOrWhiteSpace(title, nameof(title));
+            Title = Guard.Against.NullOrWhiteSpace(title, nameof(title));
             _address = Guard.Against.NullOrWhiteSpace(address, nameof(address));
             _city = Guard.Against.NullOrWhiteSpace(city, nameof(city));
         }

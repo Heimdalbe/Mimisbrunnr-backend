@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Mimmisbrunnr.Api.DTOs.Activities;
 using Mimmisbrunnr.Domain.Activities;
+using Mimmisbrunnr.Domain.Common;
 using Mimmisbrunnr.Infrastructure.Context;
 using Mimmisbrunnr.Infrastructure.Exceptions;
 using Mimmisbrunnr.Infrastructure.Services;
@@ -68,11 +69,21 @@ namespace Mimmisbrunnr.Api.Controllers
         [HttpPost]
         [ProducesResponseType(typeof(Activity), StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> Post([FromBody] Activity newEvent)
+        public async Task<IActionResult> Post([FromBody] ActivityCreateDTO activityToCreate)
         {
             try
             {
-                var activity = await _service.CreateAsync(newEvent);
+                var newActivity = new Activity(
+                        activityToCreate.Name,
+                        activityToCreate.Description,
+                        activityToCreate.Start,
+                        activityToCreate.End,
+                        new Image(activityToCreate.Banner.Url, activityToCreate.Banner.Description),
+                        new Location(activityToCreate.Location.Title, activityToCreate.Location.Address, activityToCreate.Location.City),
+                        activityToCreate.Category,
+                        activityToCreate.Accessibility
+                    );
+                var activity = await _service.CreateAsync(newActivity);
                 return CreatedAtAction(nameof(Post), new { id = activity.Id }, activity);
             } 
             catch (Exception ex)

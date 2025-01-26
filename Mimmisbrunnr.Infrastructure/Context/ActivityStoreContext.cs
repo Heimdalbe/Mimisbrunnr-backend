@@ -21,7 +21,8 @@ namespace Mimmisbrunnr.Infrastructure.Context
 
             modelBuilder.Entity<Activity>()
                 .HasOne(e => e.Location)
-                .WithMany(l => l.Events);
+                .WithMany()
+                .IsRequired(false);
         }
     }
 }

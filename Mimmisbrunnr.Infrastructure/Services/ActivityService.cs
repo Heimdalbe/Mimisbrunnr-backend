@@ -65,7 +65,7 @@ namespace Mimmisbrunnr.Infrastructure.Services
 
         public async Task<Activity> CreateAsync(Activity activity)
         {
-            await _activityStoreContext.Events.AddAsync(activity);
+            _activityStoreContext.Events.Add(activity);
             await _activityStoreContext.SaveChangesAsync();
 
             return activity;

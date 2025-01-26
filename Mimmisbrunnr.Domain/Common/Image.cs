@@ -25,7 +25,7 @@ namespace Mimmisbrunnr.Domain.Common
         #region Constructors
         protected Image() { }
 
-        public Image(string url, string description) : this(url)
+        public Image(string url, string? description) : this(url)
         {
             Description = description;
         }
