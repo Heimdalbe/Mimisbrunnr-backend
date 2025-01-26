@@ -24,7 +24,11 @@ namespace Mimmisbrunnr.Infrastructure.Services
 
         public async Task<IEnumerable<Activity>> GetAllAsync()
         {
-            return await _activityStoreContext.Events.Include(e => e.Location).ToListAsync();
+            return await _activityStoreContext.Events
+                .Where(activity => !activity.IsDeleted)
+                .Include(activity => activity.Location)
+                .Include(activity => activity.Banner)
+                .ToListAsync();
         }
 
         public async Task<IEnumerable<Activity>> GetOverviewAsync(int amount)
