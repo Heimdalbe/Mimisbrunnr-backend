@@ -1,18 +1,22 @@
 ﻿using Ardalis.GuardClauses;
+using Mimmisbrunnr.Domain.Base;
 using Mimmisbrunnr.Domain.Common;
 
-namespace Mimmisbrunnr.Domain.Event
+namespace Mimmisbrunnr.Domain.Activities
 {
-    public class Event
+    public class Activity : Entity
     {
         #region Fields
-        private Guid _id;
-        private Category _category;
-        private Accessibility _accessibility;
+        public Category Category { get; protected set; }
+        public Accessibility Accessibility { get; protected set; }
         #endregion
 
         #region Properties
         private string _name;
+        /// <summary>
+        /// The name of the event
+        /// </summary>
+        /// <example>Karakoe</example>
         public string Name { 
             get => _name; 
             set => _name = Guard.Against.NullOrWhiteSpace(value, nameof(Name)); 
@@ -57,8 +61,9 @@ namespace Mimmisbrunnr.Domain.Event
         }
         #endregion
 
+        //TODO: Add price object containing price for heimies and non-heimies
         #region Constructors
-        public Event(string name, 
+        public Activity(string name, 
             string description, 
             DateTime start, 
             DateTime end, 
@@ -73,8 +78,10 @@ namespace Mimmisbrunnr.Domain.Event
             End = end;
             Banner = banner;
             Location = location;
-            _category = Guard.Against.EnumOutOfRange(category, nameof(category));
-            _accessibility = Guard.Against.EnumOutOfRange(accessibility, nameof(accessibility));
+            Category = Guard.Against.EnumOutOfRange(category, nameof(category));
+            Accessibility = Guard.Against.EnumOutOfRange(accessibility, nameof(accessibility));
+            TimeCreated = DateTime.UtcNow;
+            TimeUpdated = DateTime.UtcNow;
         }
 
         #endregion

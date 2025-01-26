@@ -1,4 +1,5 @@
 ﻿using Ardalis.GuardClauses;
+using Mimmisbrunnr.Domain.Base;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,11 +8,10 @@ using System.Threading.Tasks;
 
 namespace Mimmisbrunnr.Domain.Common
 {
-    public class Image
+    public class Image : Entity
     {
         #region Fields
-        private Guid _id;
-        private string _url;
+        public string Url { get; protected set; }
         #endregion
 
         #region Properties
@@ -31,7 +31,7 @@ namespace Mimmisbrunnr.Domain.Common
         public Image(string url)
         {
             Guard.Against.NullOrWhiteSpace(url, nameof(url));
-            _url = Guard.Against.Url(url, nameof(url));
+            Url = Guard.Against.Url(url, nameof(url));
         }
         #endregion
     }

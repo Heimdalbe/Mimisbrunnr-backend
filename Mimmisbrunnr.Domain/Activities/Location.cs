@@ -1,16 +1,16 @@
 ﻿using Ardalis.GuardClauses;
+using Mimmisbrunnr.Domain.Base;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Mimmisbrunnr.Domain.Event
+namespace Mimmisbrunnr.Domain.Activities
 {
-    public class Location
+    public class Location : Entity
     {
         #region Fields
-        private Guid _id;
         private string _title;
         #endregion
 
@@ -21,7 +21,7 @@ namespace Mimmisbrunnr.Domain.Event
         private string _city;
         public string City { get => _city; set => _city = value; }
 
-        public ICollection<Event> Events { get; set; }
+        public ICollection<Activity> Events { get; set; }
         #endregion
 
         public Location(string title, string address, string city) { 
