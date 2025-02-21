@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
 using Xunit.Sdk;
@@ -66,6 +67,50 @@ namespace Mimmisbrunnr.Domain.Tests.Activities
             Assert.Throws<ArgumentException>(() => location.City = city);
         }
 
+
+        [Theory]
+        [InlineData("Koning Albertlaan")]
+        [InlineData("Kuisstraat")]
+        public void Location_SetAddress_ShouldNotThrow(string address)
+        {
+            //Arrange
+            Location location;
+
+            //Act
+            location = new Location("Comic Sans", "Meerstraat", "9000 Gent");
+            location.Address = address;
+
+            //Assert
+            Assert.Equal(address, location.Address);
+        }
+
+        [Theory]
+        [InlineData(null)]
+        public void Location_SetAddressWithNull_ShouldThrow(string address)
+        {
+            //Arrange
+            Location location;
+
+            //Act
+            location = new Location("Comic Sans", "Meerstraat", "9000 Gent");
+
+            //Assert
+            Assert.Throws<ArgumentNullException>(() => location.Address = address);
+        }
+
+        [Theory]
+        [InlineData("")]
+        public void Location_SetAddressWithEmptyAddress_ShouldThrow(string address)
+        {
+            //Arrange
+            Location location;
+
+            //Act
+            location = new Location("Comic Sans", "Meerstraat", "9000 Gent");
+
+            //Assert
+            Assert.Throws<ArgumentException>(() => location.Address = address);
+        }
 
     }
 }
