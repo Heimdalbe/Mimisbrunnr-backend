@@ -10,7 +10,7 @@ namespace Mimmisbrunnr.Domain.Tests.Activities
 {
     public class LocationTests
     {
-        //
+        
         [Theory]
         [InlineData(null, null, null)]
         [InlineData(null, "Meerstraat", "9000 Gent")]
@@ -22,8 +22,49 @@ namespace Mimmisbrunnr.Domain.Tests.Activities
             Assert.Throws<ArgumentNullException>(() => new Location(title, address, city));
         }
 
+        [Theory]
+        [InlineData("Kortrijk")]
+        [InlineData("Antwerpen")]
+        public void Location_SetCity_ShouldNotThrow(string city)
+        {
+            //Arrange
+            Location location;
 
+            //Act
+            location = new Location("Comic Sans", "Meerstraat", "9000 Gent");
+            location.City = city;
 
+            //Assert
+            Assert.Equal(city, location.City);
+        }
+
+        [Theory]
+        [InlineData(null)]
+        public void Location_SetCityWithNull_ShouldThrow(string city)
+        {
+            //Arrange
+            Location location;
+
+            //Act
+            location = new Location("Comic Sans", "Meerstraat", "9000 Gent");
+
+            //Assert
+            Assert.Throws<ArgumentNullException>(() => location.City = city);
+        }
+
+        [Theory]
+        [InlineData("")]
+        public void Location_SetCityWithEmptyCity_ShouldThrow(string city)
+        {
+            //Arrange
+            Location location;
+
+            //Act
+            location = new Location("Comic Sans", "Meerstraat", "9000 Gent");
+
+            //Assert
+            Assert.Throws<ArgumentException>(() => location.City = city);
+        }
 
 
     }
