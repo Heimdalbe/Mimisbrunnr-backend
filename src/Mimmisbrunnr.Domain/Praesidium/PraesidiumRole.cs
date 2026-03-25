@@ -54,6 +54,10 @@ namespace Mimmisbrunnr.Domain.Praesidium
         Order = order;
     }
 
+    public PraesidiumRole(string name, string email, int order) : this(name, new MailAddress(email), order)
+    {
+    }
+    
     #endregion
 
     }

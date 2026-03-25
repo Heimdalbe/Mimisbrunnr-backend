@@ -12,7 +12,7 @@ internal class AlbumConfiguration : EntityConfiguration<Album>
         builder.Property(a => a.Name).HasMaxLength(100).IsRequired();
         builder.Property(a => a.Year).IsRequired();
         builder.Property(a => a.Description).HasMaxLength(500);
-
+        builder.Property(a => a.CoverImage);
         builder.HasMany(a => a.Images).WithOne();
     }
 }

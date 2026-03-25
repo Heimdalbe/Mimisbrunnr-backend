@@ -1,3 +1,4 @@
+using System.Net.Mail;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Mimmisbrunnr.Domain.Account;
 
@@ -11,6 +12,6 @@ internal class AccountConfiguration : EntityConfiguration<Account>
 
         builder.Property(a => a.AccountId).IsRequired();
         builder.Property(a => a.Name).HasMaxLength(50).IsRequired();
-        builder.Property(a => a.Email).HasMaxLength(100).IsRequired();
+        builder.Property(r => r.Email).HasConversion(m => m.Address, value => new MailAddress(value));
     }
 }

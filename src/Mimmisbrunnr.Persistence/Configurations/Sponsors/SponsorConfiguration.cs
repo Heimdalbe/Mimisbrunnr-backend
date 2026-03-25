@@ -14,6 +14,7 @@ internal class SponsorConfiguration : EntityConfiguration<Sponsor>
         builder.Property(s => s.Benefits).HasMaxLength(200);
         builder.Property(s => s.Website).HasMaxLength(100);
         builder.Property(s => s.Rank);
+        builder.Property(s => s.LanSponsorRank);
         
         builder.HasOne(s => s.Logo).WithMany();
         

@@ -11,7 +11,9 @@ namespace Mimmisbrunnr.Domain.Praesidium
     public class PraesidiumTerm : Entity
     {
         #region Fields
-            private PraesidiumMember _member;
+            private MemberDetails _memberDetails;
+            
+            private Image _image;
 
             private PraesidiumRole _role;
 
@@ -20,7 +22,9 @@ namespace Mimmisbrunnr.Domain.Praesidium
         #endregion
 
         #region Properties
-        public PraesidiumMember Member { get => _member; set => _member = Guard.Against.Null(value); }
+        public MemberDetails MemberDetails { get => _memberDetails; set => _memberDetails = Guard.Against.Null(value); }
+        
+        public Image Image { get => _image; set => _image = Guard.Against.Null(value); }
 
         public PraesidiumRole Role { get => _role; set => _role = Guard.Against.Null(value); }
 
@@ -29,9 +33,10 @@ namespace Mimmisbrunnr.Domain.Praesidium
         #endregion
 
         #region Constructors
-        public PraesidiumTerm(PraesidiumMember member, PraesidiumRole role,int year/*, PraesidiumYear year*/)
+        public PraesidiumTerm(MemberDetails memberDetails, Image image, PraesidiumRole role,int year/*, PraesidiumYear year*/)
         {
-            Member = member;
+            MemberDetails = memberDetails;
+            Image = image;
             Role = role;
             Year = year;
         }

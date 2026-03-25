@@ -4,9 +4,9 @@ using Mimmisbrunnr.Domain.Praesidium;
 
 namespace Mimmisbrunnr.Persistence.Configurations.Praesidium;
 
-internal class EventConfiguration : EntityConfiguration<PraesidiumMember>
+internal class MemberDetailsConfiguration : EntityConfiguration<MemberDetails>
 {
-    public override void Configure(EntityTypeBuilder<PraesidiumMember> builder)
+    public override void Configure(EntityTypeBuilder<MemberDetails> builder)
     {
         base.Configure(builder);
         
@@ -15,7 +15,6 @@ internal class EventConfiguration : EntityConfiguration<PraesidiumMember>
         builder.Property(p => p.Quote).HasMaxLength(200);
         builder.Property(p => p.Trivia).HasMaxLength(200);
 
-        builder.HasOne(p => p.Image).WithMany();
         builder.HasMany(p => p.Socials).WithOne();
     }
 }

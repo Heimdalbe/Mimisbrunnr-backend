@@ -7,6 +7,7 @@ public class Album : Entity
     #region Fields
     private string _name;
     private int _year;
+    private Image? _coverImage;
     private ICollection<Image> _images;
     private string _desciption;
     #endregion
@@ -28,6 +29,12 @@ public class Album : Entity
     {
         get { return _desciption; }
         set { _desciption = Guard.Against.Null(value); }
+    }
+
+    public Image? CoverImage
+    {
+        get { return _coverImage ?? _images.FirstOrDefault(); }
+        set { _coverImage = Guard.Against.Null(value); }
     }
 
     public ICollection<Image> Images
@@ -56,6 +63,10 @@ public class Album : Entity
         Year =  year;
         Description = desciption;
         Images = new List<Image>();
+    }
+    public Album(string name, int year, string desciption, Image coverImage) : this(name, year, desciption)
+    {
+        CoverImage = coverImage;
     }
     #endregion
 }

@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Mimmisbrunnr.Domain.Praesidium;
 
 namespace Mimmisbrunnr.Persistence;
 /// <summary>
@@ -15,6 +16,7 @@ public class DbSeeder(ApplicationDbContext dbContext, RoleManager<IdentityRole> 
     {
         await RolesAsync();
         await UsersAsync();
+        await PraesidiumRolesAsync();
     }
 
     private async Task RolesAsync()
@@ -39,54 +41,153 @@ public class DbSeeder(ApplicationDbContext dbContext, RoleManager<IdentityRole> 
         
         await dbContext.Roles.ToListAsync();
 
-        var admin = new IdentityUser
+        var praeses = new IdentityUser
         {
-            UserName = "admin@example.com",
-            Email = "admin@example.com",
+            UserName = "praeses@heimdal.be",
+            Email = "praeses@heimdal.be",
             EmailConfirmed = true,
         };
-        await userManager.CreateAsync(admin, PasswordDefault);
+        await userManager.CreateAsync(praeses, PasswordDefault);
+        await userManager.AddToRoleAsync(praeses, "Praesidium");
+        await userManager.AddToRoleAsync(praeses, "Hmdl");
         
-        var secretary = new IdentityUser
+        var vice_praeses = new IdentityUser
         {
-            UserName = "secretary@example.com",
-            Email = "secretary@example.com",
+            UserName = "vice-praeses@heimdal.be",
+            Email = "vice-praeses@heimdal.be",
             EmailConfirmed = true,
         };
-        await userManager.CreateAsync(secretary, PasswordDefault);
+        await userManager.CreateAsync(vice_praeses, PasswordDefault);
+        await userManager.AddToRoleAsync(praeses, "Praesidium");
+        await userManager.AddToRoleAsync(praeses, "Hmdl");
+
+        var quaestor = new IdentityUser
+        {
+            UserName = "quaestor@heimdal.be",
+            Email = "quaestor@heimdal.be",
+            EmailConfirmed = true,
+        };
+        await userManager.CreateAsync(quaestor, PasswordDefault);
+        await userManager.AddToRoleAsync(praeses, "Praesidium");
+
+        var secretaris = new IdentityUser
+        {
+            UserName = "secretaris@heimdal.be",
+            Email = "secretaris@heimdal.be",
+            EmailConfirmed = true,
+        };
+        await userManager.CreateAsync(secretaris, PasswordDefault);
+        await userManager.AddToRoleAsync(praeses, "Praesidium");
+
+        var pr = new IdentityUser
+        {
+            UserName = "pr@heimdal.be",
+            Email = "pr@heimdal.be",
+            EmailConfirmed = true,
+        };
+        await userManager.CreateAsync(pr, PasswordDefault);
+        await userManager.AddToRoleAsync(praeses, "Praesidium");
+        await userManager.AddToRoleAsync(praeses, "SponsorEditor");
+
+        var media = new IdentityUser
+        {
+            UserName = "media@heimdal.be",
+            Email = "media@heimdal.be",
+            EmailConfirmed = true,
+        };
+        await userManager.CreateAsync(media, PasswordDefault);
+        await userManager.AddToRoleAsync(praeses, "Praesidium");
+        await userManager.AddToRoleAsync(praeses, "MediaEditor");
+        await userManager.AddToRoleAsync(praeses, "EventEditor");
+
+        var schachtentemmer = new IdentityUser
+        {
+            UserName = "schachtentemmer@heimdal.be",
+            Email = "schachtentemmer@heimdal.be",
+            EmailConfirmed = true,
+        };
+        await userManager.CreateAsync(schachtentemmer, PasswordDefault);
+        await userManager.AddToRoleAsync(praeses, "Praesidium");
+        await userManager.AddToRoleAsync(praeses, "EventEditor");
+
+        var cultuur = new IdentityUser
+        {
+            UserName = "cultuur@heimdal.be",
+            Email = "cultuur@heimdal.be",
+            EmailConfirmed = true,
+        };
+        await userManager.CreateAsync(cultuur, PasswordDefault);
+        await userManager.AddToRoleAsync(praeses, "Praesidium");
+        await userManager.AddToRoleAsync(praeses, "EventEditor");
         
-        var technicianAccount1 = new IdentityUser
+        var sport = new IdentityUser
         {
-            UserName = "technician1@example.com",
-            Email = "technician1@example.com",
+            UserName = "sport@heimdal.be",
+            Email = "sport@heimdal.be",
             EmailConfirmed = true,
         };
-        await userManager.CreateAsync(technicianAccount1, PasswordDefault);
+        await userManager.CreateAsync(sport, PasswordDefault);
+        await userManager.AddToRoleAsync(praeses, "Praesidium");
+        await userManager.AddToRoleAsync(praeses, "EventEditor");
         
-        var technicianAccount2 = new IdentityUser
+        var feest_lan = new IdentityUser
         {
-            UserName = "technician2@example.com",
-            Email = "technician2@example.com",
+            UserName = "feest-lan@heimdal.be",
+            Email = "feest-lan@heimdal.be",
             EmailConfirmed = true,
         };
-        await userManager.CreateAsync(technicianAccount2, PasswordDefault);
-                
-        var user = new IdentityUser
-        {
-            UserName = "user@example.com",
-            Email = "user@example.com",
-            EmailConfirmed = true,
-        };
-        await userManager.CreateAsync(user, PasswordDefault);
+        await userManager.CreateAsync(feest_lan, PasswordDefault);
+        await userManager.AddToRoleAsync(praeses, "Praesidium");
+        await userManager.AddToRoleAsync(praeses, "EventEditor");
         
-        await userManager.AddToRoleAsync(admin, "Administrator");
-        await userManager.AddToRoleAsync(secretary, "Secretary");
-        await userManager.AddToRoleAsync(technicianAccount1, "Technician");
-        await userManager.AddToRoleAsync(technicianAccount2, "Technician");
+        var ict = new IdentityUser
+        {
+            UserName = "ict@heimdal.be",
+            Email = "ict@heimdal.be",
+            EmailConfirmed = true,
+        };
+        await userManager.CreateAsync(ict, PasswordDefault);
+        await userManager.AddToRoleAsync(praeses, "Praesidium");
+        await userManager.AddToRoleAsync(praeses, "Hmdl");
 
         await dbContext.SaveChangesAsync();
     }
-    
 
-    
+    private async Task PraesidiumRolesAsync()
+    {
+        var praeses = new PraesidiumRole("Praeses", "praeses@heimdal.be", 0);
+        await dbContext.PraesidiumRoles.AddAsync(praeses);
+        
+        var vice_praeses = new PraesidiumRole("Vice-Praeses", "vice-praeses@heimdal.be", 1);
+        await dbContext.PraesidiumRoles.AddAsync(vice_praeses);
+
+        var quaestor = new PraesidiumRole("Quaestor", "quaestor@heimdal.be", 2);
+        await dbContext.PraesidiumRoles.AddAsync(quaestor);
+
+        var secretaris = new PraesidiumRole("Secretaris", "secretaris@heimdal.be", 3);
+        await dbContext.PraesidiumRoles.AddAsync(secretaris);
+
+        var pr = new PraesidiumRole("PR", "pr@heimdal.be", 4);
+        await dbContext.PraesidiumRoles.AddAsync(pr);
+
+        var media = new PraesidiumRole("Media", "media@heimdal.be", 5);
+        await dbContext.PraesidiumRoles.AddAsync(media);
+
+        var schachtentemmer = new PraesidiumRole("Schachtentemmer", "schachtentemmer@heimdal.be", 6);
+        await dbContext.PraesidiumRoles.AddAsync(schachtentemmer);
+
+        var cultuur = new PraesidiumRole("Cultuur", "cultuur@heimdal.be", 7);
+        await dbContext.PraesidiumRoles.AddAsync(cultuur);
+
+        var sport = new PraesidiumRole("Sport", "sport@heimdal.be", 8);
+        await dbContext.PraesidiumRoles.AddAsync(sport);
+
+        var feest_lan = new PraesidiumRole("Feest & Lan", "feest-lan@heimdal.be", 9);
+        await dbContext.PraesidiumRoles.AddAsync(feest_lan);
+
+        var ict = new PraesidiumRole("ICT", "ict@heimdal.be", 10);
+        await dbContext.PraesidiumRoles.AddAsync(ict);
+
+        await dbContext.SaveChangesAsync();
+    }
 }

@@ -14,6 +14,7 @@ internal class TermConfiguration : EntityConfiguration<PraesidiumTerm>
         
         //builder.HasOne(t => t.Year).WithMany();
         builder.HasOne(t => t.Role).WithMany();
-        builder.HasOne(t => t.Member).WithOne();
+        builder.HasOne(t => t.MemberDetails).WithOne();
+        builder.HasOne(p => p.Image).WithMany();
     }
 }

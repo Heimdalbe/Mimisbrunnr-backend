@@ -21,16 +21,19 @@ namespace Mimmisbrunnr.Persistence;
 /// <param name="opts"></param>
 public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> opts) : IdentityDbContext<IdentityUser>(opts)
 {
-    private DbSet<Account> Accounts => Set<Account>();
-    private DbSet<Album> Albums => Set<Album>();
-    private DbSet<Image> Images => Set<Image>();
-    private DbSet<Social> Socials => Set<Social>();
-    private DbSet<SocialType> SocialTypes => Set<SocialType>();
-    private DbSet<Event> Events => Set<Event>();
-    private DbSet<PraesidiumMember> PraesidiumMembers => Set<PraesidiumMember>();
-    private DbSet<PraesidiumRole> PraesidiumRoles => Set<PraesidiumRole>();
-    private DbSet<PraesidiumTerm> PraesidiumTerms => Set<PraesidiumTerm>();
-    private DbSet<Sponsor> Sponsors => Set<Sponsor>();
+    public DbSet<Account> Accounts => Set<Account>();
+    public DbSet<Album> Albums => Set<Album>();
+    public DbSet<Image> Images => Set<Image>();
+    public DbSet<Social> Socials => Set<Social>();
+    public DbSet<SocialType> SocialTypes => Set<SocialType>();
+    public DbSet<Event> Events => Set<Event>();
+    public DbSet<MemberDetails> MemberDetails => Set<MemberDetails>();
+    public DbSet<PraesidiumRole> PraesidiumRoles => Set<PraesidiumRole>();
+    public DbSet<PraesidiumTerm> PraesidiumTerms => Set<PraesidiumTerm>();
+    public DbSet<Erelid> Erelids => Set<Erelid>();
+    public DbSet<LustrumLid> LustrumLids => Set<LustrumLid>();
+    public DbSet<SuperSchacht> SuperSchachts => Set<SuperSchacht>();
+    public DbSet<Sponsor> Sponsors => Set<Sponsor>();
     
     protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)
     {

@@ -6,9 +6,5 @@
         Silver,
         Gold,
         Diamond,
-        KiloByte,
-        MegaByte,
-        GigaByte,
-        TeraByte,
     }
 }
