@@ -20,7 +20,7 @@ namespace Mimmisbrunnr.Domain.Praesidium
 
         private string _quote;
 
-        private string trivia;
+        private string _trivia;
 
         private ICollection<Social> _socials;
         #endregion
@@ -32,7 +32,7 @@ namespace Mimmisbrunnr.Domain.Praesidium
 
         public string Quote { get => _quote; set => _quote = Guard.Against.Null(value); }
 
-        public string Trivia { get => trivia; set => trivia = Guard.Against.Null(value); }
+        public string Trivia { get => _trivia; set => _trivia = Guard.Against.Null(value); }
 
         public ICollection<Social> Socials { get => _socials; private set => _socials = Guard.Against.Null(value); }
         #endregion
