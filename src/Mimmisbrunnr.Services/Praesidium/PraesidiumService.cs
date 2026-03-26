@@ -1,3 +1,4 @@
+using System.Net.Mail;
 using Microsoft.EntityFrameworkCore;
 using Mimmisbrunnr.Domain.Common;
 using Mimmisbrunnr.Domain.Praesidium;
@@ -40,7 +41,7 @@ public class PraesidiumService(ApplicationDbContext dbContext) : IPraesidiumServ
 
     #region SuperSchacht
 
-    public async Task<Result<PraesidiumResponse.GetSuperSchachts>> GetSuperschachts(CancellationToken cancellationToken = default)
+    public async Task<Result<PraesidiumResponse.GetSuperSchachts>> GetSuperSchachts(CancellationToken cancellationToken = default)
     {
         var superschachts = await dbContext.SuperSchachts.ToListAsync(cancellationToken: cancellationToken);
         var superschachtDtos = superschachts.Select(SuperSchachtToSimpleDto).ToList().AsReadOnly();
@@ -48,7 +49,7 @@ public class PraesidiumService(ApplicationDbContext dbContext) : IPraesidiumServ
         return Result.Success(new PraesidiumResponse.GetSuperSchachts { Schachts = superschachtDtos });
     }
 
-    public async Task<Result<SuperSchachtDto.Detailed>> GetSuperschachtDetailed(int id, CancellationToken cancellationToken = default)
+    public async Task<Result<SuperSchachtDto.Detailed>> GetSuperSchachtDetailed(int id, CancellationToken cancellationToken = default)
     {
         var superSchacht = await dbContext.SuperSchachts.FirstAsync(t => t.Id == id, cancellationToken: cancellationToken);
 
@@ -111,14 +112,22 @@ public class PraesidiumService(ApplicationDbContext dbContext) : IPraesidiumServ
     public async Task<PraesidiumResponse.PostPraesidiumMember> PostPraesidiumMember(PraesidiumRequest.PostPraesidiumMember req, CancellationToken cancellationToken)
     {
         var details  = new MemberDetails(req.FirstName!, req.LastName!, req.Quote!, req.Trivia!);
+        
         var i = await dbContext.Images.FirstOrDefaultAsync(i => i.Url == req.ImageUrl, cancellationToken: cancellationToken);
         var image = i ?? new Image(req.ImageUrl!);
-        var role = await dbContext.PraesidiumRoles.FirstAsync(r => r.Id == req.Role, cancellationToken: cancellationToken);
+        
+        var role = await dbContext.PraesidiumRoles.FirstOrDefaultAsync(r => r.Id == req.Role, cancellationToken: cancellationToken);
+        if (role is null)
+        {
+            return Result<PraesidiumResponse.PostPraesidiumMember>.NotFound($"Praesidium role with id {req.Role} not found");
+        }
         var praesidiumTerm = new PraesidiumTerm(details, image, role, req.Year);
         
         await dbContext.MemberDetails.AddAsync(details, cancellationToken);
         await dbContext.Images.AddAsync(image, cancellationToken);
         var res = await dbContext.PraesidiumTerms.AddAsync(praesidiumTerm, cancellationToken);
+        await dbContext.SaveChangesAsync(cancellationToken);
+        
         return new PraesidiumResponse.PostPraesidiumMember { Id = res.Entity.Id };
     }
     
@@ -128,9 +137,11 @@ public class PraesidiumService(ApplicationDbContext dbContext) : IPraesidiumServ
 
     public async Task<PraesidiumResponse.PostPraesidiumRole> PostPraesidiumRole(PraesidiumRequest.PostPraesidiumRole req, CancellationToken cancellationToken)
     {
-        var role = new PraesidiumRole(req.name!, req.email!, req.order);
+        var role = new PraesidiumRole(req.Name!, req.Email!, req.Order);
         
         var res = await dbContext.PraesidiumRoles.AddAsync(role, cancellationToken);
+        await dbContext.SaveChangesAsync(cancellationToken);
+        
         return new PraesidiumResponse.PostPraesidiumRole{ Id = res.Entity.Id };
     }
 
@@ -141,13 +152,17 @@ public class PraesidiumService(ApplicationDbContext dbContext) : IPraesidiumServ
     public async Task<PraesidiumResponse.PostSuperSchacht> PostSuperSchacht(PraesidiumRequest.PostSuperSchacht req, CancellationToken cancellationToken)
     {
         var details = new MemberDetails(req.FirstName!, req.LastName!, req.Quote!, req.Trivia!);
+        
         var i = await dbContext.Images.FirstOrDefaultAsync(i => i.Url == req.ImageUrl, cancellationToken: cancellationToken);
         var image = i ?? new Image(req.ImageUrl!);
+        
         var superSchacht = new SuperSchacht(details, image, req.Year);
         
         await dbContext.MemberDetails.AddAsync(details, cancellationToken);
         await dbContext.Images.AddAsync(image, cancellationToken);
         var res = await dbContext.SuperSchachts.AddAsync(superSchacht, cancellationToken);
+        await dbContext.SaveChangesAsync(cancellationToken);
+        
         return new PraesidiumResponse.PostSuperSchacht { Id = res.Entity.Id };
     }
 
@@ -158,13 +173,17 @@ public class PraesidiumService(ApplicationDbContext dbContext) : IPraesidiumServ
     public async Task<PraesidiumResponse.PostErelid> PostErelid(PraesidiumRequest.PostErelid req, CancellationToken cancellationToken)
     {
         var details = new MemberDetails(req.FirstName!, req.LastName!, req.Quote!, req.Trivia!);
+        
         var i = await dbContext.Images.FirstOrDefaultAsync(i => i.Url == req.ImageUrl, cancellationToken: cancellationToken);
         var image = i ?? new Image(req.ImageUrl!);
+        
         var erelid = new Erelid(details, image);
         
         await dbContext.MemberDetails.AddAsync(details, cancellationToken);
         await dbContext.Images.AddAsync(image, cancellationToken);
         var res = await dbContext.Erelids.AddAsync(erelid, cancellationToken);
+        await dbContext.SaveChangesAsync(cancellationToken);
+        
         return new PraesidiumResponse.PostErelid { Id = res.Entity.Id };
     }
 
@@ -175,13 +194,17 @@ public class PraesidiumService(ApplicationDbContext dbContext) : IPraesidiumServ
     public async Task<PraesidiumResponse.PostLustrumLid> PostLustrumLid(PraesidiumRequest.PostLustrumLid req, CancellationToken cancellationToken)
     {
         var details = new MemberDetails(req.FirstName!, req.LastName!, req.Quote!, req.Trivia!);
+        
         var i = await dbContext.Images.FirstOrDefaultAsync(i => i.Url == req.ImageUrl, cancellationToken: cancellationToken);
         var image = i ?? new Image(req.ImageUrl!);
+        
         var lustrumLid = new LustrumLid(details, image, req.Year);
         
         await dbContext.MemberDetails.AddAsync(details, cancellationToken);
         await dbContext.Images.AddAsync(image, cancellationToken);
         var res = await dbContext.LustrumLids.AddAsync(lustrumLid, cancellationToken);
+        await dbContext.SaveChangesAsync(cancellationToken);
+        
         return new PraesidiumResponse.PostLustrumLid { Id = res.Entity.Id };
     }
 
@@ -190,6 +213,219 @@ public class PraesidiumService(ApplicationDbContext dbContext) : IPraesidiumServ
     #endregion
 
     #region Put
+
+    #region PraesidiumMember
+    
+    public async Task<PraesidiumResponse.PutPraesidiumMember> PutPraesidiumMember(int id, PraesidiumRequest.PutPraesidiumMember req, CancellationToken cancellationToken)
+    {
+        var term = await dbContext.PraesidiumTerms.Include(t => t.MemberDetails).FirstOrDefaultAsync(t => t.Id == id, cancellationToken: cancellationToken);
+
+        if (term is null)
+        {
+            return Result<PraesidiumResponse.PutPraesidiumMember>.NotFound($"Praesidium member with id {id} not found");
+        }
+        
+        if (req.FirstName is not null)
+        {
+            term.MemberDetails.FirstName = req.FirstName;
+        }
+        if (req.LastName is not null)
+        {
+            term.MemberDetails.LastName = req.LastName;
+        }
+        if (req.Quote is not null)
+        {
+            term.MemberDetails.Quote = req.Quote;
+        }
+        if (req.Trivia is not null)
+        {
+            term.MemberDetails.Trivia = req.Trivia;
+        }
+        if (req.ImageUrl is not null)
+        {
+            var i = await dbContext.Images.FirstOrDefaultAsync(i => i.Url == req.ImageUrl, cancellationToken: cancellationToken);
+            var image = i ?? new Image(req.ImageUrl!);
+            term.Image = image;
+        }
+        if (req.Year.HasValue)
+        {
+            term.Year = req.Year.Value;
+        }
+        if (req.Role.HasValue)
+        {
+            var role = await dbContext.PraesidiumRoles.FirstOrDefaultAsync(r => r.Id == req.Role, cancellationToken: cancellationToken);
+            if (role is null)
+            {
+                return Result<PraesidiumResponse.PutPraesidiumMember>.NotFound($"Praesidium role with id {id} not found");
+            }
+            term.Role = role;
+        }
+        
+        await dbContext.SaveChangesAsync(cancellationToken);
+        
+        return new PraesidiumResponse.PutPraesidiumMember { Id = term.Id };
+    }
+
+    #endregion
+
+    #region PraesidiumRole
+
+    public async Task<PraesidiumResponse.PutPraesidiumRole> PutPraesidiumRole(int id, PraesidiumRequest.PutPraesidiumRole req, CancellationToken cancellationToken)
+    {
+        var role = await dbContext.PraesidiumRoles.FirstOrDefaultAsync(r => r.Id == id, cancellationToken: cancellationToken);
+        if (role is null)
+        {
+            return Result<PraesidiumResponse.PutPraesidiumRole>.NotFound($"Role with id {id} not found");
+        }
+
+        if (req.Name is not null)
+        {
+            role.Name = req.Name;
+        }
+        if (req.Email is not null)
+        {
+            role.Email = new MailAddress(req.Email);
+        }
+        if (req.Order.HasValue)
+        {
+            role.Order = req.Order.Value;
+        }
+        
+        await dbContext.SaveChangesAsync(cancellationToken);
+        
+        return new PraesidiumResponse.PutPraesidiumRole { Id = role.Id };
+    }
+
+    #endregion
+
+    #region Superschacht
+    
+    public async Task<PraesidiumResponse.PutSuperSchacht> PutSuperSchacht(int id, PraesidiumRequest.PutSuperSchacht req, CancellationToken cancellationToken)
+    {
+        var superSchacht = await dbContext.SuperSchachts.Include(s => s.MemberDetails).FirstOrDefaultAsync(s => s.Id == id, cancellationToken: cancellationToken);
+        if (superSchacht is null)
+        {
+            return Result<PraesidiumResponse.PutSuperSchacht>.NotFound($"Superschacht with id {id} not found");
+        }
+
+        if (req.FirstName is not null)
+        {
+            superSchacht.MemberDetails.FirstName = req.FirstName;
+        }
+        if (req.LastName is not null)
+        {
+            superSchacht.MemberDetails.LastName = req.LastName;
+        }
+        if (req.Quote is not null)
+        {
+            superSchacht.MemberDetails.Quote = req.Quote;
+        }
+        if (req.Trivia is not null)
+        {
+            superSchacht.MemberDetails.Trivia = req.Trivia;   
+        }
+        if (req.ImageUrl is not null)
+        {
+            var i = await dbContext.Images.FirstOrDefaultAsync(i => i.Url == req.ImageUrl, cancellationToken: cancellationToken);
+            var image = i ?? new Image(req.ImageUrl!);
+            superSchacht.Image = image;
+        }
+        if (req.Year.HasValue)
+        {
+            superSchacht.Year = req.Year.Value;
+        }
+
+        await dbContext.SaveChangesAsync(cancellationToken);
+        
+        return new PraesidiumResponse.PutSuperSchacht{  Id = superSchacht.Id };
+    }
+
+    #endregion
+
+    #region Erelid
+    
+    public async Task<PraesidiumResponse.PutErelid> PutErelid(int id, PraesidiumRequest.PutErelid req, CancellationToken cancellationToken)
+    {
+        var erelid = await dbContext.Erelids.Include(e => e.MemberDetails).FirstOrDefaultAsync(e => e.Id == id, cancellationToken: cancellationToken);
+        if (erelid is null)
+        {
+            return Result<PraesidiumResponse.PutErelid>.NotFound($"Erelid with id {id} not found");
+        }
+
+        if (req.FirstName is not null)
+        {
+            erelid.MemberDetails.FirstName = req.FirstName;
+        }
+        if (req.LastName is not null)
+        {
+            erelid.MemberDetails.LastName = req.LastName;
+        }
+        if (req.Quote is not null)
+        {
+            erelid.MemberDetails.Quote = req.Quote;
+        }
+        if (req.Trivia is not null)
+        {
+            erelid.MemberDetails.Trivia = req.Trivia;   
+        }
+        if (req.ImageUrl is not null)
+        {
+            var i = await dbContext.Images.FirstOrDefaultAsync(i => i.Url == req.ImageUrl, cancellationToken: cancellationToken);
+            var image = i ?? new Image(req.ImageUrl!);
+            erelid.Image = image;
+        }
+
+        await dbContext.SaveChangesAsync(cancellationToken);
+        
+        return new PraesidiumResponse.PutErelid{  Id = erelid.Id };
+    }
+
+    #endregion
+
+    #region Lustrum
+
+    public async Task<PraesidiumResponse.PutLustrumLid> PutLustrumLid(int id, PraesidiumRequest.PutLustrumLid req, CancellationToken cancellationToken)
+    {
+        var lustrumLid = await dbContext.LustrumLids.Include(s => s.MemberDetails).FirstOrDefaultAsync(s => s.Id == id, cancellationToken: cancellationToken);
+        if (lustrumLid is null)
+        {
+            return Result<PraesidiumResponse.PutLustrumLid>.NotFound($"LustrumLid with id {id} not found");
+        }
+
+        if (req.FirstName is not null)
+        {
+            lustrumLid.MemberDetails.FirstName = req.FirstName;
+        }
+        if (req.LastName is not null)
+        {
+            lustrumLid.MemberDetails.LastName = req.LastName;
+        }
+        if (req.Quote is not null)
+        {
+            lustrumLid.MemberDetails.Quote = req.Quote;
+        }
+        if (req.Trivia is not null)
+        {
+            lustrumLid.MemberDetails.Trivia = req.Trivia;   
+        }
+        if (req.ImageUrl is not null)
+        {
+            var i = await dbContext.Images.FirstOrDefaultAsync(i => i.Url == req.ImageUrl, cancellationToken: cancellationToken);
+            var image = i ?? new Image(req.ImageUrl!);
+            lustrumLid.Image = image;
+        }
+        if (req.Year.HasValue)
+        {
+            lustrumLid.Year = req.Year.Value;
+        }
+
+        await dbContext.SaveChangesAsync(cancellationToken);
+        
+        return new PraesidiumResponse.PutLustrumLid{  Id = lustrumLid.Id };
+    }
+
+    #endregion
+    
     #endregion
     
     #region Delete

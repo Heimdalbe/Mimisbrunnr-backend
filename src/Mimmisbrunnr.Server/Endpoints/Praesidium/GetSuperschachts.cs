@@ -11,6 +11,6 @@ public class GetSuperschachts(IPraesidiumService praesidiumService) : EndpointWi
 
     public override Task<Result<PraesidiumResponse.GetSuperSchachts>> ExecuteAsync(CancellationToken ct)
     {
-        return praesidiumService.GetSuperschachts(ct);
+        return praesidiumService.GetSuperSchachts(ct);
     }
 }

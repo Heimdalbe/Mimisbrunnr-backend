@@ -13,6 +13,6 @@ public class GetSuperSchachtById(IPraesidiumService praesidiumService) : Endpoin
     public override Task<Result<SuperSchachtDto.Detailed>> ExecuteAsync(CancellationToken ct)
     {
         var id = Route<int>("int");
-        return praesidiumService.GetSuperschachtDetailed(id, ct);
+        return praesidiumService.GetSuperSchachtDetailed(id, ct);
     }
 }

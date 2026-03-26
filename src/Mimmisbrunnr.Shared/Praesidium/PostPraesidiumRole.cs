@@ -12,19 +12,19 @@ public partial class PraesidiumRequest
 {
     public class PostPraesidiumRole
     {
-        public string? name { get; set; }
+        public string? Name { get; set; }
         
-        public string? email { get; set; }
+        public string? Email { get; set; }
         
-        public int order { get; set; }
+        public int Order { get; set; }
         
         public class Validator : AbstractValidator<PostPraesidiumRole>
         {
             public Validator()
             {
-                RuleFor(x => x.name).NotNull().NotEmpty();
-                RuleFor(x => x.email).NotNull().NotEmpty();
-                RuleFor(x => x.order).NotNull().GreaterThanOrEqualTo(0);
+                RuleFor(x => x.Name).NotNull().NotEmpty();
+                RuleFor(x => x.Email).NotNull().NotEmpty();
+                RuleFor(x => x.Order).NotNull().GreaterThanOrEqualTo(0);
             }
         }
     }
