@@ -6,7 +6,7 @@ public class GetSuperschachts(IPraesidiumService praesidiumService) : EndpointWi
 {
     public override void Configure()
     {
-        Get("api/praesidium/superschachts");
+        Get("/api/praesidium/superschachts");
     }
 
     public override Task<Result<PraesidiumResponse.GetSuperSchachts>> ExecuteAsync(CancellationToken ct)

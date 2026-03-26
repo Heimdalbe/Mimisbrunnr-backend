@@ -21,7 +21,7 @@ public class SuperSchacht : Entity
     #endregion
     
     #region Constructors
-    public SuperSchacht(MemberDetails memberDetails, int year, Image image)
+    public SuperSchacht(MemberDetails memberDetails, Image image, int year)
     {
         MemberDetails = memberDetails;
         Image = image;

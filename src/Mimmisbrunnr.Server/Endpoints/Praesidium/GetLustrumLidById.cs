@@ -7,7 +7,7 @@ public class GetLustrumLidById(IPraesidiumService praesidiumService) : EndpointW
 {
     public override void Configure()
     {
-        Get("api/praesidium/lustrum/members/{id:int}");
+        Get("/api/praesidium/lustrum/members/{id:int}");
     }
 
     public override Task<Result<LustrumLidDto.Detailed>> ExecuteAsync(CancellationToken ct)

@@ -6,7 +6,7 @@ public class GetErelids(IPraesidiumService praesidiumService) : EndpointWithoutR
 {
     public override void Configure()
     {
-        Get("api/praesidium/erelids");
+        Get("/api/praesidium/erelids");
     }
 
     public override Task<Result<PraesidiumResponse.GetErelids>> ExecuteAsync(CancellationToken ct)

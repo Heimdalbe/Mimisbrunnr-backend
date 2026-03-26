@@ -7,7 +7,7 @@ public class GetPraesidiumMemberById(IPraesidiumService praesidiumService) : End
 {
     public override void Configure()
     {
-        Get("api/praesidium/members/{id:int}");
+        Get("/api/praesidium/members/{id:int}");
     }
 
     public override Task<Result<PraesidiumTermDto.Detailed>> ExecuteAsync(CancellationToken ct)

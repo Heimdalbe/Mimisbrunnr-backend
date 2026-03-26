@@ -21,7 +21,7 @@ public class LustrumLid : Entity
     #endregion
     
     #region Constructors
-    public LustrumLid(MemberDetails memberDetails, int year, Image image)
+    public LustrumLid(MemberDetails memberDetails, Image image, int year)
     {
         MemberDetails = memberDetails;
         Image = image;
