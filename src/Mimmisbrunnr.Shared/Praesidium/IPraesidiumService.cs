@@ -43,4 +43,14 @@ public interface IPraesidiumService
     Task<PraesidiumResponse.PutErelid> PutErelid(int id, PraesidiumRequest.PutErelid req, CancellationToken cancellationToken);
     
     Task<PraesidiumResponse.PutLustrumLid> PutLustrumLid(int id, PraesidiumRequest.PutLustrumLid req, CancellationToken cancellationToken);
+    
+    Task<PraesidiumResponse.DeletePraesidiumMember> DeletePraesidiumMember(int id, CancellationToken ct);
+    
+    Task<PraesidiumResponse.DeletePraesidiumRole> DeletePraesidiumRole(int id, CancellationToken ct);
+    
+    Task<PraesidiumResponse.DeleteSuperSchacht> DeleteSuperSchacht(int id, CancellationToken ct);
+    
+    Task<PraesidiumResponse.DeleteErelid> DeleteErelid(int id, CancellationToken ct);
+    
+    Task<PraesidiumResponse.DeleteLustrumlid> DeleteLustrumLid(int id, CancellationToken ct);
 }

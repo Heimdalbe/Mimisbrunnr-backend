@@ -119,7 +119,7 @@ public class PraesidiumService(ApplicationDbContext dbContext) : IPraesidiumServ
         var role = await dbContext.PraesidiumRoles.FirstOrDefaultAsync(r => r.Id == req.Role, cancellationToken: cancellationToken);
         if (role is null)
         {
-            return Result<PraesidiumResponse.PostPraesidiumMember>.NotFound($"Praesidium role with id {req.Role} not found");
+            return Result<PraesidiumResponse.PostPraesidiumMember>.NotFound($"Praesidium member with id {req.Role} not found");
         }
         var praesidiumTerm = new PraesidiumTerm(details, image, role, req.Year);
         
@@ -429,5 +429,88 @@ public class PraesidiumService(ApplicationDbContext dbContext) : IPraesidiumServ
     #endregion
     
     #region Delete
+
+    #region PraesidiumMember
+
+    public async Task<PraesidiumResponse.DeletePraesidiumMember> DeletePraesidiumMember(int id, CancellationToken ct)
+    {
+        var term = await dbContext.PraesidiumTerms.FirstOrDefaultAsync(t => t.Id == id, ct);
+        if (term is null)
+        {
+            return Result<PraesidiumResponse.DeletePraesidiumMember>.NotFound($"Praesidum member with id {id} not found");
+        }
+
+        dbContext.Remove(term);
+        await dbContext.SaveChangesAsync(ct);
+        
+        return new PraesidiumResponse.DeletePraesidiumMember{ Id = term.Id };
+    }
+
+    #endregion
+    
+    #region PraesidiumRole
+    public async Task<PraesidiumResponse.DeletePraesidiumRole> DeletePraesidiumRole(int id, CancellationToken ct)
+    {
+        var role = await dbContext.PraesidiumRoles.FirstOrDefaultAsync(t => t.Id == id, ct);
+        if (role is null)
+        {
+            return Result<PraesidiumResponse.DeletePraesidiumRole>.NotFound($"Praesidum role with id {id} not found");
+        }
+
+        dbContext.Remove(role);
+        await dbContext.SaveChangesAsync(ct);
+        
+        return new PraesidiumResponse.DeletePraesidiumRole{ Id = role.Id };
+    }
+    #endregion
+
+    #region SuperSchacht
+    public async Task<PraesidiumResponse.DeleteSuperSchacht> DeleteSuperSchacht(int id, CancellationToken ct)
+    {
+        var superSchacht = await dbContext.PraesidiumRoles.FirstOrDefaultAsync(t => t.Id == id, ct);
+        if (superSchacht is null)
+        {
+            return Result<PraesidiumResponse.DeleteSuperSchacht>.NotFound($"Super schacht with id {id} not found");
+        }
+
+        dbContext.Remove(superSchacht);
+        await dbContext.SaveChangesAsync(ct);
+        
+        return new PraesidiumResponse.DeleteSuperSchacht{ Id = superSchacht.Id };
+    }
+    #endregion
+
+    #region Erelid
+    public async Task<PraesidiumResponse.DeleteErelid> DeleteErelid(int id, CancellationToken ct)
+    {
+        var erelid = await dbContext.PraesidiumRoles.FirstOrDefaultAsync(t => t.Id == id, ct);
+        if (erelid is null)
+        {
+            return Result<PraesidiumResponse.DeleteErelid>.NotFound($"Erelid with id {id} not found");
+        }
+
+        dbContext.Remove(erelid);
+        await dbContext.SaveChangesAsync(ct);
+        
+        return new PraesidiumResponse.DeleteErelid(){ Id = erelid.Id };
+    }
+    #endregion
+
+    #region Lustrum
+    public async Task<PraesidiumResponse.DeleteLustrumlid> DeleteLustrumLid(int id, CancellationToken ct)
+    {
+        var lustrumLid = await dbContext.PraesidiumRoles.FirstOrDefaultAsync(t => t.Id == id, ct);
+        if (lustrumLid is null)
+        {
+            return Result<PraesidiumResponse.DeleteLustrumlid>.NotFound($"Lustrum lid with id {id} not found");
+        }
+
+        dbContext.Remove(lustrumLid);
+        await dbContext.SaveChangesAsync(ct);
+        
+        return new PraesidiumResponse.DeleteLustrumlid{ Id = lustrumLid.Id };
+    }
+    #endregion
+    
     #endregion
 }
