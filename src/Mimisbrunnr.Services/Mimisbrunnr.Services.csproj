@@ -1,0 +1,20 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net9.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <Using Include="Ardalis.Result" />
+        <Using Include="Serilog" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Mimisbrunnr.Domain\Mimisbrunnr.Domain.csproj" />
+      <ProjectReference Include="..\Mimisbrunnr.Persistence\Mimisbrunnr.Persistence.csproj" />
+      <ProjectReference Include="..\Mimisbrunnr.Shared\Mimisbrunnr.Shared.csproj" />
+    </ItemGroup>
+
+</Project>
