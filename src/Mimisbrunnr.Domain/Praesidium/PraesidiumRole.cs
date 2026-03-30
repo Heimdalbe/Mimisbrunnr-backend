@@ -40,7 +40,7 @@ namespace Mimisbrunnr.Domain.Praesidium
     public int Order
     {
         get => _order;
-        set => _order = Guard.Against.NegativeOrZero(value);
+        set => _order = Guard.Against.Negative(value);
     }
 
     #endregion

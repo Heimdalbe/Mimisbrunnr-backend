@@ -1,0 +1,16 @@
+using Mimisbrunnr.Shared.Praesidium;
+
+namespace Mimisbrunnr.Server.Endpoints.Praesidium;
+
+public class GetSuperschachts(IPraesidiumService praesidiumService) : EndpointWithoutRequest<Result<PraesidiumResponse.GetSuperSchachts>>
+{
+    public override void Configure()
+    {
+        Get("/api/praesidium/superschachts");
+    }
+
+    public override Task<Result<PraesidiumResponse.GetSuperSchachts>> ExecuteAsync(CancellationToken ct)
+    {
+        return praesidiumService.GetSuperSchachts(ct);
+    }
+}

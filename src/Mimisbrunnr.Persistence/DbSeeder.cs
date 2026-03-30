@@ -27,7 +27,6 @@ public class DbSeeder(ApplicationDbContext dbContext, RoleManager<IdentityRole> 
         await roleManager.CreateAsync(new IdentityRole("Feut"));            // Ziet open events
         await roleManager.CreateAsync(new IdentityRole("Schacht"));         // Ziet open + gesloten + schachten events
         await roleManager.CreateAsync(new IdentityRole("Commilitones"));    // Ziet open + gesloten events
-        await roleManager.CreateAsync(new IdentityRole("Praesidium"));      // Ziet open + gesloten + schachten events
         await roleManager.CreateAsync(new IdentityRole("Hmdl"));            // Media + Event + Sponsor + Admin-stuff = ICT + Praeses (Admin)
         await roleManager.CreateAsync(new IdentityRole("MediaEditor"));     // Albums aanpassen
         await roleManager.CreateAsync(new IdentityRole("EventEditor"));     // Events aanpassen
@@ -48,7 +47,7 @@ public class DbSeeder(ApplicationDbContext dbContext, RoleManager<IdentityRole> 
             EmailConfirmed = true,
         };
         await userManager.CreateAsync(praeses, PasswordDefault);
-        await userManager.AddToRoleAsync(praeses, "Praesidium");
+        await userManager.AddToRoleAsync(praeses, "Commilitones");
         await userManager.AddToRoleAsync(praeses, "Hmdl");
         
         var vice_praeses = new IdentityUser
@@ -58,7 +57,7 @@ public class DbSeeder(ApplicationDbContext dbContext, RoleManager<IdentityRole> 
             EmailConfirmed = true,
         };
         await userManager.CreateAsync(vice_praeses, PasswordDefault);
-        await userManager.AddToRoleAsync(vice_praeses, "Praesidium");
+        await userManager.AddToRoleAsync(vice_praeses, "Commilitones");
         await userManager.AddToRoleAsync(vice_praeses, "Hmdl");
 
         var quaestor = new IdentityUser
@@ -68,7 +67,7 @@ public class DbSeeder(ApplicationDbContext dbContext, RoleManager<IdentityRole> 
             EmailConfirmed = true,
         };
         await userManager.CreateAsync(quaestor, PasswordDefault);
-        await userManager.AddToRoleAsync(quaestor, "Praesidium");
+        await userManager.AddToRoleAsync(quaestor, "Commilitones");
 
         var secretaris = new IdentityUser
         {
@@ -77,7 +76,7 @@ public class DbSeeder(ApplicationDbContext dbContext, RoleManager<IdentityRole> 
             EmailConfirmed = true,
         };
         await userManager.CreateAsync(secretaris, PasswordDefault);
-        await userManager.AddToRoleAsync(secretaris, "Praesidium");
+        await userManager.AddToRoleAsync(secretaris, "Commilitones");
 
         var pr = new IdentityUser
         {
@@ -86,7 +85,7 @@ public class DbSeeder(ApplicationDbContext dbContext, RoleManager<IdentityRole> 
             EmailConfirmed = true,
         };
         await userManager.CreateAsync(pr, PasswordDefault);
-        await userManager.AddToRoleAsync(pr, "Praesidium");
+        await userManager.AddToRoleAsync(pr, "Commilitones");
         await userManager.AddToRoleAsync(pr, "SponsorEditor");
 
         var media = new IdentityUser
@@ -96,7 +95,7 @@ public class DbSeeder(ApplicationDbContext dbContext, RoleManager<IdentityRole> 
             EmailConfirmed = true,
         };
         await userManager.CreateAsync(media, PasswordDefault);
-        await userManager.AddToRoleAsync(media, "Praesidium");
+        await userManager.AddToRoleAsync(media, "Commilitones");
         await userManager.AddToRoleAsync(media, "MediaEditor");
         await userManager.AddToRoleAsync(media, "EventEditor");
 
@@ -107,7 +106,7 @@ public class DbSeeder(ApplicationDbContext dbContext, RoleManager<IdentityRole> 
             EmailConfirmed = true,
         };
         await userManager.CreateAsync(schachtentemmer, PasswordDefault);
-        await userManager.AddToRoleAsync(schachtentemmer, "Praesidium");
+        await userManager.AddToRoleAsync(schachtentemmer, "Commilitones");
         await userManager.AddToRoleAsync(schachtentemmer, "EventEditor");
 
         var cultuur = new IdentityUser
@@ -117,7 +116,7 @@ public class DbSeeder(ApplicationDbContext dbContext, RoleManager<IdentityRole> 
             EmailConfirmed = true,
         };
         await userManager.CreateAsync(cultuur, PasswordDefault);
-        await userManager.AddToRoleAsync(cultuur, "Praesidium");
+        await userManager.AddToRoleAsync(cultuur, "Commilitones");
         await userManager.AddToRoleAsync(cultuur, "EventEditor");
         
         var sport = new IdentityUser
@@ -127,7 +126,7 @@ public class DbSeeder(ApplicationDbContext dbContext, RoleManager<IdentityRole> 
             EmailConfirmed = true,
         };
         await userManager.CreateAsync(sport, PasswordDefault);
-        await userManager.AddToRoleAsync(sport, "Praesidium");
+        await userManager.AddToRoleAsync(sport, "Commilitones");
         await userManager.AddToRoleAsync(sport, "EventEditor");
         
         var feest_lan = new IdentityUser
@@ -137,7 +136,7 @@ public class DbSeeder(ApplicationDbContext dbContext, RoleManager<IdentityRole> 
             EmailConfirmed = true,
         };
         await userManager.CreateAsync(feest_lan, PasswordDefault);
-        await userManager.AddToRoleAsync(feest_lan, "Praesidium");
+        await userManager.AddToRoleAsync(feest_lan, "Commilitones");
         await userManager.AddToRoleAsync(feest_lan, "EventEditor");
         
         var ict = new IdentityUser
@@ -147,7 +146,7 @@ public class DbSeeder(ApplicationDbContext dbContext, RoleManager<IdentityRole> 
             EmailConfirmed = true,
         };
         await userManager.CreateAsync(ict, PasswordDefault);
-        await userManager.AddToRoleAsync(ict, "Praesidium");
+        await userManager.AddToRoleAsync(ict, "Commilitones");
         await userManager.AddToRoleAsync(ict, "Hmdl");
 
         await dbContext.SaveChangesAsync();

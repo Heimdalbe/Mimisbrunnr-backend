@@ -35,22 +35,32 @@ namespace Mimisbrunnr.Domain.Sponsor
 
         public string Benefits { get => _benefits; set => _benefits = Guard.Against.Null(value); }
 
-        public SponsorRank? Rank { get => _rank; set => _rank = Guard.Against.Null(value); }
+        public SponsorRank? Rank { get => _rank; set => _rank = value; }
 
-        public LanSponsorRank? LanSponsorRank { get => _lanSponsorRank; set => _lanSponsorRank = Guard.Against.Null(value); }
+        public LanSponsorRank? LanSponsorRank { get => _lanSponsorRank; set => _lanSponsorRank = value; }
         
         public int Order { get => _order; set => _order = Guard.Against.NegativeOrZero(value); }
         #endregion
 
         #region Constructors
-        public Sponsor(string name, Image logo, string website, string benefits, SponsorRank rank, LanSponsorRank lanSponsorRank, int order)
+        public Sponsor(string name, Image logo, string website, string benefits, SponsorRank rank, LanSponsorRank lanSponsorRank, int order) : this(name, logo, website, benefits, rank, order)
+        {
+            LanSponsorRank = Guard.Against.Null(lanSponsorRank);
+        }
+        public Sponsor(string name, Image logo, string website, string benefits, SponsorRank rank, int order) : this(name, logo, website, benefits, order)
+        {
+            Rank = Guard.Against.Null(rank);
+        }
+        public Sponsor(string name, Image logo, string website, string benefits, LanSponsorRank lanSponsorRank, int order) : this(name,logo, website, benefits, order)
+        {
+            LanSponsorRank = Guard.Against.Null(lanSponsorRank);
+        }
+        private Sponsor(string name, Image logo, string website, string benefits, int order)
         {
             Name = name;
             Logo = logo;
             Website = website;
             Benefits = benefits;
-            Rank = rank;
-            LanSponsorRank = lanSponsorRank;
             Order = order;
         }
         #endregion
