@@ -1,0 +1,6 @@
+@Mimisbrunnr.Server_HostAddress = http://localhost:5109
+
+GET {{Mimisbrunnr.Server_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
