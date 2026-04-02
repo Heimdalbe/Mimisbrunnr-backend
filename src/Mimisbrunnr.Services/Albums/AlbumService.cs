@@ -18,7 +18,9 @@ public class AlbumService(ApplicationDbContext dbContext, IHttpClientFactory htt
 
     public async Task<Result<AlbumResponse.GetAlbums>> GetPubAlbums(CancellationToken ct)
     {
-        var albums = await dbContext.Albums.Where(a => a.Published).ToListAsync(ct);
+        var albums = await dbContext.Albums
+            .Include(a => a.CoverImage)
+            .Where(a => a.Published).ToListAsync(ct);
         var dtos = albums.Select(AlbumToSimpleDto).ToList().AsReadOnly();
         
         return Result.Success(new AlbumResponse.GetAlbums{ Albums = dtos });
@@ -26,7 +28,9 @@ public class AlbumService(ApplicationDbContext dbContext, IHttpClientFactory htt
     
     public async Task<Result<AlbumResponse.GetAlbums>> GetAlbums(CancellationToken ct)
     {
-        var albums = await dbContext.Albums.ToListAsync(ct);
+        var albums = await dbContext.Albums
+            .Include(a => a.CoverImage)
+            .ToListAsync(ct);
         var dtos = albums.Select(AlbumToSimpleDto).ToList().AsReadOnly();
         
         return Result.Success(new AlbumResponse.GetAlbums{ Albums = dtos });
@@ -35,7 +39,10 @@ public class AlbumService(ApplicationDbContext dbContext, IHttpClientFactory htt
     
     public async Task<Result<AlbumDto.Detailed>> GetPubAlbum(int id, CancellationToken ct)
     {
-        var album = await dbContext.Albums.Include(a => a.Images).FirstOrDefaultAsync(a => a.Id == id && a.Published, ct);
+        var album = await dbContext.Albums
+            .Include(a => a.CoverImage)
+            .Include(a => a.Images)
+            .FirstOrDefaultAsync(a => a.Id == id && a.Published, ct);
         
         if (album is null)
             return Result.NotFound($"Album with id {id} not found");
@@ -45,7 +52,10 @@ public class AlbumService(ApplicationDbContext dbContext, IHttpClientFactory htt
     
     public async Task<Result<AlbumDto.Detailed>> GetAlbum(int id, CancellationToken ct)
     {
-        var album = await dbContext.Albums.Include(a => a.Images).FirstOrDefaultAsync(a => a.Id == id, ct);
+        var album = await dbContext.Albums
+            .Include(a => a.CoverImage)
+            .Include(a => a.Images)
+            .FirstOrDefaultAsync(a => a.Id == id, ct);
         
         if (album is null)
             return Result.NotFound($"Album with id {id} not found");
