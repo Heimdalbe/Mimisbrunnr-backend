@@ -17,7 +17,13 @@ public class PraesidiumService(ApplicationDbContext dbContext) : IPraesidiumServ
 
     public async Task<Result<PraesidiumResponse.GetPraesidiumOfYear>> GetPraesidiumOfYear(int year, CancellationToken cancellationToken = default)
     {
-        var praesidium = await dbContext.PraesidiumTerms.Where(t => t.Year == year).ToListAsync(cancellationToken);
+        var praesidium = await dbContext.PraesidiumTerms
+            .Include(p => p.MemberDetails)
+            .ThenInclude(md=>md.Socials)
+            .ThenInclude(s => s.Type)
+            .Include(p => p.Image)
+            .Include(p => p.Role)
+            .Where(t => t.Year == year).ToListAsync(cancellationToken);
         var praesidiumDtos = praesidium.Select(TermToSimpleDto).ToList().AsReadOnly();
 
         return Result.Success(new PraesidiumResponse.GetPraesidiumOfYear { Praesidium = praesidiumDtos });
@@ -25,7 +31,13 @@ public class PraesidiumService(ApplicationDbContext dbContext) : IPraesidiumServ
 
     public async Task<Result<PraesidiumTermDto.Detailed>> GetPraesidiumTermDetailed(int id, CancellationToken cancellationToken = default)
     {
-        var term = await dbContext.PraesidiumTerms.FirstOrDefaultAsync(t => t.Id == id, cancellationToken: cancellationToken);
+        var term = await dbContext.PraesidiumTerms
+            .Include(p => p.MemberDetails)
+            .ThenInclude(md=>md.Socials)
+            .ThenInclude(s => s.Type)
+            .Include(p => p.Image)
+            .Include(p => p.Role)
+            .FirstOrDefaultAsync(t => t.Id == id, cancellationToken: cancellationToken);
 
         if (term is null)
             return Result.NotFound($"Praesidium term with id {id} not found");
@@ -35,7 +47,13 @@ public class PraesidiumService(ApplicationDbContext dbContext) : IPraesidiumServ
 
     public async Task<Result<PraesidiumResponse.GetYears>> GetPraesidiumYears(CancellationToken cancellationToken = default)
     {
-        var years = await dbContext.PraesidiumTerms.Select(t => t.Year).Distinct().ToListAsync(cancellationToken);
+        var years = await dbContext.PraesidiumTerms
+            .Include(p => p.MemberDetails)
+            .ThenInclude(md=>md.Socials)
+            .ThenInclude(s => s.Type)
+            .Include(p => p.Image)
+            .Include(p => p.Role)
+            .Select(t => t.Year).Distinct().ToListAsync(cancellationToken);
 
         return Result.Success(new PraesidiumResponse.GetYears { Years = years.AsReadOnly() });
     }
@@ -46,7 +64,12 @@ public class PraesidiumService(ApplicationDbContext dbContext) : IPraesidiumServ
 
     public async Task<Result<PraesidiumResponse.GetSuperSchachts>> GetSuperSchachts(CancellationToken cancellationToken = default)
     {
-        var superschachts = await dbContext.SuperSchachts.ToListAsync(cancellationToken: cancellationToken);
+        var superschachts = await dbContext.SuperSchachts
+            .Include(p => p.MemberDetails)
+            .ThenInclude(md=>md.Socials)
+            .ThenInclude(s => s.Type)
+            .Include(p => p.Image)
+            .ToListAsync(cancellationToken: cancellationToken);
         var superschachtDtos = superschachts.Select(SuperSchachtToSimpleDto).ToList().AsReadOnly();
 
         return Result.Success(new PraesidiumResponse.GetSuperSchachts { Schachts = superschachtDtos });
@@ -54,7 +77,12 @@ public class PraesidiumService(ApplicationDbContext dbContext) : IPraesidiumServ
 
     public async Task<Result<SuperSchachtDto.Detailed>> GetSuperSchachtDetailed(int id, CancellationToken cancellationToken = default)
     {
-        var superSchacht = await dbContext.SuperSchachts.FirstOrDefaultAsync(t => t.Id == id, cancellationToken: cancellationToken);
+        var superSchacht = await dbContext.SuperSchachts
+            .Include(p => p.MemberDetails)
+            .ThenInclude(md=>md.Socials)
+            .ThenInclude(s => s.Type)
+            .Include(p => p.Image)
+            .FirstOrDefaultAsync(t => t.Id == id, cancellationToken: cancellationToken);
         
         if (superSchacht is null)
             return Result.NotFound($"Superschacht with id {id} not found");
@@ -68,7 +96,12 @@ public class PraesidiumService(ApplicationDbContext dbContext) : IPraesidiumServ
 
     public async Task<Result<PraesidiumResponse.GetErelids>> GetErelids(CancellationToken cancellationToken = default)
     {
-        var erelids = await dbContext.Erelids.ToListAsync(cancellationToken: cancellationToken);
+        var erelids = await dbContext.Erelids
+            .Include(p => p.MemberDetails)
+            .ThenInclude(md=>md.Socials)
+            .ThenInclude(s => s.Type)
+            .Include(p => p.Image)
+            .ToListAsync(cancellationToken: cancellationToken);
         var erelidDtos = erelids.Select(ErelidToSimpleDto).ToList().AsReadOnly();
 
         return Result.Success(new PraesidiumResponse.GetErelids { Erelids = erelidDtos });
@@ -76,7 +109,12 @@ public class PraesidiumService(ApplicationDbContext dbContext) : IPraesidiumServ
 
     public async Task<Result<ErelidDto.Detailed>> GetErelidDetailed(int id, CancellationToken cancellationToken = default)
     {
-        var erelid = await dbContext.Erelids.FirstOrDefaultAsync(t => t.Id == id, cancellationToken: cancellationToken);
+        var erelid = await dbContext.Erelids
+            .Include(p => p.MemberDetails)
+            .ThenInclude(md=>md.Socials)
+            .ThenInclude(s => s.Type)
+            .Include(p => p.Image)
+            .FirstOrDefaultAsync(t => t.Id == id, cancellationToken: cancellationToken);
 
         if (erelid is null)
             return Result.NotFound($"Erelids with id {id} not found");
@@ -90,7 +128,12 @@ public class PraesidiumService(ApplicationDbContext dbContext) : IPraesidiumServ
 
     public async Task<Result<PraesidiumResponse.GetLustrumLids>> GetLustrumLids(int year, CancellationToken cancellationToken = default)
     {
-        var lustrumLids = await dbContext.LustrumLids.Where(l => l.Year == year).ToListAsync(cancellationToken: cancellationToken);
+        var lustrumLids = await dbContext.LustrumLids
+            .Include(p => p.MemberDetails)
+            .ThenInclude(md=>md.Socials)
+            .ThenInclude(s => s.Type)
+            .Include(p => p.Image)
+            .Where(l => l.Year == year).ToListAsync(cancellationToken: cancellationToken);
         var lustrumDtos = lustrumLids.Select(LustrumLidToSimpleDto).ToList().AsReadOnly();
 
         return Result.Success(new PraesidiumResponse.GetLustrumLids { LustrumLids = lustrumDtos });
@@ -98,7 +141,12 @@ public class PraesidiumService(ApplicationDbContext dbContext) : IPraesidiumServ
 
     public async Task<Result<LustrumLidDto.Detailed>> GetLustrumlidDetailed(int id, CancellationToken cancellationToken = default)
     {
-        var lustrumLid = await dbContext.LustrumLids.FirstOrDefaultAsync(l => l.Id == id, cancellationToken: cancellationToken);
+        var lustrumLid = await dbContext.LustrumLids
+            .Include(p => p.MemberDetails)
+            .ThenInclude(md=>md.Socials)
+            .ThenInclude(s => s.Type)
+            .Include(p => p.Image)
+            .FirstOrDefaultAsync(l => l.Id == id, cancellationToken: cancellationToken);
 
         if (lustrumLid is null)
             return Result.NotFound($"Lustrum lid with id {id} not found");

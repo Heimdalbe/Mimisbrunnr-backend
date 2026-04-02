@@ -18,7 +18,9 @@ public class EventService(ApplicationDbContext dbContext) : IEventService
 
     public async Task<Result<EventResponse.GetEvents>> GetOpenEvents(QueryRequest.SkipTake req, CancellationToken ct)
     {
-        var events = await dbContext.Events.Where(e => e.Published && e.Accessibility == Accessibility.OPEN).ToListAsync(cancellationToken: ct);
+        var events = await dbContext.Events
+            .Include(e => e.Banner)
+            .Where(e => e.Published && e.Accessibility == Accessibility.OPEN).ToListAsync(cancellationToken: ct);
 
         var dtos = events.Select(EventToSimpleDto)
             .Skip(req.Skip)
@@ -31,7 +33,9 @@ public class EventService(ApplicationDbContext dbContext) : IEventService
 
     public async Task<Result<EventResponse.GetEvents>> GetPublishedEvents(QueryRequest.SkipTake req, CancellationToken ct)
     {
-        var events = await dbContext.Events.Where(e => e.Published).ToListAsync(cancellationToken: ct);
+        var events = await dbContext.Events
+            .Include(e => e.Banner)
+            .Where(e => e.Published).ToListAsync(cancellationToken: ct);
 
         var dtos = events.Select(EventToSimpleDto)
             .Skip(req.Skip)
@@ -44,7 +48,9 @@ public class EventService(ApplicationDbContext dbContext) : IEventService
 
     public async Task<Result<EventResponse.GetEvents>> GetEvents(CancellationToken ct)
     {
-        var events = await dbContext.Events.ToListAsync(cancellationToken: ct);
+        var events = await dbContext.Events
+            .Include(e => e.Banner)
+            .ToListAsync(cancellationToken: ct);
 
         var dtos = events.Select(EventToSimpleDto)
             .OrderBy(e => e.Start)
@@ -55,7 +61,11 @@ public class EventService(ApplicationDbContext dbContext) : IEventService
 
     public async Task<Result<EventDto.Detailed>> GetOpenEvent(int id, CancellationToken ct)
     {
-        var e = await dbContext.Events.FirstOrDefaultAsync(e => e.Id == id && e.Published && e.Accessibility == Accessibility.OPEN, ct);
+        var e = await dbContext.Events
+            .Include(e => e.Banner)
+            .Include(e => e.Sponsors)
+            .ThenInclude(s => s.Logo)
+            .FirstOrDefaultAsync(e => e.Id == id && e.Published && e.Accessibility == Accessibility.OPEN, ct);
 
         if (e is null)
             return Result.NotFound($"Event with id {id} not found");
@@ -65,7 +75,11 @@ public class EventService(ApplicationDbContext dbContext) : IEventService
 
     public async Task<Result<EventDto.Detailed>> GetPublishedEvent(int id, CancellationToken ct)
     {
-        var e = await dbContext.Events.FirstOrDefaultAsync(e => e.Id == id && e.Published, ct);
+        var e = await dbContext.Events
+            .Include(e => e.Banner)
+            .Include(e => e.Sponsors)
+            .ThenInclude(s => s.Logo)
+            .FirstOrDefaultAsync(e => e.Id == id && e.Published, ct);
 
         if (e is null)
             return Result.NotFound($"Event with id {id} not found");
@@ -75,7 +89,11 @@ public class EventService(ApplicationDbContext dbContext) : IEventService
 
     public async Task<Result<EventDto.Detailed>> GetEvent(int id, CancellationToken ct)
     {
-        var e = await dbContext.Events.FirstOrDefaultAsync(e => e.Id == id, ct);
+        var e = await dbContext.Events
+            .Include(e => e.Banner)
+            .Include(e => e.Sponsors)
+            .ThenInclude(s => s.Logo)
+            .FirstOrDefaultAsync(e => e.Id == id, ct);
 
         if (e is null)
             return Result.NotFound($"Event with id {id} not found");
