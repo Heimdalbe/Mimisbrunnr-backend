@@ -222,7 +222,31 @@ public class PraesidiumService(ApplicationDbContext dbContext) : IPraesidiumServ
     }
 
     #endregion
+    
+    #region MemberSocial
 
+    public async Task<Result<PraesidiumResponse.PostMemberSocial>> PostMemberSocial(int id, PraesidiumRequest.PostMemberSocial req, CancellationToken ct)
+    {
+        var member = await dbContext.MemberDetails
+            .Include(m => m.Socials)
+            .FirstOrDefaultAsync(m => m.Id == id, ct);
+        if (member is null)
+            return Result.NotFound($"Member with id {id} not found");
+        
+        var type = await dbContext.SocialTypes.FirstOrDefaultAsync(t => t.Id == req.TypeId, ct);
+        if (type is null)
+            return Result.NotFound($"Social type with id {req.TypeId} not found");
+        
+        member.AddSocial(new Social(type, req.Url));
+        
+        await dbContext.SaveChangesAsync(ct);
+        
+        return Result.Success(new PraesidiumResponse.PostMemberSocial { Id = id });
+    }
+
+    #endregion
+
+    
     #endregion
 
     #region Put
@@ -556,5 +580,27 @@ public class PraesidiumService(ApplicationDbContext dbContext) : IPraesidiumServ
 
     #endregion
 
+    #region MemberSocial
+
+    public async Task<Result<PraesidiumResponse.DeleteMemberSocial>> DeleteMemberSocial(int memberId, int socialId, CancellationToken ct)
+    {
+        var member = await dbContext.MemberDetails
+            .Include(m => m.Socials)
+            .FirstOrDefaultAsync(m => m.Id == memberId, ct);
+        if (member is null)
+            return Result.NotFound($"Member with id {memberId} not found");
+        
+        var social = await dbContext.Socials.FirstOrDefaultAsync(s => s.Id == socialId, ct);
+        if (social is null)
+            return Result.NotFound($"Social with id {socialId} not found");
+        
+        member.RemoveSocial(social);
+        await dbContext.SaveChangesAsync(ct);
+        
+        return Result.Success(new PraesidiumResponse.DeleteMemberSocial { Id = memberId });
+    }
+
+    #endregion
+    
     #endregion
 }
