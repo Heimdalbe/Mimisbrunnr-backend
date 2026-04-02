@@ -1,7 +1,9 @@
+using Mimisbrunnr.Domain.Accounts;
 using Mimisbrunnr.Domain.Common;
 using Mimisbrunnr.Domain.Events;
 using Mimisbrunnr.Domain.Praesidium;
 using Mimisbrunnr.Domain.Sponsors;
+using Mimisbrunnr.Shared.Accounts.Dtos;
 using Mimisbrunnr.Shared.Common.Dtos;
 using Mimisbrunnr.Shared.Events.Dtos;
 using Mimisbrunnr.Shared.Praesidium.Dtos;
@@ -283,5 +285,28 @@ public static class Mappers
         };
     }
     
+    #endregion
+
+    #region Account
+
+    public static AccountDto.Simple AccountToSimpleDto(Account account)
+    {
+        return new AccountDto.Simple
+        {
+            Id = account.Id,
+            Name = account.Name,
+        };
+    }
+
+    public static AccountDto.Detailed AccountToDetailedDto(Account account)
+    {
+        return new AccountDto.Detailed
+        {
+            Id = account.Id,
+            Name = account.Name,
+            Email = account.Email.Address
+        };
+    }
+
     #endregion
 }

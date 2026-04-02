@@ -23,7 +23,7 @@ public partial class PraesidiumRequest
             public Validator()
             {
                 RuleFor(x => x.Name).NotNull().NotEmpty();
-                RuleFor(x => x.Email).NotNull().NotEmpty();
+                RuleFor(x => x.Email).NotNull().EmailAddress();
                 RuleFor(x => x.Order).NotNull().GreaterThanOrEqualTo(0);
             }
         }
