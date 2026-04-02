@@ -1,4 +1,6 @@
 using Microsoft.AspNetCore.Identity;
+using Mimisbrunnr.Domain.Accounts;
+using Mimisbrunnr.Persistence;
 using Mimisbrunnr.Shared.Identity.Accounts;
 
 namespace Mimisbrunnr.Server.Endpoints.Identity.Accounts;
@@ -9,7 +11,7 @@ namespace Mimisbrunnr.Server.Endpoints.Identity.Accounts;
 /// </summary>
 /// <param name="userManager"></param>
 /// <param name="userStore"></param>
-public class Register(UserManager<IdentityUser> userManager, IUserStore<IdentityUser> userStore) : Endpoint<AccountRequest.Register, Result>
+public class Register(UserManager<IdentityUser> userManager, IUserStore<IdentityUser> userStore, ApplicationDbContext dbContext) : Endpoint<AccountRequest.Register, Result>
 {
     public override void Configure()
     {
@@ -39,6 +41,9 @@ public class Register(UserManager<IdentityUser> userManager, IUserStore<Identity
         // dbContext.Technicians.Add(new Technician("Fname", "Lname", user.Id));
         // or assinging a specific role etc using the RoleManager<IdentityUser> (inject it in the primary constructor).
 
+        var account = new Account(user.UserName, user.Email,user.Id);
+        
+        dbContext.Accounts.Add(account);
         
         // You can send a confirmation email by using a SMTP server or anything in the like. 
         // await SendConfirmationEmailAsync(user, userManager, context, email); or do something that matters
