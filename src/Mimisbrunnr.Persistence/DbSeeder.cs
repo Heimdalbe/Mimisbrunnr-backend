@@ -31,6 +31,7 @@ public class DbSeeder(ApplicationDbContext dbContext, RoleManager<IdentityRole> 
         await roleManager.CreateAsync(new IdentityRole("MediaEditor"));     // Albums aanpassen
         await roleManager.CreateAsync(new IdentityRole("EventEditor"));     // Events aanpassen
         await roleManager.CreateAsync(new IdentityRole("SponsorEditor"));   // Sponsors aanpassen
+        
     }
     
     private async Task  UsersAsync()

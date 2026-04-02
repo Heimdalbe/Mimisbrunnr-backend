@@ -1,5 +1,5 @@
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Mimisbrunnr.Domain.Album;
+using Mimisbrunnr.Domain.Albums;
 
 namespace Mimisbrunnr.Persistence.Configurations.Albums;
 

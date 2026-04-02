@@ -71,7 +71,8 @@ namespace Mimisbrunnr.Domain.Events
         #region Methods
         public void AddSponsor(Sponsor sponsor)
         {
-            _sponsors.Add(sponsor);
+            if(!_sponsors.Contains(sponsor))
+                _sponsors.Add(sponsor);
         }
 
         public void RemoveSponsor(Sponsor sponsor)

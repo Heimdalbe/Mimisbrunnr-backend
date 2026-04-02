@@ -11,31 +11,32 @@ namespace Mimisbrunnr.Domain.Common
     {
         #region Fields
         private string _url;
-        private string? _description;
+        private string _description;
         #endregion
 
         #region Properties
         public string Description { 
             get => _description ?? ""; 
-            set => _description = Guard.Against.Null(value, nameof(Description)); 
+            set => _description = Guard.Against.Null(value); 
         }
         
         public string Url
         {
             get => _url;
+            private set => _url = Guard.Against.Null(value);
         }
         #endregion
 
         #region Constructors
-        public Image(string url, string description) : this(url)
+        public Image(string url, string description)
         {
             Description = description;
         }
 
-        public Image(string url)
+        public Image(string url) : this(url, "")
         {
-            Guard.Against.NullOrWhiteSpace(url, nameof(url));
-            _url = Guard.Against.Url(url, nameof(url));
+            Guard.Against.NullOrWhiteSpace(url);
+            Url = Guard.Against.Url(url);
         }
         #endregion
     }
