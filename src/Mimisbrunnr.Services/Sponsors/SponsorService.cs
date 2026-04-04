@@ -14,7 +14,9 @@ public class SponsorService(ApplicationDbContext dbContext) : ISponsorService
 
     public async Task<Result<SponsorResponse.GetSponsors>> GetSponsors(CancellationToken cancellationToken = default)
     {
-        var sponsors = await dbContext.Sponsors.ToListAsync(cancellationToken: cancellationToken);
+        var sponsors = await dbContext.Sponsors
+            .Include(s => s.Logo)
+            .ToListAsync(cancellationToken: cancellationToken);
         var dtos = sponsors.Select(SponsorToSimpleDto).ToList().AsReadOnly();
 
         return Result.Success(new SponsorResponse.GetSponsors { Sponsors = dtos });
@@ -22,7 +24,9 @@ public class SponsorService(ApplicationDbContext dbContext) : ISponsorService
 
     public async Task<Result<SponsorDto.Detailed>> GetSponsor(int id, CancellationToken cancellationToken = default)
     {
-        var sponsor = await dbContext.Sponsors.FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
+        var sponsor = await dbContext.Sponsors
+            .Include(s => s.Logo)
+            .FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
 
         if (sponsor is null)
             return Result.NotFound($"Sponsor with id {id} not found");
