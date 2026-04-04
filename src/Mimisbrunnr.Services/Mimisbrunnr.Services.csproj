@@ -17,4 +17,8 @@
       <ProjectReference Include="..\Mimisbrunnr.Shared\Mimisbrunnr.Shared.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <PackageReference Include="Microsoft.Extensions.Http" Version="10.0.5" />
+    </ItemGroup>
+
 </Project>
