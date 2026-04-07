@@ -10,7 +10,7 @@ internal class TermConfiguration : EntityConfiguration<PraesidiumTerm>
         base.Configure(builder);
 
         builder.Property(t => t.Year).IsRequired();
-        builder.HasAlternateKey(t => t.Year);
+        builder.HasIndex(t => t.Year);
         
         //builder.HasOne(t => t.Year).WithMany();
         builder.HasOne(t => t.Role).WithMany();
