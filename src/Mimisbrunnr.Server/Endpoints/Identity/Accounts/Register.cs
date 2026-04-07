@@ -11,6 +11,7 @@ namespace Mimisbrunnr.Server.Endpoints.Identity.Accounts;
 /// </summary>
 /// <param name="userManager"></param>
 /// <param name="userStore"></param>
+/// <param name="dbContext"></param>
 public class Register(UserManager<IdentityUser> userManager, IUserStore<IdentityUser> userStore, ApplicationDbContext dbContext) : Endpoint<AccountRequest.Register, Result>
 {
     public override void Configure()
