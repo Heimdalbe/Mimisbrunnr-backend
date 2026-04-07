@@ -1,15 +1,4 @@
-﻿using Ardalis.GuardClauses;
-using Mimisbrunnr.Domain.Events;
-using Mimisbrunnr.Domain.Exceptions;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
-using Mimisbrunnr.Domain.Common;
-
-namespace Mimisbrunnr.Domain.Praesidium
+﻿namespace Mimisbrunnr.Domain.Praesidium
 {
     public class MemberDetails : Entity
     {
