@@ -1,7 +1,8 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using Mimisbrunnr.Domain.Account;
+
+using Mimisbrunnr.Domain.Accounts;
 using Mimisbrunnr.Domain.Albums;
 using Mimisbrunnr.Domain.Common;
 using Mimisbrunnr.Domain.Events;

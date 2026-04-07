@@ -1,3 +1,5 @@
+using System.Text.Json;
+
 namespace Mimisbrunnr.Shared.Common;
 
 /// <summary>
@@ -50,6 +52,20 @@ public static partial class QueryRequest
         /// to further refine query results based on specified conditions.
         /// </summary>
         public Dictionary<string, object?> Filters { get; set; } = new();
+        
+        public string AsQuery()
+        {
+            var filterJson = JsonSerializer.Serialize(Filters);
+
+            var str =
+                $"skip={Skip}" +
+                $"&take={Take}" +
+                $"&orderBy={OrderBy}" +
+                $"&orderDescending={OrderDescending}" +
+                $"&searchTerm={SearchTerm}" +
+                $"&filters={filterJson}";
+            return str;
+        }
     }
 
     /// <summary>
