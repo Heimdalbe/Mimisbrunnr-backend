@@ -12,7 +12,7 @@ public class GetLustrumLidById(IPraesidiumService praesidiumService) : EndpointW
 
     public override Task<Result<LustrumLidDto.Detailed>> ExecuteAsync(CancellationToken ct)
     {
-        var id = Route<int>("int");
+        var id = Route<int>("id");
         return praesidiumService.GetLustrumlidDetailed(id, ct);
     }
 }

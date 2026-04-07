@@ -28,15 +28,16 @@ try
         .AddEntityFrameworkStores<ApplicationDbContext>()
         .Services.AddDbContext<ApplicationDbContext>(o =>
         {
-            var connectionString = builder.Configuration.GetConnectionString("DatabaseConnection") ??
-                                   throw new InvalidOperationException("Connection string 'DatabaseConnection' not found.");
-            o.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)); // Swap Sqlite for your database provider (e.g. Sql Server, MySQL, PostgreSQL, etc.).
+            var connectionString = builder.Configuration.GetConnectionString("DatabaseConnection");
+            if (string.IsNullOrEmpty(connectionString))
+                throw new InvalidOperationException("Connection string 'DatabaseConnection' not found.");
+
+            o.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
             o.EnableDetailedErrors();
             if (builder.Environment.IsDevelopment())
-            {
-                o.EnableSensitiveDataLogging(); // only enabled in development.
-            }
-            o.UseTriggers(options => options.AddTrigger<EntityBeforeSaveTrigger>()); // Handles all UpdatedAt, CreatedAt stuff.
+                o.EnableSensitiveDataLogging();
+
+            o.AddApplicationTriggers();
         })
         .ConfigureApplicationCookie(o =>
         {
@@ -78,9 +79,9 @@ try
         {
             var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
             var dbSeeder = scope.ServiceProvider.GetRequiredService<DbSeeder>();
-            // dbContext.Database.EnsureDeleted(); // Delete the database if it exists to clean it up if needed.
+            dbContext.Database.EnsureDeleted(); // Delete the database if it exists to clean it up if needed.
 
-            dbContext.Database.Migrate(); // Creates the database if it doesn't exist and applies all migrations. See Readme.md for more info.
+            await dbContext.Database.EnsureCreatedAsync(); // Creates the database if it doesn't exist and applies all migrations. See Readme.md for more info.
             await dbSeeder.SeedAsync(); // Seeds the database with some test data.
         }
     }

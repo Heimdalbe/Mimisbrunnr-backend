@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 namespace Mimisbrunnr.Persistence.Configurations.Identity;
 
 /// <summary>
-/// Configuration for the Identity tables.
+///     Configuration for the Identity tables.
 /// </summary>
 internal class IdentityConfiguration :
     IEntityTypeConfiguration<IdentityUser>,
@@ -16,6 +16,20 @@ internal class IdentityConfiguration :
     IEntityTypeConfiguration<IdentityRoleClaim<string>>,
     IEntityTypeConfiguration<IdentityUserToken<string>>
 {
+    public void Configure(EntityTypeBuilder<IdentityRole> builder)
+    {
+        builder.ToTable("Roles");
+        builder.Property(r => r.Id).HasMaxLength(255);
+        builder.Property(r => r.Name).HasMaxLength(255);
+        builder.Property(r => r.NormalizedName).HasMaxLength(255);
+        builder.Property(r => r.ConcurrencyStamp).HasMaxLength(500);
+    }
+
+    public void Configure(EntityTypeBuilder<IdentityRoleClaim<string>> builder)
+    {
+        builder.ToTable("RoleClaims");
+        builder.Property(rc => rc.RoleId).HasMaxLength(255);
+    }
     // Configures the IdentityUser tables.
     // NOTE:
     // If you want to use a separate schema for your Identity tables,
@@ -23,25 +37,47 @@ internal class IdentityConfiguration :
     //     builder.ToTable("Users", "auth");
     // However, be aware that SQLite does NOT support schemas, so this only works with SQL Server, MarioDB, PostgreSQL,...
     // The default below will work on any provider.
-    
+
     public void Configure(EntityTypeBuilder<IdentityUser> builder)
-        => builder.ToTable("Users");
-
-    public void Configure(EntityTypeBuilder<IdentityRole> builder)
-        => builder.ToTable("Roles");
-
-    public void Configure(EntityTypeBuilder<IdentityUserRole<string>> builder)
-        => builder.ToTable("UserRoles");
+    {
+        builder.ToTable("Users");
+        builder.Property(u => u.Id).HasMaxLength(255);
+        builder.Property(u => u.Email).HasMaxLength(255);
+        builder.Property(u => u.NormalizedEmail).HasMaxLength(255);
+        builder.Property(u => u.UserName).HasMaxLength(255);
+        builder.Property(u => u.NormalizedUserName).HasMaxLength(255);
+        builder.Property(u => u.PasswordHash).HasMaxLength(500);
+        builder.Property(u => u.SecurityStamp).HasMaxLength(500);
+        builder.Property(u => u.ConcurrencyStamp).HasMaxLength(500);
+        builder.Property(u => u.PhoneNumber).HasMaxLength(50);
+    }
 
     public void Configure(EntityTypeBuilder<IdentityUserClaim<string>> builder)
-        => builder.ToTable("UserClaims");
+    {
+        builder.ToTable("UserClaims");
+        builder.Property(uc => uc.UserId).HasMaxLength(255);
+    }
 
     public void Configure(EntityTypeBuilder<IdentityUserLogin<string>> builder)
-        => builder.ToTable("UserLogins");
+    {
+        builder.ToTable("UserLogins");
+        builder.Property(ul => ul.LoginProvider).HasMaxLength(255);
+        builder.Property(ul => ul.ProviderKey).HasMaxLength(255);
+        builder.Property(ul => ul.UserId).HasMaxLength(255);
+    }
 
-    public void Configure(EntityTypeBuilder<IdentityRoleClaim<string>> builder)
-        => builder.ToTable("RoleClaims");
+    public void Configure(EntityTypeBuilder<IdentityUserRole<string>> builder)
+    {
+        builder.ToTable("UserRoles");
+        builder.Property(ur => ur.UserId).HasMaxLength(255);
+        builder.Property(ur => ur.RoleId).HasMaxLength(255);
+    }
 
     public void Configure(EntityTypeBuilder<IdentityUserToken<string>> builder)
-        => builder.ToTable("UserTokens");
+    {
+        builder.ToTable("UserTokens");
+        builder.Property(ut => ut.UserId).HasMaxLength(255);
+        builder.Property(ut => ut.LoginProvider).HasMaxLength(255);
+        builder.Property(ut => ut.Name).HasMaxLength(255);
+    }
 }

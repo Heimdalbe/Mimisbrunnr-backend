@@ -1,14 +1,14 @@
 using System.Net.Mail;
-using Mimisbrunnr.Domain.Common;
 
-namespace Mimisbrunnr.Domain.Account;
+namespace Mimisbrunnr.Domain.Accounts;
 
 public class Account : Entity
 {
     #region Fields
+    
     private string _name;
     private MailAddress _email;
-    private int _accountId;
+    private string _userId;
     #endregion
 
     #region Properties
@@ -24,22 +24,22 @@ public class Account : Entity
         set { _email = Guard.Against.Null(value); }
     }
     
-    public int AccountId
+    public string UserId
     {
-        get { return _accountId; }
-        private set { _accountId = Guard.Against.NegativeOrZero(value); }
+        get { return _userId; }
+        private set { _userId = Guard.Against.NullOrEmpty(value); }
     }
     #endregion
     
     #region Constructors
-    public Account(string name, MailAddress email, int accountId)
+    public Account(string name, MailAddress email, string userId)
     {
         Name = name;
         Email = email;
-        AccountId = accountId;
+        UserId = userId;
     }
 
-    public Account(string name, string email, int accountId) : this(name, new MailAddress(email), accountId)
+    public Account(string name, string email, string userId) : this(name, new MailAddress(email), userId)
     {
         
     }

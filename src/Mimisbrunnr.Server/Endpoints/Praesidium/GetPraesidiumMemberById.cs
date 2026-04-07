@@ -12,7 +12,7 @@ public class GetPraesidiumMemberById(IPraesidiumService praesidiumService) : End
 
     public override Task<Result<PraesidiumTermDto.Detailed>> ExecuteAsync(CancellationToken ct)
     {
-        var id = Route<int>("int");
+        var id = Route<int>("id");
         return praesidiumService.GetPraesidiumTermDetailed(id, ct);
     }
 }
