@@ -8,8 +8,8 @@ public static class AlbumDto
     {
         public required int Id { get; set; }
         public required string Name { get; set; }
+        public required DateOnly Date { get; set; }
         public required ImageDto.Simple? CoverImage { get; set; }
-        
         public required bool Published { get; set; }
     }
     
@@ -17,6 +17,7 @@ public static class AlbumDto
     {
         public required int Id { get; set; }
         public required string Name { get; set; }
+        public required DateOnly Date { get; set; }
         public required ImageDto.Simple? CoverImage { get; set; }
         public required IReadOnlyCollection<ImageDto.Simple> Images { get; set; }
         public required string Description { get; set; }

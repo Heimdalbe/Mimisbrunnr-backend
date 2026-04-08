@@ -4,7 +4,7 @@ public class Album : Entity
 {
     #region Fields
     private string _name;
-    private int _year;
+    private DateOnly _date;
     private Image? _coverImage;
     private ICollection<Image> _images;
     private string _description;
@@ -18,10 +18,10 @@ public class Album : Entity
         set { _name = Guard.Against.NullOrEmpty(value); }
     }
     
-    public int Year
+    public DateOnly Date
     {
-        get { return _year; }
-        set { _year = Guard.Against.NegativeOrZero(value); }
+        get { return _date; }
+        set { _date = Guard.Against.NullOrInvalidInput(value, nameof(Date), date => date.Year >= 2018); }
     }
 
     public string Description
@@ -73,15 +73,15 @@ public class Album : Entity
     #endregion
     
     #region Constructors
-    public Album(string name, int year, string description, bool published)
+    public Album(string name, DateOnly date, string description, bool published)
     {
         Name = name;
-        Year =  year;
+        Date =  date;
         Description = description;
         Images = new List<Image>();
         Published = published;
     }
-    public Album(string name, int year, string description, bool published, Image coverImage) : this(name, year, description, published)
+    public Album(string name, DateOnly date, string description, bool published, Image coverImage) : this(name, date, description, published)
     {
         CoverImage = coverImage;
     }

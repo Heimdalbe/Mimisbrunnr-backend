@@ -73,10 +73,10 @@ public class AlbumService(ApplicationDbContext dbContext, IHttpClientFactory htt
         if (req.CoverImageUrl is not null)
         {
             var coverImage = await dbContext.Images.FirstOrDefaultAsync(i => i.Url == req.CoverImageUrl, cancellationToken: ct) ?? new Image(req.CoverImageUrl);
-            album = new Album(req.Name, req.Year, req.Description, req.Published, coverImage);
+            album = new Album(req.Name, req.Date, req.Description, req.Published, coverImage);
         }
         else
-            album = new Album(req.Name, req.Year, req.Description, req.Published);
+            album = new Album(req.Name, req.Date, req.Description, req.Published);
         
         dbContext.Albums.Add(album);
         await dbContext.SaveChangesAsync(ct);
@@ -161,8 +161,8 @@ public class AlbumService(ApplicationDbContext dbContext, IHttpClientFactory htt
         if(req.Name is not null)
             album.Name = req.Name;
         
-        if (req.Year is not null)
-            album.Year = req.Year.Value;
+        if (req.Date is not null)
+            album.Date = req.Date.Value;
 
         if (req.CoverImageUrl is not null)
         {

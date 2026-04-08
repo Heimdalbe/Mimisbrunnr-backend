@@ -297,6 +297,7 @@ public static class Mappers
         {
             Id = album.Id,
             Name = album.Name,
+            Date = album.Date,
             CoverImage = album.CoverImage is null ? null : ImageToSimpleDto(album.CoverImage),
             Published = album.Published,
         };
@@ -308,13 +309,15 @@ public static class Mappers
         {
             Id = album.Id,
             Name = album.Name,
+            Date = album.Date,
             CoverImage = album.CoverImage is null ? null : ImageToSimpleDto(album.CoverImage),
             Images = album.Images.Select(ImageToSimpleDto).ToArray(),
             Description = album.Description,
             Published = album.Published,
         };
     }
-    
+
+    #endregion
 
     #region Account
 

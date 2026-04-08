@@ -13,7 +13,7 @@ public partial class AlbumRequest
     public class PostAlbum
     {
         public required string Name { get; set; }
-        public required int Year { get; set; }
+        public required DateOnly Date { get; set; }
         public string? CoverImageUrl { get; set; }
         public required string Description { get; set; } 
         public required bool Published { get; set; }
@@ -23,7 +23,8 @@ public partial class AlbumRequest
             public Validator()
             {
                 RuleFor(x => x.Name).NotNull().NotEmpty();
-                RuleFor(x => x.Year).NotNull().GreaterThanOrEqualTo(2018);
+                RuleFor(x => x.Date).NotNull();
+                RuleFor(x => x.Date.Year).GreaterThanOrEqualTo(2018);
                 RuleFor(x => x.CoverImageUrl).NotEmpty().When(x => x.CoverImageUrl is not null);
                 RuleFor(x => x.Description).NotNull();
                 RuleFor(x => x.Published).NotNull();
