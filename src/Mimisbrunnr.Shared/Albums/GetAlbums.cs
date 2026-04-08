@@ -8,5 +8,6 @@ public partial class AlbumResponse
     public class GetAlbums
     {
         public required IReadOnlyList<AlbumDto.Simple> Albums { get; set; }
+        public required int Total { get; set; }
     }
 }

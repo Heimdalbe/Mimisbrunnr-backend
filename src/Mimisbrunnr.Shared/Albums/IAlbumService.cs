@@ -1,10 +1,11 @@
 using Mimisbrunnr.Shared.Albums.Dtos;
+using Mimisbrunnr.Shared.Common;
 
 namespace Mimisbrunnr.Shared.Albums;
 
 public interface IAlbumService
 {
-    Task<Result<AlbumResponse.GetAlbums>> GetPubAlbums(CancellationToken ct);
+    Task<Result<AlbumResponse.GetAlbums>> GetPubAlbums(QueryRequest.SkipTake req, CancellationToken ct);
     
     Task<Result<AlbumResponse.GetAlbums>> GetAlbums(CancellationToken ct);
 

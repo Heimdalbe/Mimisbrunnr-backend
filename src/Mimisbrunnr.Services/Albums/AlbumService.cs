@@ -7,6 +7,7 @@ using Mimisbrunnr.Domain.Common;
 using Mimisbrunnr.Persistence;
 using Mimisbrunnr.Shared.Albums;
 using Mimisbrunnr.Shared.Albums.Dtos;
+using Mimisbrunnr.Shared.Common;
 using Mimisbrunnr.Shared.Common.Dtos;
 using static Mimisbrunnr.Services.Mappers.Mappers;
 
@@ -16,14 +17,20 @@ public class AlbumService(ApplicationDbContext dbContext, IHttpClientFactory htt
 {
     #region Get
 
-    public async Task<Result<AlbumResponse.GetAlbums>> GetPubAlbums(CancellationToken ct)
+    public async Task<Result<AlbumResponse.GetAlbums>> GetPubAlbums(QueryRequest.SkipTake req, CancellationToken ct)
     {
         var albums = await dbContext.Albums
             .Include(a => a.CoverImage)
-            .Where(a => a.Published).ToListAsync(ct);
+            .Where(a => a.Published)
+            .Skip(req.Skip)
+            .Take(req.Take)
+            .ToListAsync(ct);
+
+        var total = await dbContext.Albums.Where(a => a.Published).CountAsync(ct);
+        
         var dtos = albums.Select(AlbumToSimpleDto).ToList().AsReadOnly();
         
-        return Result.Success(new AlbumResponse.GetAlbums{ Albums = dtos });
+        return Result.Success(new AlbumResponse.GetAlbums{ Albums = dtos, Total = total});
     }
     
     public async Task<Result<AlbumResponse.GetAlbums>> GetAlbums(CancellationToken ct)
@@ -33,7 +40,7 @@ public class AlbumService(ApplicationDbContext dbContext, IHttpClientFactory htt
             .ToListAsync(ct);
         var dtos = albums.Select(AlbumToSimpleDto).ToList().AsReadOnly();
         
-        return Result.Success(new AlbumResponse.GetAlbums{ Albums = dtos });
+        return Result.Success(new AlbumResponse.GetAlbums{ Albums = dtos,  Total = albums.Count });
     }
     
     
