@@ -8,6 +8,7 @@ public class GetPubAlbums(IAlbumService albumService) : Endpoint<QueryRequest.Sk
     public override void Configure()
     {
         Get("/api/albums/pub");
+        AllowAnonymous();
     }
 
     public override Task<Result<AlbumResponse.GetAlbums>> ExecuteAsync(QueryRequest.SkipTake req, CancellationToken ct)

@@ -24,6 +24,16 @@ try
     builder.Services
         .AddSerilog((_, lc) => lc.ReadFrom.Configuration(builder.Configuration) // Configuration in AppSettings.json
             .Destructure.UsingAttributes()) // Sensitive data logging
+        .AddCors(options =>
+        {
+            options.AddPolicy("Frontend", policy =>
+            {
+                policy.WithOrigins("http://localhost:5173")
+                    .AllowAnyHeader()
+                    .AllowAnyMethod()
+                    .AllowCredentials();
+            });
+        })
         .AddIdentity<IdentityUser, IdentityRole>() 
         .AddEntityFrameworkStores<ApplicationDbContext>()
         .Services.AddDbContext<ApplicationDbContext>(o =>
@@ -87,9 +97,10 @@ try
     }
     // Theses middlewares are strict in order of calling!
     app.UseHttpsRedirection()
-        .UseBlazorFrameworkFiles() // Blazor is also served from the API. 
-        .UseStaticFiles()
+        //.UseBlazorFrameworkFiles() // Blazor is also served from the API. 
+        //.UseStaticFiles()
         .UseDefaultExceptionHandler()
+        .UseCors("Frontend")
         .UseAuthentication()
         .UseAuthorization()
         .UseFastEndpoints(o =>
@@ -101,9 +112,9 @@ try
                 ep.PostProcessor<GlobalResponseSender>(Order.Before);
                 ep.PostProcessor<GlobalResponseLogger>(Order.Before);
             };
-        })
-        .UseSwaggerGen();
-    app.MapFallbackToFile("index.html"); // Serves the Blazor app from the API, when no routes match.
+        });
+        //.UseSwaggerGen();
+    //app.MapFallbackToFile("index.html"); // Serves the Blazor app from the API, when no routes match.
     app.Run();
 }
 catch (Exception ex)

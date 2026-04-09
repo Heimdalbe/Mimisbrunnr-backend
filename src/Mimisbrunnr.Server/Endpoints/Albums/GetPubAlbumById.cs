@@ -9,6 +9,7 @@ public class GetPubAlbumById(IAlbumService albumService) : EndpointWithoutReques
     public override void Configure()
     {
         Get("/api/albums/pub/{id:int}");
+        AllowAnonymous();
     }
 
     public override Task<Result<AlbumDto.Detailed>> ExecuteAsync(CancellationToken ct)

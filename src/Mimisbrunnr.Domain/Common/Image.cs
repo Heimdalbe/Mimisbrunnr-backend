@@ -23,20 +23,19 @@ namespace Mimisbrunnr.Domain.Common
         public string Url
         {
             get => _url;
-            private set => _url = Guard.Against.Null(value);
+            private set => _url = Guard.Against.Url(value);
         }
         #endregion
 
         #region Constructors
         public Image(string url, string description)
         {
+            Url = Guard.Against.NullOrWhiteSpace(url);
             Description = description;
         }
 
         public Image(string url) : this(url, "")
         {
-            Guard.Against.NullOrWhiteSpace(url);
-            Url = Guard.Against.Url(url);
         }
         #endregion
     }

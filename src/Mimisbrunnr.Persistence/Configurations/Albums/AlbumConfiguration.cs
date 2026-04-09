@@ -11,7 +11,7 @@ internal class AlbumConfiguration : EntityConfiguration<Album>
         base.Configure(builder);
         
         builder.Property(a => a.Name).HasMaxLength(100).IsRequired();
-        builder.Property(a => a.Date).HasDefaultValue(DateTime.UtcNow);
+        builder.Property(a => a.Date).HasDefaultValue(DateOnly.FromDateTime(DateTime.UtcNow));
         builder.Property(a => a.Description).HasMaxLength(500);
         builder.HasOne(a => a.CoverImage).WithMany();
         builder.HasMany(a => a.Images).WithMany();
