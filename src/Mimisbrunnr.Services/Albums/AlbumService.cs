@@ -125,9 +125,6 @@ public class AlbumService(ApplicationDbContext dbContext, IHttpClientFactory htt
         
         var url = $"https://api.imgur.com/3/album/{key}";
         
-        Console.WriteLine("a");
-        Console.WriteLine(client.DefaultRequestHeaders.Authorization);
-
         try
         {
             var response = await client.GetAsync(url, ct);
