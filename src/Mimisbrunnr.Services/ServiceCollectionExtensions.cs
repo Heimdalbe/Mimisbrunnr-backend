@@ -25,12 +25,6 @@ public static class ServiceCollectionExtensions
         
         services.AddTransient<DbSeeder>();       
         
-        
-        services.AddHttpClient("SecureApi");
-        
-        services.AddScoped(sp =>
-            sp.GetRequiredService<IHttpClientFactory>().CreateClient("SecureApi"));
-        
         return services;
     }
 }

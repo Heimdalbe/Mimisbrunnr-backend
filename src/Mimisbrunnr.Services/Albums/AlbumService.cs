@@ -122,33 +122,29 @@ public class AlbumService(ApplicationDbContext dbContext, IHttpClientFactory htt
         var key = match.Groups[1].Value;
         
         var client = httpClientFactory.CreateClient("SecureApi");
-        client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Client-ID", "771f08ac2c9301e");
+        
         var url = $"https://api.imgur.com/3/album/{key}";
+        
+        Console.WriteLine("a");
+        Console.WriteLine(client.DefaultRequestHeaders.Authorization);
 
         try
         {
             var response = await client.GetAsync(url, ct);
             
-            try
-            {
-                var result = await response.Content.ReadFromJsonAsync<ImgurAlbumResponse>(ct);
+            var result = await response.Content.ReadFromJsonAsync<ImgurAlbumResponse>(ct);
                 
-                if (result is not null)
-                {
-                    var images = result.Data.Images.Select(i => dbContext.Images.FirstOrDefault(im => im.Url == i.Link) ?? new Image(i.Link)).ToList();
+            if (result is not null)
+            {
+                var images = result.Data.Images.Select(i => dbContext.Images.FirstOrDefault(im => im.Url == i.Link) ?? new Image(i.Link)).ToList();
 
-                    album.Images = images;
-                }
-                
+                album.Images = images;
             }
-            catch
-            {
-                return Result.Error("Internal server error");
-            }
+               
         }
         catch
         {
-            return Result.Error("Internal server error");            
+            return Result.NotFound($"Album with key {key} not found");            
         }
         await dbContext.SaveChangesAsync(ct);
         

@@ -1,3 +1,4 @@
+using System.Net.Http.Headers;
 using Destructurama;
 using FastEndpoints.Swagger;
 using Microsoft.AspNetCore.Identity;
@@ -20,7 +21,7 @@ try
 {
     Log.Information("Starting web application");
     var builder = WebApplication.CreateBuilder(args);
-
+    
     builder.Services
         .AddSerilog((_, lc) => lc.ReadFrom.Configuration(builder.Configuration) // Configuration in AppSettings.json
             .Destructure.UsingAttributes()) // Sensitive data logging
@@ -36,7 +37,15 @@ try
         })
         .AddIdentity<IdentityUser, IdentityRole>() 
         .AddEntityFrameworkStores<ApplicationDbContext>()
-        .Services.AddDbContext<ApplicationDbContext>(o =>
+        
+        .Services.AddHttpClient("SecureApi", c =>
+        {
+            var imgurClientId = builder.Configuration.GetSection("imgur")["Client-Id"];
+            c.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Client-ID", imgurClientId);
+        })
+        .Services.AddScoped(sp => sp.GetRequiredService<IHttpClientFactory>().CreateClient("SecureApi"))
+        
+        .AddDbContext<ApplicationDbContext>(o =>
         {
             var connectionString = builder.Configuration.GetConnectionString("DatabaseConnection");
             if (string.IsNullOrEmpty(connectionString))
