@@ -1,3 +1,4 @@
+using System.Net.Http.Headers;
 using Destructurama;
 using FastEndpoints.Swagger;
 using Microsoft.AspNetCore.Identity;
@@ -20,13 +21,31 @@ try
 {
     Log.Information("Starting web application");
     var builder = WebApplication.CreateBuilder(args);
-
+    
     builder.Services
         .AddSerilog((_, lc) => lc.ReadFrom.Configuration(builder.Configuration) // Configuration in AppSettings.json
             .Destructure.UsingAttributes()) // Sensitive data logging
+        .AddCors(options =>
+        {
+            options.AddPolicy("Frontend", policy =>
+            {
+                policy.WithOrigins("http://localhost:5173")
+                    .AllowAnyHeader()
+                    .AllowAnyMethod()
+                    .AllowCredentials();
+            });
+        })
         .AddIdentity<IdentityUser, IdentityRole>() 
         .AddEntityFrameworkStores<ApplicationDbContext>()
-        .Services.AddDbContext<ApplicationDbContext>(o =>
+        
+        .Services.AddHttpClient("SecureApi", c =>
+        {
+            var imgurClientId = builder.Configuration.GetSection("imgur")["Client-Id"];
+            c.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Client-ID", imgurClientId);
+        })
+        .Services.AddScoped(sp => sp.GetRequiredService<IHttpClientFactory>().CreateClient("SecureApi"))
+        
+        .AddDbContext<ApplicationDbContext>(o =>
         {
             var connectionString = builder.Configuration.GetConnectionString("DatabaseConnection");
             if (string.IsNullOrEmpty(connectionString))
@@ -87,9 +106,10 @@ try
     }
     // Theses middlewares are strict in order of calling!
     app.UseHttpsRedirection()
-        .UseBlazorFrameworkFiles() // Blazor is also served from the API. 
-        .UseStaticFiles()
+        //.UseBlazorFrameworkFiles() // Blazor is also served from the API. 
+        //.UseStaticFiles()
         .UseDefaultExceptionHandler()
+        .UseCors("Frontend")
         .UseAuthentication()
         .UseAuthorization()
         .UseFastEndpoints(o =>
@@ -101,9 +121,9 @@ try
                 ep.PostProcessor<GlobalResponseSender>(Order.Before);
                 ep.PostProcessor<GlobalResponseLogger>(Order.Before);
             };
-        })
-        .UseSwaggerGen();
-    app.MapFallbackToFile("index.html"); // Serves the Blazor app from the API, when no routes match.
+        });
+        //.UseSwaggerGen();
+    //app.MapFallbackToFile("index.html"); // Serves the Blazor app from the API, when no routes match.
     app.Run();
 }
 catch (Exception ex)
