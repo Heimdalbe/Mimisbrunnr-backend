@@ -1,8 +1,10 @@
+using Mimisbrunnr.Domain.Albums;
 using Mimisbrunnr.Domain.Accounts;
 using Mimisbrunnr.Domain.Common;
 using Mimisbrunnr.Domain.Events;
 using Mimisbrunnr.Domain.Praesidium;
 using Mimisbrunnr.Domain.Sponsors;
+using Mimisbrunnr.Shared.Albums.Dtos;
 using Mimisbrunnr.Shared.Accounts.Dtos;
 using Mimisbrunnr.Shared.Common.Dtos;
 using Mimisbrunnr.Shared.Events.Dtos;
@@ -285,6 +287,36 @@ public static class Mappers
         };
     }
     
+    #endregion
+    
+    #region Album
+
+    public static AlbumDto.Simple AlbumToSimpleDto(Album album)
+    {
+        return new AlbumDto.Simple
+        {
+            Id = album.Id,
+            Name = album.Name,
+            Date = album.Date,
+            CoverImage = album.CoverImage is null ? null : ImageToSimpleDto(album.CoverImage),
+            Published = album.Published,
+        };
+    }
+
+    public static AlbumDto.Detailed AlbumToDetailedDto(Album album)
+    {
+        return new AlbumDto.Detailed
+        {
+            Id = album.Id,
+            Name = album.Name,
+            Date = album.Date,
+            CoverImage = album.CoverImage is null ? null : ImageToSimpleDto(album.CoverImage),
+            Images = album.Images.Select(ImageToSimpleDto).ToArray(),
+            Description = album.Description,
+            Published = album.Published,
+        };
+    }
+
     #endregion
 
     #region Account

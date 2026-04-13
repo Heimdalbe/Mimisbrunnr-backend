@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Mimisbrunnr.Domain.Albums;
 //using Mimisbrunnr.Domain.Accounts;
 using Mimisbrunnr.Domain.Common;
 using Mimisbrunnr.Domain.Praesidium;
@@ -23,6 +24,7 @@ public class DbSeeder(ApplicationDbContext dbContext, RoleManager<IdentityRole> 
         //await AccountAsync();
         await ImagesAsync();
         await PraesidiumAsync();
+        await AlbumsAsync();
     }
 
     private async Task RolesAsync()
@@ -37,6 +39,7 @@ public class DbSeeder(ApplicationDbContext dbContext, RoleManager<IdentityRole> 
         await roleManager.CreateAsync(new IdentityRole("MediaEditor"));     // Albums aanpassen
         await roleManager.CreateAsync(new IdentityRole("EventEditor"));     // Events aanpassen
         await roleManager.CreateAsync(new IdentityRole("SponsorEditor"));   // Sponsors aanpassen
+        
     }
 
     private async Task ImagesAsync()
@@ -44,7 +47,7 @@ public class DbSeeder(ApplicationDbContext dbContext, RoleManager<IdentityRole> 
         if (dbContext.Images.Any())
             return;
 
-        defaultImage = new Image("https://i.image.com/aiXnDhm.png", "");
+        defaultImage = new Image("https://i.imgur.com/aiXnDhm.png", "");
         await dbContext.Images.AddAsync(defaultImage);
         
         await dbContext.SaveChangesAsync();
@@ -326,5 +329,32 @@ public class DbSeeder(ApplicationDbContext dbContext, RoleManager<IdentityRole> 
         await dbContext.SaveChangesAsync();
 
         #endregion
+    }
+
+    private async Task AlbumsAsync()
+    {
+        if(dbContext.Albums.Any())
+            return;
+
+        var a1 = new Album("A1",DateOnly.Parse("12/12/2024"),"",true );
+        a1.AddImage(defaultImage);
+        a1.Published = true;
+        
+        dbContext.Albums.Add(a1);
+        
+        var a2 = new Album("A2",DateOnly.Parse("12/12/2025"),"Dit is een album",true );
+        a2.AddImage(defaultImage);
+        a2.Published = true;
+        
+        dbContext.Albums.Add(a2);
+        
+        var a3 = new Album("A3",DateOnly.Parse("12/12/2026"),"",true );
+        dbContext.Albums.Add(a3);
+        
+        var a4 = new Album("A3",DateOnly.Parse("12/12/2027"),"",false );
+
+        dbContext.Albums.Add(a4);
+        
+        await dbContext.SaveChangesAsync();
     }
 }

@@ -14,17 +14,17 @@ public partial class SponsorRequest
     {
         public string? Name { get; set; }
 
-        public required string? LogoUrl { get; set; }
+        public string? LogoUrl { get; set; }
 
-        public required string? Website { get; set; }
+        public string? Website { get; set; }
 
-        public required string? Benefits { get; set; }
+        public string? Benefits { get; set; }
 
-        public required string? SponsorRank { get; set; }
+        public string? SponsorRank { get; set; }
         
-        public required string? LanSponsorRank { get; set; }
+        public string? LanSponsorRank { get; set; }
         
-        public required int? Order { get; set; }
+        public int? Order { get; set; }
 
         class Validator :  AbstractValidator<PutSponsor>
         {

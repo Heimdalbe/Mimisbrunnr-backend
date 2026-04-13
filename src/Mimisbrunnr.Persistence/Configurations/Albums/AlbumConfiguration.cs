@@ -1,5 +1,6 @@
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Mimisbrunnr.Domain.Album;
+using Mimisbrunnr.Domain.Albums;
 
 namespace Mimisbrunnr.Persistence.Configurations.Albums;
 
@@ -10,7 +11,7 @@ internal class AlbumConfiguration : EntityConfiguration<Album>
         base.Configure(builder);
         
         builder.Property(a => a.Name).HasMaxLength(100).IsRequired();
-        builder.Property(a => a.Year).IsRequired();
+        builder.Property(a => a.Date).HasDefaultValue(DateOnly.FromDateTime(DateTime.UtcNow));
         builder.Property(a => a.Description).HasMaxLength(500);
         builder.HasOne(a => a.CoverImage).WithMany();
         builder.HasMany(a => a.Images).WithMany();
