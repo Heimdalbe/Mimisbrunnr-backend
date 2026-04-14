@@ -9,6 +9,7 @@ using Mimisbrunnr.Shared.Accounts.Dtos;
 using Mimisbrunnr.Shared.Common.Dtos;
 using Mimisbrunnr.Shared.Events.Dtos;
 using Mimisbrunnr.Shared.Praesidium.Dtos;
+using Mimisbrunnr.Shared.Socials.Dtos;
 using Mimisbrunnr.Shared.Sponsors.Dtos;
 
 namespace Mimisbrunnr.Services.Mappers;

@@ -1,4 +1,4 @@
-namespace Mimisbrunnr.Shared.Common.Dtos;
+namespace Mimisbrunnr.Shared.Socials.Dtos;
 
 public static class SocialDto
 {

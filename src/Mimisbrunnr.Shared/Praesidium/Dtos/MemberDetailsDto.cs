@@ -1,4 +1,5 @@
 using Mimisbrunnr.Shared.Common.Dtos;
+using Mimisbrunnr.Shared.Socials.Dtos;
 
 namespace Mimisbrunnr.Shared.Praesidium.Dtos;
 

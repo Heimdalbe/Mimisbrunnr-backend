@@ -33,6 +33,8 @@ public interface IPraesidiumService
     Task<Result<PraesidiumResponse.PostErelid>> PostErelid(PraesidiumRequest.PostErelid req, CancellationToken cancellationToken = default);
     
     Task<Result<PraesidiumResponse.PostLustrumLid>> PostLustrumLid(PraesidiumRequest.PostLustrumLid req, CancellationToken cancellationToken = default);
+
+    Task<Result<PraesidiumResponse.PostMemberSocial>> PostMemberSocial(int id, PraesidiumRequest.PostMemberSocial req, CancellationToken ct);
     
     Task<Result<PraesidiumResponse.PutPraesidiumMember>> PutPraesidiumMember(int id, PraesidiumRequest.PutPraesidiumMember req, CancellationToken cancellationToken = default);
     
@@ -53,4 +55,6 @@ public interface IPraesidiumService
     Task<Result<PraesidiumResponse.DeleteErelid>> DeleteErelid(int id, CancellationToken ct = default);
     
     Task<Result<PraesidiumResponse.DeleteLustrumlid>> DeleteLustrumLid(int id, CancellationToken ct = default);
+
+    Task<Result<PraesidiumResponse.DeleteMemberSocial>> DeleteMemberSocial(int memberId, int socialId, CancellationToken ct);
 }
