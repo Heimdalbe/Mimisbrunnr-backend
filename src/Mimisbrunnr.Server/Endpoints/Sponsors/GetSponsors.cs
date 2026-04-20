@@ -7,6 +7,7 @@ public class GetSponsors(ISponsorService sponsorService) : EndpointWithoutReques
     public override void Configure()
     {
         Get("/api/sponsors/");
+        AllowAnonymous();
     }
 
     public override Task<Result<SponsorResponse.GetSponsors>> ExecuteAsync(CancellationToken ct)

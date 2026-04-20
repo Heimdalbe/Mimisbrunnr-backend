@@ -8,6 +8,7 @@ public class GetSuperSchachtById(IPraesidiumService praesidiumService) : Endpoin
     public override void Configure()
     {
         Get("/api/praesidium/superschachts/{id:int}");
+        AllowAnonymous();
     }
 
     public override Task<Result<SuperSchachtDto.Detailed>> ExecuteAsync(CancellationToken ct)

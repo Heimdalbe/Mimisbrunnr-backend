@@ -8,6 +8,7 @@ public class GetEreLidById(IPraesidiumService praesidiumService) : EndpointWitho
     public override void Configure()
     {
         Get("/api/praesidium/erelids/{id:int}");
+        AllowAnonymous();
     }
 
     public override Task<Result<ErelidDto.Detailed>> ExecuteAsync(CancellationToken ct)

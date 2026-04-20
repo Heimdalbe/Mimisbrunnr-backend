@@ -11,6 +11,7 @@ public class GetPubEventById(IEventService eventService, ISessionContextProvider
     public override void Configure()
     {
         Get("/api/events/pub/{id:int}");
+        AllowAnonymous();
     }
 
     public override Task<Result<EventDto.Detailed>> ExecuteAsync(CancellationToken ct)

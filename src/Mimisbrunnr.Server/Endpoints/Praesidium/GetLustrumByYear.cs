@@ -7,6 +7,7 @@ public class GetLustrumByYear(IPraesidiumService praesidiumService) : EndpointWi
     public override void Configure()
     {
         Get("/api/praesidium/lustrum/{year:int}");
+        AllowAnonymous();
     }
 
     public override Task<Result<PraesidiumResponse.GetLustrumLids>> ExecuteAsync(CancellationToken ct)

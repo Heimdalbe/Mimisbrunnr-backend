@@ -15,9 +15,9 @@ public partial class AlbumRequest
         public required string Url { get; set; }
         public required string Description { get; set; }
 
-        class Validator : AbstractValidator<PostAlbumImage>
+        public class Validator : AbstractValidator<PostAlbumImage>
         {
-            Validator()
+            public Validator()
             {
                 RuleFor(x => x.Url).NotNull().NotEmpty();
                 RuleFor(x => x.Description).NotNull();

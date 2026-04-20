@@ -121,8 +121,8 @@ try
                 ep.PostProcessor<GlobalResponseSender>(Order.Before);
                 ep.PostProcessor<GlobalResponseLogger>(Order.Before);
             };
-        });
-        //.UseSwaggerGen();
+        })
+        .UseSwaggerGen();
     //app.MapFallbackToFile("index.html"); // Serves the Blazor app from the API, when no routes match.
     app.Run();
 }
