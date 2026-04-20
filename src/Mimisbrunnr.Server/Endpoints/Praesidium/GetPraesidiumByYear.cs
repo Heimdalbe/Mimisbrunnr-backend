@@ -7,6 +7,7 @@ public class GetPraesidiumByYear(IPraesidiumService praesidiumService) : Endpoin
     public override void Configure()
     {
         Get("/api/praesidium/{year:int}");
+        AllowAnonymous();
     }
 
     public override Task<Result<PraesidiumResponse.GetPraesidiumOfYear>> ExecuteAsync(CancellationToken ct)

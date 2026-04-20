@@ -26,9 +26,9 @@ public partial class SponsorRequest
         
         public required int Order { get; set; }
 
-        class Validator :  AbstractValidator<PostSponsor>
+        public class Validator :  AbstractValidator<PostSponsor>
         {
-            Validator()
+            public Validator()
             {
                 RuleFor(x => x.Name).NotNull().NotEmpty();
                 

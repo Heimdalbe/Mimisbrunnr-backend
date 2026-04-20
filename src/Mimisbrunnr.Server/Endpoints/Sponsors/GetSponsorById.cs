@@ -8,6 +8,7 @@ public class GetSponsorById(ISponsorService sponsorService) : EndpointWithoutReq
     public override void Configure()
     {
         Get("/api/sponsors/{id:int}");
+        AllowAnonymous();
     }
 
     public override Task<Result<SponsorDto.Detailed>> ExecuteAsync(CancellationToken ct)

@@ -10,6 +10,7 @@ public class GetPubEvents(IEventService eventService, ISessionContextProvider se
     public override void Configure()
     {
         Get("/api/events/pub");
+        AllowAnonymous();
     }
 
     public override Task<Result<EventResponse.GetEvents>> ExecuteAsync(QueryRequest.SkipTake req, CancellationToken ct)
