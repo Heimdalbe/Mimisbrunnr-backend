@@ -20,7 +20,10 @@ public class EventService(ApplicationDbContext dbContext) : IEventService
     {
         var events = await dbContext.Events
             .Include(e => e.Banner)
-            .Where(e => e.Published && e.Accessibility == Accessibility.OPEN).ToListAsync(cancellationToken: ct);
+            .Where(e => e.Published &&
+                        e.Accessibility == Accessibility.OPEN &&
+                        e.End >= DateTime.Now
+            ).ToListAsync(cancellationToken: ct);
 
         var dtos = events.Select(EventToSimpleDto)
             .Skip(req.Skip)
@@ -35,7 +38,9 @@ public class EventService(ApplicationDbContext dbContext) : IEventService
     {
         var events = await dbContext.Events
             .Include(e => e.Banner)
-            .Where(e => e.Published).ToListAsync(cancellationToken: ct);
+            .Where(e => e.Published &&
+                        e.End >= DateTime.Now
+            ).ToListAsync(cancellationToken: ct);
 
         var dtos = events.Select(EventToSimpleDto)
             .Skip(req.Skip)
