@@ -387,20 +387,20 @@ public class DbSeeder(ApplicationDbContext dbContext, RoleManager<IdentityRole> 
 
         var a1 = new Album("A1",DateOnly.Parse("12/12/2024"),"",true );
         a1.AddImage(defaultImage);
-        a1.Published = true;
         
         dbContext.Albums.Add(a1);
         
         var a2 = new Album("A2",DateOnly.Parse("12/12/2025"),"Dit is een album",true );
         a2.AddImage(defaultImage);
-        a2.Published = true;
         
         dbContext.Albums.Add(a2);
         
-        var a3 = new Album("A3",DateOnly.Parse("12/12/2026"),"",true );
+        var a3 = new Album("A3",DateOnly.Parse("12/12/2026"),"",false );
+        a3.Publish(true);
+        
         dbContext.Albums.Add(a3);
         
-        var a4 = new Album("A3",DateOnly.Parse("12/12/2027"),"",false );
+        var a4 = new Album("A4",DateOnly.Parse("12/12/2027"),"",false );
 
         dbContext.Albums.Add(a4);
         

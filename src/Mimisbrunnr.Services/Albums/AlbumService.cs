@@ -154,7 +154,7 @@ public class AlbumService(ApplicationDbContext dbContext, IHttpClientFactory htt
 
     public async Task<Result<AlbumResponse.PutAlbum>> PutAlbum(int id, AlbumRequest.PutAlbum req, CancellationToken ct)
     {
-        var album = await dbContext.Albums.FirstOrDefaultAsync(a => a.Id == id, ct);
+        var album = await dbContext.Albums.Include(a => a.Images).FirstOrDefaultAsync(a => a.Id == id, ct);
         
         if (album is null)
             return Result.NotFound($"Album with id {id} not found");
@@ -175,7 +175,7 @@ public class AlbumService(ApplicationDbContext dbContext, IHttpClientFactory htt
             album.Description = req.Description;
         
         if (req.Published is not null)
-            album.Published = req.Published.Value;
+            album.Publish(req.Published.Value);
         
         await dbContext.SaveChangesAsync(ct);
         
