@@ -7,7 +7,7 @@ public class PutSuperSchacht(IPraesidiumService praesidiumService) : Endpoint<Pr
 {
     public override void Configure()
     {
-        Post("/api/praesidium/superschachts/{id:int}");
+        Put("/api/praesidium/superschachts/{id:int}");
         Roles(AppRoles.Hmdl);
     }
 

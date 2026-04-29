@@ -6,6 +6,8 @@ public static class SponsorDto
 {
     public class Simple
     {
+        public required int Id { get; set; }
+        
         public required string Name  { get; set; }
 
         public required ImageDto.Simple Logo  { get; set; }
@@ -17,6 +19,8 @@ public static class SponsorDto
     
     public class Detailed
     {
+        public required int Id { get; set; }
+        
         public required string Name  { get; set; }
 
         public required ImageDto.Simple Logo  { get; set; }

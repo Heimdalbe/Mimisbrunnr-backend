@@ -19,7 +19,7 @@ public class LustrumLid : Entity
     }
     public Image Image { get => _image; set => _image = Guard.Against.Null(value); }
     
-    public int Year { get => _year; set => _year = Guard.Against.InvalidInput(value, "startYear", (year) => year >= 2023 &&  year%5 == 3); }
+    public int Year { get => _year; set => _year = Guard.Against.InvalidInput(value, "startYear", (year) => year >= 2022 &&  year%5 == 2); }
     #endregion
     
     #region Constructors

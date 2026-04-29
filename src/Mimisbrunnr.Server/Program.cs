@@ -60,6 +60,8 @@ try
         })
         .ConfigureApplicationCookie(o =>
         {
+            o.Cookie.SameSite = SameSiteMode.None;
+            
             o.Events.OnRedirectToLogin = ctx =>
             {
                 ctx.Response.StatusCode = StatusCodes.Status401Unauthorized;

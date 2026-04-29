@@ -15,7 +15,6 @@ public class SocialService(ApplicationDbContext dbContext) : ISocialService
     {
         var socials = dbContext.Socials
             .Include(s => s.Type)
-            .ThenInclude(t => t.Icon)
             .ToList();
         var dtos = socials.Select(SocialToSimpleDto).ToList().AsReadOnly();
         
@@ -29,7 +28,6 @@ public class SocialService(ApplicationDbContext dbContext) : ISocialService
     {
         var social = await dbContext.Socials
             .Include(s => s.Type)
-            .ThenInclude(t => t.Icon)
             .FirstOrDefaultAsync(s => s.Id == id, ct);
         
         if (social is null)
@@ -41,7 +39,6 @@ public class SocialService(ApplicationDbContext dbContext) : ISocialService
     public async Task<Result<SocialResponse.GetSocialTypes>> GetSocialTypes(CancellationToken ct)
     {
         var socials = dbContext.SocialTypes
-            .Include(t => t.Icon)
             .ToList();
         var dtos = socials.Select(SocialTypeToSimpleDto).ToList().AsReadOnly();
         
@@ -54,7 +51,6 @@ public class SocialService(ApplicationDbContext dbContext) : ISocialService
     public async Task<Result<SocialTypeDto.Detailed>> GetSocialType(int id, CancellationToken ct)
     {
         var socialType = await dbContext.SocialTypes
-            .Include(t => t.Icon)
             .FirstOrDefaultAsync(s => s.Id == id, ct);
         
         if (socialType is null)
@@ -86,9 +82,7 @@ public class SocialService(ApplicationDbContext dbContext) : ISocialService
     
     public async Task<Result<SocialResponse.PostSocialType>> PostSocialType(SocialRequest.PostSocialType req, CancellationToken ct)
     {
-        var icon = dbContext.Images.FirstOrDefault(i => i.Url == req.IconUrl) ?? new Image(req.IconUrl);
-        
-        var socialType = new SocialType(req.Name, icon);
+        var socialType = new SocialType(req.Name);
         
         dbContext.SocialTypes.Add(socialType);
         await dbContext.SaveChangesAsync(ct);
@@ -138,13 +132,6 @@ public class SocialService(ApplicationDbContext dbContext) : ISocialService
         
         if(req.Name is not null)
             socialType.Name = req.Name;
-
-        if (req.IconUrl is not null)
-        {
-            var icon =  dbContext.Images.FirstOrDefault(i => i.Url == req.IconUrl) ?? new Image(req.IconUrl);
-            
-            socialType.Icon = icon;
-        }
 
         await dbContext.SaveChangesAsync(ct);
         

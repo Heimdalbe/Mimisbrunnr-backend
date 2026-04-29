@@ -7,6 +7,8 @@ public static class EventDto
 {
     public class Simple
     {
+        public required int Id { get; set; }
+        
         public required string Category { get; set; }
 
         public required string Accessibility { get; set; }
@@ -17,7 +19,7 @@ public static class EventDto
 
         public required DateTime? End { get;set; }
 
-        public required ImageDto.Simple? Banner;
+        public required ImageDto.Simple? Banner {get;set;}
 
         public required string? EntryFee { get; set; }
         
@@ -26,6 +28,8 @@ public static class EventDto
     
     public class Detailed
     {
+        public required int Id { get; set; }
+        
         public required string Category { get; set; }
 
         public required string Accessibility { get; set; }
@@ -42,9 +46,9 @@ public static class EventDto
 
         public required string? ICal { get;set; }
 
-        public required ImageDto.Simple? Banner;
+        public required ImageDto.Simple? Banner {get;set;}
 
-        public required SponsorDto.Simple[] Sponsors;
+        public required SponsorDto.Simple[] Sponsors {get;set;}
 
         public required string? EntryFee { get; set; }
         

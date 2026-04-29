@@ -6,13 +6,12 @@ public static class SocialTypeDto
 {
     public class Simple
     {
-        public required ImageDto.Simple Icon { get; set; }
+        public required string Name { get; set; }
     }
 
     public class Detailed
     {
         public required int Id {get; set;}
-        public required ImageDto.Simple Icon { get; set; }
         public required string Name { get; set; }
     }
 }

@@ -17,7 +17,8 @@ public class SponsorService(ApplicationDbContext dbContext) : ISponsorService
         var sponsors = await dbContext.Sponsors
             .Include(s => s.Logo)
             .ToListAsync(cancellationToken: cancellationToken);
-        var dtos = sponsors.Select(SponsorToSimpleDto).ToList().AsReadOnly();
+        
+        var dtos = sponsors.OrderBy(s => s.Order).Select(SponsorToSimpleDto).ToList().AsReadOnly();
 
         return Result.Success(new SponsorResponse.GetSponsors { Sponsors = dtos });
     }

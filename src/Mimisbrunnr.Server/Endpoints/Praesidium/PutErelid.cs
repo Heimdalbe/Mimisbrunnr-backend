@@ -7,7 +7,7 @@ public class PutErelid(IPraesidiumService praesidiumService) : Endpoint<Praesidi
 {
     public override void Configure()
     {
-        Post("/api/praesidium/erelids/{id:int}");
+        Put("/api/praesidium/erelids/{id:int}");
         Roles(AppRoles.Hmdl);
     }
 

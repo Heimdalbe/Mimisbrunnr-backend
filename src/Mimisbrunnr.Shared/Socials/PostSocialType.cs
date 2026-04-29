@@ -12,15 +12,12 @@ public partial class SocialRequest
 {
     public class PostSocialType
     {
-        public required string IconUrl { get; set; }
-        
         public required string Name { get; set; }
         
         public class Validator :  AbstractValidator<PostSocialType>
         {
             public Validator()
             {
-                RuleFor(x => x.IconUrl).NotNull().NotEmpty();
                 RuleFor(x => x.Name).NotNull().NotEmpty();
             }
         }

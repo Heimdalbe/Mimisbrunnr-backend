@@ -7,7 +7,7 @@ public class PutLustrumLid(IPraesidiumService praesidiumService) : Endpoint<Prae
 {
     public override void Configure()
     {
-        Post("/api/praesidium/lustrum/members/{id:int}");
+        Put("/api/praesidium/lustrum/members/{id:int}");
         Roles(AppRoles.Hmdl);
     }
 

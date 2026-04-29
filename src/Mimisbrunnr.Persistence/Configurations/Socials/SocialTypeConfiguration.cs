@@ -10,7 +10,5 @@ internal class SocialTypeConfiguration: EntityConfiguration<SocialType>
         base.Configure(builder);
 
         builder.Property(st => st.Name).HasMaxLength(50).IsRequired();
-        
-        builder.HasOne(st => st.Icon).WithMany();
     }
 }

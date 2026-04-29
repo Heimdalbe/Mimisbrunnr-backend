@@ -24,7 +24,8 @@ public class PraesidiumService(ApplicationDbContext dbContext) : IPraesidiumServ
             .Include(p => p.Image)
             .Include(p => p.Role)
             .Where(t => t.Year == year).ToListAsync(cancellationToken);
-        var praesidiumDtos = praesidium.Select(TermToSimpleDto).ToList().AsReadOnly();
+        
+        var praesidiumDtos = praesidium.OrderBy(p => p.Role.Order).Select(TermToSimpleDto).ToList().AsReadOnly();
 
         return Result.Success(new PraesidiumResponse.GetPraesidiumOfYear { Praesidium = praesidiumDtos });
     }
@@ -55,7 +56,7 @@ public class PraesidiumService(ApplicationDbContext dbContext) : IPraesidiumServ
             .Include(p => p.Role)
             .Select(t => t.Year).Distinct().ToListAsync(cancellationToken);
 
-        return Result.Success(new PraesidiumResponse.GetYears { Years = years.AsReadOnly() });
+        return Result.Success(new PraesidiumResponse.GetYears { Years = years.Order().ToList().AsReadOnly() });
     }
 
     #endregion
@@ -70,7 +71,7 @@ public class PraesidiumService(ApplicationDbContext dbContext) : IPraesidiumServ
             .ThenInclude(s => s.Type)
             .Include(p => p.Image)
             .ToListAsync(cancellationToken: cancellationToken);
-        var superschachtDtos = superschachts.Select(SuperSchachtToSimpleDto).ToList().AsReadOnly();
+        var superschachtDtos = superschachts.OrderBy(s=> s.Year).Select(SuperSchachtToSimpleDto).ToList().AsReadOnly();
 
         return Result.Success(new PraesidiumResponse.GetSuperSchachts { Schachts = superschachtDtos });
     }
@@ -158,7 +159,7 @@ public class PraesidiumService(ApplicationDbContext dbContext) : IPraesidiumServ
     {
         var years = await dbContext.LustrumLids.Select(t => t.Year).Distinct().ToListAsync(cancellationToken);
 
-        return Result.Success(new PraesidiumResponse.GetYears { Years = years.AsReadOnly() });
+        return Result.Success(new PraesidiumResponse.GetYears { Years = years.Order().ToList().AsReadOnly() });
     }
 
     #endregion
