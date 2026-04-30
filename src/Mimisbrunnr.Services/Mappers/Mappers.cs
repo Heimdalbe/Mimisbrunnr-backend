@@ -315,7 +315,7 @@ public static class Mappers
             Name = album.Name,
             Date = album.Date,
             CoverImage = album.CoverImage is null ? null : ImageToSimpleDto(album.CoverImage),
-            Images = album.Images.Select(ImageToSimpleDto).ToArray(),
+            Images = album.Images.Select(ImageToDetailedDto).ToArray(),
             Description = album.Description,
             Published = album.Published,
         };
