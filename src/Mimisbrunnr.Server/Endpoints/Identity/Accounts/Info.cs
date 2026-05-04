@@ -32,7 +32,7 @@ public class Info(UserManager<IdentityUser> userManager) : EndpointWithoutReques
         {
             Email = user.Email!,
             IsEmailConfirmed = await userManager.IsEmailConfirmedAsync(user),
-            Claims = claimsPrincipal.Claims.ToDictionary(c => c.Type, c => c.Value),
+            Claims = claimsPrincipal.Claims.Where(c => c.Type != ClaimTypes.Role).ToDictionary(c => c.Type, c => c.Value),
             Roles = claimsPrincipal.Claims.Where(c => c.Type == ClaimTypes.Role).Select(c => c.Value).ToList()
         };
     }
