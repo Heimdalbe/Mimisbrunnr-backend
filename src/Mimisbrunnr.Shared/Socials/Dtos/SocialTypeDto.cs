@@ -6,6 +6,7 @@ public static class SocialTypeDto
 {
     public class Simple
     {
+        public required int Id {get; set;}
         public required string Name { get; set; }
     }
 

@@ -43,6 +43,7 @@ public static class Mappers
     {
         return new SocialTypeDto.Simple
         {
+            Id = socialType.Id,
             Name = socialType.Name,
         };
     }
@@ -61,6 +62,7 @@ public static class Mappers
     {
         return new SocialDto.Simple
         {
+            Id = social.Id,
             Type = SocialTypeToSimpleDto(social.Type),
             Url = social.Url
         };
