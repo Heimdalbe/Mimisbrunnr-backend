@@ -17,3 +17,6 @@
 
 2. Navigeer in een terminal window naar het \src\Mimisbrunnr.Server project.
 3. Start de applicatie met `dotnet run`
+
+## Vereisten
+- .NET 9 SDK
