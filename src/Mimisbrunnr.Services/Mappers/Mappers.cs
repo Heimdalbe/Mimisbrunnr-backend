@@ -43,7 +43,8 @@ public static class Mappers
     {
         return new SocialTypeDto.Simple
         {
-            Icon = ImageToSimpleDto(socialType.Icon),
+            Id = socialType.Id,
+            Name = socialType.Name,
         };
     }
     public static SocialTypeDto.Detailed SocialTypeToDetailedDto(SocialType socialType)
@@ -52,7 +53,6 @@ public static class Mappers
         {
             Id = socialType.Id,
             Name = socialType.Name,
-            Icon = ImageToSimpleDto(socialType.Icon),
         };
     }
     #endregion
@@ -62,6 +62,7 @@ public static class Mappers
     {
         return new SocialDto.Simple
         {
+            Id = social.Id,
             Type = SocialTypeToSimpleDto(social.Type),
             Url = social.Url
         };
@@ -89,7 +90,7 @@ public static class Mappers
             Id = memberdetails.Id,
             FirstName = memberdetails.FirstName,
             LastName = memberdetails.LastName,
-            Socials = memberdetails.Socials.Select(SocialToSimpleDto).ToArray()
+            Socials = memberdetails.Socials.Select(SocialToSimpleDto).ToArray(),
         };
     }
     public static MemberDetailsDto.Detailed MemberDetailtsToDetailedDto(MemberDetails  memberdetails)
@@ -229,6 +230,7 @@ public static class Mappers
     {
         return new EventDto.Simple
         {
+            Id = e.Id,
             Category = e.Category.ToString(),
             Accessibility = e.Accessibility.ToString(),
             Name = e.Name,
@@ -244,6 +246,7 @@ public static class Mappers
     {
         return new EventDto.Detailed
         {
+            Id = e.Id,
             Category = e.Category.ToString(),
             Accessibility = e.Accessibility.ToString(),
             Name = e.Name,
@@ -267,6 +270,7 @@ public static class Mappers
     {
         return new SponsorDto.Simple
         {
+            Id = sponsor.Id,
             Name = sponsor.Name,
             Logo = ImageToSimpleDto(sponsor.Logo),
             Website = sponsor.Website,
@@ -278,6 +282,7 @@ public static class Mappers
     {
         return new SponsorDto.Detailed
         {
+            Id = sponsor.Id,
             Name = sponsor.Name,
             Logo = ImageToSimpleDto(sponsor.Logo),
             Website = sponsor.Website,
@@ -312,7 +317,7 @@ public static class Mappers
             Name = album.Name,
             Date = album.Date,
             CoverImage = album.CoverImage is null ? null : ImageToSimpleDto(album.CoverImage),
-            Images = album.Images.Select(ImageToSimpleDto).ToArray(),
+            Images = album.Images.Select(ImageToDetailedDto).ToArray(),
             Description = album.Description,
             Published = album.Published,
         };

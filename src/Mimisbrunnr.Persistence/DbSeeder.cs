@@ -1,9 +1,12 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Mimisbrunnr.Domain.Accounts;
 using Mimisbrunnr.Domain.Albums;
 //using Mimisbrunnr.Domain.Accounts;
 using Mimisbrunnr.Domain.Common;
+using Mimisbrunnr.Domain.Events;
 using Mimisbrunnr.Domain.Praesidium;
+using Mimisbrunnr.Domain.Sponsors;
 
 namespace Mimisbrunnr.Persistence;
 /// <summary>
@@ -21,10 +24,13 @@ public class DbSeeder(ApplicationDbContext dbContext, RoleManager<IdentityRole> 
     {
         await RolesAsync();
         await UsersAsync();
-        //await AccountAsync();
+        await AccountAsync();
         await ImagesAsync();
         await PraesidiumAsync();
+        await SocialsAsync();
         await AlbumsAsync();
+        await SponsorsAsync();
+        await EventsAsync();
     }
 
     private async Task RolesAsync()
@@ -33,7 +39,7 @@ public class DbSeeder(ApplicationDbContext dbContext, RoleManager<IdentityRole> 
             return;
 
         await roleManager.CreateAsync(new IdentityRole("Feut"));            // Ziet open events
-        await roleManager.CreateAsync(new IdentityRole("Schacht"));         // Ziet open + gesloten + schachten events
+        await roleManager.CreateAsync(new IdentityRole("Schacht"));         // Ziet open + gesloten events
         await roleManager.CreateAsync(new IdentityRole("Commilitones"));    // Ziet open + gesloten events
         await roleManager.CreateAsync(new IdentityRole("Hmdl"));            // Media + Event + Sponsor + Admin-stuff = ICT + Praeses (Admin)
         await roleManager.CreateAsync(new IdentityRole("MediaEditor"));     // Albums aanpassen
@@ -178,7 +184,7 @@ public class DbSeeder(ApplicationDbContext dbContext, RoleManager<IdentityRole> 
             return;
         
         var users = await dbContext.Users.ToListAsync();
-        //users.ForEach(u => dbContext.Accounts.Add(new Account(u.UserName!, u.Email!, u.Id)));
+        users.ForEach(u => dbContext.Accounts.Add(new Account(u.UserName!, u.Email!, u.Id)));
         
         await dbContext.SaveChangesAsync();
     }
@@ -262,7 +268,7 @@ public class DbSeeder(ApplicationDbContext dbContext, RoleManager<IdentityRole> 
         dbContext.MemberDetails.Add(c25);
         var sp25 = new MemberDetails("Alejandro", "De Bruyne", "", "Kan een koprol doen");
         dbContext.MemberDetails.Add(sp25);
-        var fl24 = new MemberDetails("Tanhuy", "Montaine", "", "");
+        var fl24 = new MemberDetails("Tanguy", "Montaine", "", "");
         dbContext.MemberDetails.Add(fl24);
         var fl25 = new MemberDetails("Richy", "Rahman", "", "");
         dbContext.MemberDetails.Add(fl25);
@@ -329,8 +335,51 @@ public class DbSeeder(ApplicationDbContext dbContext, RoleManager<IdentityRole> 
         await dbContext.SaveChangesAsync();
 
         #endregion
+
+        #region Lustrum
+
+        await dbContext.AddAsync(new LustrumLid(fl24, defaultImage,2022));
+        await dbContext.AddAsync(new LustrumLid(p24, defaultImage, 2022));
+        await dbContext.AddAsync(new LustrumLid(se24, defaultImage, 2022));
+
+        await dbContext.SaveChangesAsync();
+        
+        #endregion
     }
 
+    private async Task SocialsAsync()
+    {
+        if(dbContext.Socials.Any())
+            return;
+
+        #region SocialTypes
+        
+        var st1 = new SocialType("facebook");
+        await dbContext.SocialTypes.AddAsync(st1);
+        
+        var st2 = new SocialType("instagram");
+        await dbContext.SocialTypes.AddAsync(st1);
+        
+        var st3 = new SocialType("linkedin");
+        await dbContext.SocialTypes.AddAsync(st1);
+        
+        var st4 = new SocialType("twitch");
+        await dbContext.SocialTypes.AddAsync(st1);
+        
+        var st5 = new SocialType("discord");
+        await dbContext.SocialTypes.AddAsync(st1);
+        
+        #endregion
+
+        var s1 = new Social(st1, "https://www.facebook.com/Heimdal.be/");
+        await dbContext.Socials.AddAsync(s1);
+        
+        var m1 = await dbContext.MemberDetails.Include(s=> s.Socials).Where(m => m.Id == 1).FirstAsync();
+        m1.AddSocial(s1);
+
+        await dbContext.SaveChangesAsync();
+    }
+    
     private async Task AlbumsAsync()
     {
         if(dbContext.Albums.Any())
@@ -338,22 +387,108 @@ public class DbSeeder(ApplicationDbContext dbContext, RoleManager<IdentityRole> 
 
         var a1 = new Album("A1",DateOnly.Parse("12/12/2024"),"",true );
         a1.AddImage(defaultImage);
-        a1.Published = true;
         
         dbContext.Albums.Add(a1);
         
         var a2 = new Album("A2",DateOnly.Parse("12/12/2025"),"Dit is een album",true );
         a2.AddImage(defaultImage);
-        a2.Published = true;
         
         dbContext.Albums.Add(a2);
         
-        var a3 = new Album("A3",DateOnly.Parse("12/12/2026"),"",true );
+        var a3 = new Album("A3",DateOnly.Parse("12/12/2026"),"",false );
+        a3.Publish(true);
+        
         dbContext.Albums.Add(a3);
         
-        var a4 = new Album("A3",DateOnly.Parse("12/12/2027"),"",false );
+        var a4 = new Album("A4",DateOnly.Parse("12/12/2027"),"",false );
 
         dbContext.Albums.Add(a4);
+        
+        await dbContext.SaveChangesAsync();
+    }
+
+    private async Task SponsorsAsync()
+    {
+        if(dbContext.Sponsors.Any())
+            return;
+
+        var s1 = new Sponsor("De CS", defaultImage, "https://cafecomicsans.be", "korting", SponsorRank.Diamond, LanSponsorRank.None, 1);
+        await dbContext.Sponsors.AddAsync(s1);
+        
+        var s2 = new Sponsor("De VV", defaultImage, "https://www.devrolijkeviking.be", "korting", SponsorRank.Diamond, LanSponsorRank.None, 2);
+        await dbContext.Sponsors.AddAsync(s2);
+        
+        var s3 = new Sponsor("Delaware", defaultImage, "https://www.delaware.pro/en-be", "", SponsorRank.None, LanSponsorRank.KiloByte, 3);
+        await dbContext.Sponsors.AddAsync(s3);
+        
+        var s4 = new Sponsor("Sepp De Groote", defaultImage, "https://www.linkedin.com/in/sepp-degroote/", "", SponsorRank.Silver, LanSponsorRank.None, 4);
+        await dbContext.Sponsors.AddAsync(s4);
+        
+        await dbContext.SaveChangesAsync();
+    }
+    
+    private async Task EventsAsync()
+    {
+        if(dbContext.Events.Any())
+            return;
+        
+        var date = DateTime.Today;
+
+        var e1 = new Event(Category.CULTUUR, Accessibility.OPEN, "karakoe")
+        {
+            Banner = defaultImage,
+            Description = "Dit is de karakoe",
+            Location = "De CS",
+            Start = date + TimeSpan.FromDays(10),
+            End = date + TimeSpan.FromDays(10),
+            Published = true
+        };
+        
+        dbContext.Events.Add(e1);
+
+        var e2 = new Event(Category.SPORT, Accessibility.OPEN, "mario cart");
+        e2.Banner = defaultImage;
+        e2.Description = "Dit is de mario cart";
+        e2.Location = "De CS";
+        e2.Start = date + TimeSpan.FromDays(15);
+        e2.End = date + TimeSpan.FromDays(15);;
+        e2.ICal = "www.heimdal.be";
+        e2.Published = true;
+        
+        dbContext.Events.Add(e2);
+
+        var e3 = new Event(Category.CULTUUR, Accessibility.CLOSED, "Weekend");
+        e3.Banner = defaultImage;
+        e3.Description = "Dit is het weekend";
+        e3.Location = "In de wildernis";
+        e3.Start = date + TimeSpan.FromDays(23);
+        e3.End = date + TimeSpan.FromDays(23);
+        e3.Published = true;
+        
+        dbContext.Events.Add(e3);
+
+        var s1 = await dbContext.Sponsors.FirstAsync(sponsor => sponsor.Id == 1);
+        var s2 = await dbContext.Sponsors.FirstAsync(sponsor => sponsor.Id == 2);
+        var s3 = await dbContext.Sponsors.FirstAsync(sponsor => sponsor.Id == 3);
+        
+
+        var e4 = new Event(Category.FEESTENLAN, Accessibility.OPEN, "LAN")
+        {
+            Banner = defaultImage,
+            Description = "Dit is de LAN",
+            Location = "Resto D - campus schoonmeersen",
+            Start = date + TimeSpan.FromDays(7),
+            End = date + TimeSpan.FromDays(7),
+            Published = true
+        };
+        
+        e4.AddSponsors([s1,s2,s3]);
+        
+        dbContext.Events.Add(e4);
+
+        var e5 = new Event(Category.LEAGUE, Accessibility.OPEN, "WIP", false);
+        
+        dbContext.Events.Add(e5);
         
         await dbContext.SaveChangesAsync();
     }

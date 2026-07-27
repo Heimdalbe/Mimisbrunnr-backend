@@ -12,10 +12,7 @@ public partial class PraesidiumRequest
 {
     public class PutLustrumLid
     {
-        public string? FirstName { get; set; }
-        public string? LastName { get; set; }
-        public string? Quote { get; set; }
-        public string? Trivia { get; set; }
+        public int? MemberId { get; set; }
 
         public int? Year { get; set; }
         
@@ -25,10 +22,9 @@ public partial class PraesidiumRequest
         {
             public Validator()
             {
-                RuleFor(x => x.FirstName).NotEmpty().When(x => x.FirstName != null);
-                RuleFor(x => x.LastName).NotEmpty().When(x => x.FirstName != null);
+                RuleFor(x => x.MemberId).GreaterThan(0).When(x => x.MemberId.HasValue);
                 RuleFor(x => x.Year).GreaterThanOrEqualTo(2023).When(x => x.Year.HasValue);
-                RuleFor(x => x.ImageUrl).NotEmpty().When(x => x.FirstName != null);
+                RuleFor(x => x.ImageUrl).NotEmpty().When(x => x.ImageUrl != null);
             }
         }
     }

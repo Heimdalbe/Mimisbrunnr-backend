@@ -45,7 +45,7 @@ public class Album : Entity
     public bool Published
     {
         get { return _published; }
-        set { _published = value && _images.Count > 0; }
+        private set { _published = value; }
     }
     #endregion
     
@@ -70,6 +70,12 @@ public class Album : Entity
     {
         images.ForEach(RemoveImage);
     }
+
+    public void Publish(bool value)
+    {
+        Published = value && _images.Count > 0;
+    }
+    
     #endregion
     
     #region Constructors

@@ -11,23 +11,20 @@ namespace Mimisbrunnr.Domain.Common
     {
         #region Fields
         private string _name;
-
-        private Image _icon;
+        
         #endregion
 
         #region Properties
         public string Name { get => _name; set => _name = Guard.Against.NullOrEmpty(value); }
-
-        public Image Icon { get => _icon; set => _icon = Guard.Against.Null(value); }
+        
         #endregion
 
         #region Constructors
         
         private SocialType() { }
-        public SocialType(string name, Image icon)
+        public SocialType(string name)
         {
             Name = name;
-            Icon = icon;
         }
         #endregion
     }

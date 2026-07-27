@@ -13,6 +13,6 @@ public class GetLustrumByYear(IPraesidiumService praesidiumService) : EndpointWi
     public override Task<Result<PraesidiumResponse.GetLustrumLids>> ExecuteAsync(CancellationToken ct)
     {
         var year = Route<int>("year");
-        return praesidiumService.GetLustrumLids(year,ct);
+        return praesidiumService.GetLustrumLidsOfYear(year,ct);
     }
 }

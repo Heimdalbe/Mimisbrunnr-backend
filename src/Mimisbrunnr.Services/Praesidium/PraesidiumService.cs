@@ -13,6 +13,40 @@ public class PraesidiumService(ApplicationDbContext dbContext) : IPraesidiumServ
 {
     #region Get
 
+    #region MemberDetails
+    
+    #region MemberDetails
+
+    public async Task<Result<PraesidiumResponse.GetMemberDetails>> GetMemberDetails(CancellationToken cancellationToken = default)
+    {
+        var members = await dbContext.MemberDetails
+            .Include(m => m.Socials)
+            .ThenInclude(m => m.Type)
+            .ToListAsync(cancellationToken);
+
+        var memberDtos = members.OrderBy(m => m.FirstName).ThenBy(m => m.LastName)
+            .Select(MemberDetailtsToSimpleDto).ToList().AsReadOnly();
+        
+        return Result.Success(new PraesidiumResponse.GetMemberDetails{Members = memberDtos});
+    }
+
+    public async Task<Result<MemberDetailsDto.Detailed>> GetMemberDetailsDetailed(int id, CancellationToken cancellationToken = default)
+    {
+        var member = await dbContext.MemberDetails
+            .Include(m => m.Socials)
+            .ThenInclude(m => m.Type)
+            .FirstOrDefaultAsync(m => m.Id == id, cancellationToken);
+
+        if(member is null)
+            return Result.NotFound($"Member with id {id} not found");
+        
+        return Result.Success(MemberDetailtsToDetailedDto(member));
+    }
+
+    #endregion
+
+    #endregion
+
     #region PraesidiumMember
 
     public async Task<Result<PraesidiumResponse.GetPraesidiumOfYear>> GetPraesidiumOfYear(int year, CancellationToken cancellationToken = default)
@@ -24,7 +58,8 @@ public class PraesidiumService(ApplicationDbContext dbContext) : IPraesidiumServ
             .Include(p => p.Image)
             .Include(p => p.Role)
             .Where(t => t.Year == year).ToListAsync(cancellationToken);
-        var praesidiumDtos = praesidium.Select(TermToSimpleDto).ToList().AsReadOnly();
+        
+        var praesidiumDtos = praesidium.OrderBy(p => p.Role.Order).Select(TermToSimpleDto).ToList().AsReadOnly();
 
         return Result.Success(new PraesidiumResponse.GetPraesidiumOfYear { Praesidium = praesidiumDtos });
     }
@@ -55,11 +90,51 @@ public class PraesidiumService(ApplicationDbContext dbContext) : IPraesidiumServ
             .Include(p => p.Role)
             .Select(t => t.Year).Distinct().ToListAsync(cancellationToken);
 
-        return Result.Success(new PraesidiumResponse.GetYears { Years = years.AsReadOnly() });
+        return Result.Success(new PraesidiumResponse.GetYears { Years = years.Order().ToList().AsReadOnly() });
     }
 
+    public async Task<Result<PraesidiumResponse.GetPraesidiaMembers>> GetPraesidiaMembers(CancellationToken cancellationToken = default)
+    {
+        var praesidium = await dbContext.PraesidiumTerms
+            .Include(p => p.MemberDetails)
+            .ThenInclude(md=>md.Socials)
+            .ThenInclude(s => s.Type)
+            .Include(p => p.Image)
+            .Include(p => p.Role)
+            .ToListAsync(cancellationToken);
+
+        var praesidiumDtos = praesidium.OrderBy(p => p.Year)
+            .ThenBy(p => p.Role.Order).Select(TermToSimpleDto).ToList().AsReadOnly();
+
+        return Result.Success(new PraesidiumResponse.GetPraesidiaMembers { Praesidia = praesidiumDtos });
+    }
+        
     #endregion
 
+    #region PraesidiumRole
+
+    public async Task<Result<PraesidiumResponse.GetPraesidiumRoles>> GetPraesidiumRoles(CancellationToken ct)
+    {
+        var roles = await dbContext.PraesidiumRoles.ToListAsync(ct);
+
+        var rolesDtos = roles.OrderBy(p => p.Order)
+            .Select(RoleToSimpleDto).ToList().AsReadOnly();
+
+        return Result.Success(new PraesidiumResponse.GetPraesidiumRoles { Roles = rolesDtos });
+    }
+    
+    public async Task<Result<PraesidiumRoleDto.Detailed>> GetPraesidiumRoleDetailed(int id, CancellationToken ct)
+    {
+        var role = await dbContext.PraesidiumRoles.FirstOrDefaultAsync(p => p.Id == id, ct);
+        
+        if(role is null)
+            return Result.NotFound($"Role with id {id} not found");
+
+        return Result.Success(RoleToDetailedDto(role));
+    }
+    
+    #endregion
+    
     #region SuperSchacht
 
     public async Task<Result<PraesidiumResponse.GetSuperSchachts>> GetSuperSchachts(CancellationToken cancellationToken = default)
@@ -70,7 +145,7 @@ public class PraesidiumService(ApplicationDbContext dbContext) : IPraesidiumServ
             .ThenInclude(s => s.Type)
             .Include(p => p.Image)
             .ToListAsync(cancellationToken: cancellationToken);
-        var superschachtDtos = superschachts.Select(SuperSchachtToSimpleDto).ToList().AsReadOnly();
+        var superschachtDtos = superschachts.OrderBy(s=> s.Year).Select(SuperSchachtToSimpleDto).ToList().AsReadOnly();
 
         return Result.Success(new PraesidiumResponse.GetSuperSchachts { Schachts = superschachtDtos });
     }
@@ -126,7 +201,20 @@ public class PraesidiumService(ApplicationDbContext dbContext) : IPraesidiumServ
 
     #region Lustrum
 
-    public async Task<Result<PraesidiumResponse.GetLustrumLids>> GetLustrumLids(int year, CancellationToken cancellationToken = default)
+    public async Task<Result<PraesidiumResponse.GetLustrumLids>> GetLustrumLids(CancellationToken cancellationToken = default)
+    {
+        var lustrumLids = await dbContext.LustrumLids
+            .Include(p => p.MemberDetails)
+            .ThenInclude(md=>md.Socials)
+            .ThenInclude(s => s.Type)
+            .Include(p => p.Image)
+            .ToListAsync(cancellationToken: cancellationToken);
+        var lustrumDtos = lustrumLids.OrderBy(l => l.Year).Select(LustrumLidToSimpleDto).ToList().AsReadOnly();
+
+        return Result.Success(new PraesidiumResponse.GetLustrumLids { LustrumLids = lustrumDtos });
+    }
+
+    public async Task<Result<PraesidiumResponse.GetLustrumLids>> GetLustrumLidsOfYear(int year, CancellationToken cancellationToken = default)
     {
         var lustrumLids = await dbContext.LustrumLids
             .Include(p => p.MemberDetails)
@@ -158,7 +246,7 @@ public class PraesidiumService(ApplicationDbContext dbContext) : IPraesidiumServ
     {
         var years = await dbContext.LustrumLids.Select(t => t.Year).Distinct().ToListAsync(cancellationToken);
 
-        return Result.Success(new PraesidiumResponse.GetYears { Years = years.AsReadOnly() });
+        return Result.Success(new PraesidiumResponse.GetYears { Years = years.Order().ToList().AsReadOnly() });
     }
 
     #endregion
@@ -166,30 +254,44 @@ public class PraesidiumService(ApplicationDbContext dbContext) : IPraesidiumServ
     #endregion
 
     #region Post
+    
+    #region MemberDetails
+
+    public async Task<Result<PraesidiumResponse.PostMemberDetails>> PostMemberDetails(PraesidiumRequest.PostMemberDetails req, CancellationToken cancellationToken = default)
+    {
+        var details = new MemberDetails(req.FirstName, req.LastName, req.Quote, req.Trivia);
+        dbContext.MemberDetails.Add(details);
+        await dbContext.SaveChangesAsync(cancellationToken);
+        
+        return Result.Success(new PraesidiumResponse.PostMemberDetails{Id = details.Id});
+    }
+    
+    #endregion
 
     #region PraesidiumMember
 
     public async Task<Result<PraesidiumResponse.PostPraesidiumMember>> PostPraesidiumMember(PraesidiumRequest.PostPraesidiumMember req, CancellationToken cancellationToken)
     {
-        var details = new MemberDetails(req.FirstName!, req.LastName!, req.Quote!, req.Trivia!);
+        var details = await dbContext.MemberDetails.FirstOrDefaultAsync(m => m.Id == req.MemberId, cancellationToken);
+        if (details is null)
+            return Result.NotFound($"Member with id {req.MemberId} not found");
 
         var i = await dbContext.Images.FirstOrDefaultAsync(i => i.Url == req.ImageUrl, cancellationToken: cancellationToken);
-        var image = i ?? new Image(req.ImageUrl!);
+        var image = i ?? new Image(req.ImageUrl);
 
         var role = await dbContext.PraesidiumRoles.FirstOrDefaultAsync(r => r.Id == req.Role, cancellationToken: cancellationToken);
         if (role is null)
         {
-            return Result.NotFound($"Praesidium member with id {req.Role} not found");
+            return Result.NotFound($"Praesidium role with id {req.Role} not found");
         }
 
+        
         var praesidiumTerm = new PraesidiumTerm(details, image, role, req.Year);
 
-        await dbContext.MemberDetails.AddAsync(details, cancellationToken);
-        await dbContext.Images.AddAsync(image, cancellationToken);
-        var res = await dbContext.PraesidiumTerms.AddAsync(praesidiumTerm, cancellationToken);
+        await dbContext.PraesidiumTerms.AddAsync(praesidiumTerm, cancellationToken);
         await dbContext.SaveChangesAsync(cancellationToken);
 
-        return Result.Success(new PraesidiumResponse.PostPraesidiumMember { Id = res.Entity.Id });
+        return Result.Success(new PraesidiumResponse.PostPraesidiumMember { Id = praesidiumTerm.Id });
     }
 
     #endregion
@@ -198,12 +300,12 @@ public class PraesidiumService(ApplicationDbContext dbContext) : IPraesidiumServ
 
     public async Task<Result<PraesidiumResponse.PostPraesidiumRole>> PostPraesidiumRole(PraesidiumRequest.PostPraesidiumRole req, CancellationToken cancellationToken)
     {
-        var role = new PraesidiumRole(req.Name!, req.Email!, req.Order);
+        var role = new PraesidiumRole(req.Name, req.Email, req.Order);
 
-        var res = await dbContext.PraesidiumRoles.AddAsync(role, cancellationToken);
+        await dbContext.PraesidiumRoles.AddAsync(role, cancellationToken);
         await dbContext.SaveChangesAsync(cancellationToken);
 
-        return Result.Success(new PraesidiumResponse.PostPraesidiumRole { Id = res.Entity.Id });
+        return Result.Success(new PraesidiumResponse.PostPraesidiumRole { Id = role.Id });
     }
 
     #endregion
@@ -212,19 +314,19 @@ public class PraesidiumService(ApplicationDbContext dbContext) : IPraesidiumServ
 
     public async Task<Result<PraesidiumResponse.PostSuperSchacht>> PostSuperSchacht(PraesidiumRequest.PostSuperSchacht req, CancellationToken cancellationToken)
     {
-        var details = new MemberDetails(req.FirstName!, req.LastName!, req.Quote!, req.Trivia!);
+        var details = await dbContext.MemberDetails.FirstOrDefaultAsync(m => m.Id == req.MemberId, cancellationToken);
+        if (details is null)
+            return Result.NotFound($"Member with id {req.MemberId} not found");
 
         var i = await dbContext.Images.FirstOrDefaultAsync(i => i.Url == req.ImageUrl, cancellationToken: cancellationToken);
         var image = i ?? new Image(req.ImageUrl!);
 
         var superSchacht = new SuperSchacht(details, image, req.Year);
 
-        await dbContext.MemberDetails.AddAsync(details, cancellationToken);
-        await dbContext.Images.AddAsync(image, cancellationToken);
-        var res = await dbContext.SuperSchachts.AddAsync(superSchacht, cancellationToken);
+        await dbContext.SuperSchachts.AddAsync(superSchacht, cancellationToken);
         await dbContext.SaveChangesAsync(cancellationToken);
 
-        return Result.Success(new PraesidiumResponse.PostSuperSchacht { Id = res.Entity.Id });
+        return Result.Success(new PraesidiumResponse.PostSuperSchacht { Id = superSchacht.Id });
     }
 
     #endregion
@@ -233,19 +335,19 @@ public class PraesidiumService(ApplicationDbContext dbContext) : IPraesidiumServ
 
     public async Task<Result<PraesidiumResponse.PostErelid>> PostErelid(PraesidiumRequest.PostErelid req, CancellationToken cancellationToken)
     {
-        var details = new MemberDetails(req.FirstName!, req.LastName!, req.Quote!, req.Trivia!);
+        var details = await dbContext.MemberDetails.FirstOrDefaultAsync(m => m.Id == req.MemberId, cancellationToken);
+        if (details is null)
+            return Result.NotFound($"Member with id {req.MemberId} not found");
 
         var i = await dbContext.Images.FirstOrDefaultAsync(i => i.Url == req.ImageUrl, cancellationToken: cancellationToken);
         var image = i ?? new Image(req.ImageUrl!);
 
         var erelid = new Erelid(details, image);
 
-        await dbContext.MemberDetails.AddAsync(details, cancellationToken);
-        await dbContext.Images.AddAsync(image, cancellationToken);
-        var res = await dbContext.Erelids.AddAsync(erelid, cancellationToken);
+        await dbContext.Erelids.AddAsync(erelid, cancellationToken);
         await dbContext.SaveChangesAsync(cancellationToken);
 
-        return Result.Success(new PraesidiumResponse.PostErelid { Id = res.Entity.Id });
+        return Result.Success(new PraesidiumResponse.PostErelid { Id = erelid.Id });
     }
 
     #endregion
@@ -254,19 +356,19 @@ public class PraesidiumService(ApplicationDbContext dbContext) : IPraesidiumServ
 
     public async Task<Result<PraesidiumResponse.PostLustrumLid>> PostLustrumLid(PraesidiumRequest.PostLustrumLid req, CancellationToken cancellationToken)
     {
-        var details = new MemberDetails(req.FirstName!, req.LastName!, req.Quote!, req.Trivia!);
+        var details = await dbContext.MemberDetails.FirstOrDefaultAsync(m => m.Id == req.MemberId, cancellationToken);
+        if (details is null)
+            return Result.NotFound($"Member with id {req.MemberId} not found");
 
         var i = await dbContext.Images.FirstOrDefaultAsync(i => i.Url == req.ImageUrl, cancellationToken: cancellationToken);
         var image = i ?? new Image(req.ImageUrl!);
 
         var lustrumLid = new LustrumLid(details, image, req.Year);
 
-        await dbContext.MemberDetails.AddAsync(details, cancellationToken);
-        await dbContext.Images.AddAsync(image, cancellationToken);
-        var res = await dbContext.LustrumLids.AddAsync(lustrumLid, cancellationToken);
+        await dbContext.LustrumLids.AddAsync(lustrumLid, cancellationToken);
         await dbContext.SaveChangesAsync(cancellationToken);
 
-        return Result.Success(new PraesidiumResponse.PostLustrumLid { Id = res.Entity.Id });
+        return Result.Success(new PraesidiumResponse.PostLustrumLid { Id = lustrumLid.Id });
     }
 
     #endregion
@@ -293,12 +395,47 @@ public class PraesidiumService(ApplicationDbContext dbContext) : IPraesidiumServ
     }
 
     #endregion
-
     
     #endregion
 
     #region Put
 
+    #region MemberDetails
+
+    public async Task<Result<PraesidiumResponse.PutMemberDetails>> PutMemberDetails(int id, PraesidiumRequest.PutMemberDetails req, CancellationToken cancellationToken = default)
+    {
+        var  details = await dbContext.MemberDetails.FirstOrDefaultAsync(m => m.Id == id, cancellationToken);
+        
+        if(details is null)
+            return Result.NotFound($"Member with id {id} not found");
+
+        if (req.FirstName is not null)
+        {
+            details.FirstName = req.FirstName;
+        }
+
+        if (req.LastName is not null)
+        {
+            details.LastName = req.LastName;
+        }
+
+        if (req.Quote is not null)
+        {
+            details.Quote = req.Quote;
+        }
+
+        if (req.Trivia is not null)
+        {
+            details.Trivia = req.Trivia;
+        }
+
+        await dbContext.SaveChangesAsync(cancellationToken);
+        
+        return Result.Success(new PraesidiumResponse.PutMemberDetails{Id = details.Id});
+    }
+
+    #endregion
+    
     #region PraesidiumMember
 
     public async Task<Result<PraesidiumResponse.PutPraesidiumMember>> PutPraesidiumMember(int id, PraesidiumRequest.PutPraesidiumMember req, CancellationToken cancellationToken)
@@ -310,24 +447,13 @@ public class PraesidiumService(ApplicationDbContext dbContext) : IPraesidiumServ
             return Result.NotFound($"Praesidium member with id {id} not found");
         }
 
-        if (req.FirstName is not null)
+        if (req.MemberId.HasValue)
         {
-            term.MemberDetails.FirstName = req.FirstName;
-        }
+            var details = await dbContext.MemberDetails.FirstOrDefaultAsync(m => m.Id == req.MemberId, cancellationToken);
+            if (details is null)
+                return Result.NotFound($"Member with id {req.MemberId} not found");
 
-        if (req.LastName is not null)
-        {
-            term.MemberDetails.LastName = req.LastName;
-        }
-
-        if (req.Quote is not null)
-        {
-            term.MemberDetails.Quote = req.Quote;
-        }
-
-        if (req.Trivia is not null)
-        {
-            term.MemberDetails.Trivia = req.Trivia;
+            term.MemberDetails = details;
         }
 
         if (req.ImageUrl is not null)
@@ -347,7 +473,7 @@ public class PraesidiumService(ApplicationDbContext dbContext) : IPraesidiumServ
             var role = await dbContext.PraesidiumRoles.FirstOrDefaultAsync(r => r.Id == req.Role, cancellationToken: cancellationToken);
             if (role is null)
             {
-                return Result.NotFound($"Praesidium role with id {id} not found");
+                return Result.NotFound($"Role with id {id} not found");
             }
 
             term.Role = role;
@@ -401,25 +527,14 @@ public class PraesidiumService(ApplicationDbContext dbContext) : IPraesidiumServ
         {
             return Result.NotFound($"Superschacht with id {id} not found");
         }
-
-        if (req.FirstName is not null)
+        
+        if (req.MemberId.HasValue)
         {
-            superSchacht.MemberDetails.FirstName = req.FirstName;
-        }
+            var details = await dbContext.MemberDetails.FirstOrDefaultAsync(m => m.Id == req.MemberId, cancellationToken);
+            if (details is null)
+                return Result.NotFound($"Member with id {req.MemberId} not found");
 
-        if (req.LastName is not null)
-        {
-            superSchacht.MemberDetails.LastName = req.LastName;
-        }
-
-        if (req.Quote is not null)
-        {
-            superSchacht.MemberDetails.Quote = req.Quote;
-        }
-
-        if (req.Trivia is not null)
-        {
-            superSchacht.MemberDetails.Trivia = req.Trivia;
+            superSchacht.MemberDetails = details;
         }
 
         if (req.ImageUrl is not null)
@@ -450,25 +565,14 @@ public class PraesidiumService(ApplicationDbContext dbContext) : IPraesidiumServ
         {
             return Result.NotFound($"Erelid with id {id} not found");
         }
-
-        if (req.FirstName is not null)
+        
+        if (req.MemberId.HasValue)
         {
-            erelid.MemberDetails.FirstName = req.FirstName;
-        }
+            var details = await dbContext.MemberDetails.FirstOrDefaultAsync(m => m.Id == req.MemberId, cancellationToken);
+            if (details is null)
+                return Result.NotFound($"Member with id {req.MemberId} not found");
 
-        if (req.LastName is not null)
-        {
-            erelid.MemberDetails.LastName = req.LastName;
-        }
-
-        if (req.Quote is not null)
-        {
-            erelid.MemberDetails.Quote = req.Quote;
-        }
-
-        if (req.Trivia is not null)
-        {
-            erelid.MemberDetails.Trivia = req.Trivia;
+            erelid.MemberDetails = details;
         }
 
         if (req.ImageUrl is not null)
@@ -495,26 +599,15 @@ public class PraesidiumService(ApplicationDbContext dbContext) : IPraesidiumServ
             return Result.NotFound($"LustrumLid with id {id} not found");
         }
 
-        if (req.FirstName is not null)
+        if (req.MemberId.HasValue)
         {
-            lustrumLid.MemberDetails.FirstName = req.FirstName;
-        }
+            var details = await dbContext.MemberDetails.FirstOrDefaultAsync(m => m.Id == req.MemberId, cancellationToken);
+            if (details is null)
+                return Result.NotFound($"Member with id {req.MemberId} not found");
 
-        if (req.LastName is not null)
-        {
-            lustrumLid.MemberDetails.LastName = req.LastName;
+            lustrumLid.MemberDetails = details;
         }
-
-        if (req.Quote is not null)
-        {
-            lustrumLid.MemberDetails.Quote = req.Quote;
-        }
-
-        if (req.Trivia is not null)
-        {
-            lustrumLid.MemberDetails.Trivia = req.Trivia;
-        }
-
+        
         if (req.ImageUrl is not null)
         {
             var i = await dbContext.Images.FirstOrDefaultAsync(i => i.Url == req.ImageUrl, cancellationToken: cancellationToken);
@@ -538,6 +631,22 @@ public class PraesidiumService(ApplicationDbContext dbContext) : IPraesidiumServ
 
     #region Delete
 
+    #region MemberDetails
+
+    public async Task<Result<PraesidiumResponse.DeleteMemberDetails>> DeleteMemberDetails(int id, CancellationToken cancellationToken = default)
+    {
+        var details = await dbContext.MemberDetails.FirstOrDefaultAsync(m => m.Id == id, cancellationToken);
+        if(details is null)
+            return Result.NotFound($"Member with id {id} not found");
+        
+        dbContext.MemberDetails.Remove(details);
+        await dbContext.SaveChangesAsync(cancellationToken);
+        
+        return Result.Success(new PraesidiumResponse.DeleteMemberDetails { Id = id });
+    }
+
+    #endregion
+    
     #region PraesidiumMember
 
     public async Task<Result<PraesidiumResponse.DeletePraesidiumMember>> DeletePraesidiumMember(int id, CancellationToken ct)

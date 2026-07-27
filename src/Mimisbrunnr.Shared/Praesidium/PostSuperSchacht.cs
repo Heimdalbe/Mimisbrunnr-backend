@@ -12,10 +12,7 @@ public partial class PraesidiumRequest
 {
     public class PostSuperSchacht
     {
-        public string? FirstName { get; set; }
-        public string? LastName { get; set; }
-        public string? Quote { get; set; }
-        public string? Trivia { get; set; }
+        public required int MemberId { get; set; }
         
         public int Year { get; set; }
 
@@ -25,10 +22,7 @@ public partial class PraesidiumRequest
         {
             public Validator()
             {
-                RuleFor(x => x.FirstName).NotNull().NotEmpty();
-                RuleFor(x => x.LastName).NotNull().NotEmpty();
-                RuleFor(x => x.Quote).NotNull();
-                RuleFor(x => x.Trivia).NotNull();
+                RuleFor(x => x.MemberId).NotNull().GreaterThan(0);
                 RuleFor(x => x.Year).NotNull().GreaterThan(2018);
                 RuleFor(x => x.ImageUrl).NotNull().NotEmpty();
             }
