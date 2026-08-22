@@ -238,6 +238,7 @@ public static class Mappers
             End = e.End,
             Banner = e.Banner is null? null : ImageToSimpleDto(e.Banner),
             EntryFee = e.EntryFee,
+            Url = e.Url,
             Published = e.Published,
         };
     }
@@ -258,6 +259,7 @@ public static class Mappers
             Banner = e.Banner is null? null : ImageToSimpleDto(e.Banner),
             Sponsors = e.Sponsors.Select(SponsorToSimpleDto).ToArray(),
             EntryFee = e.EntryFee,
+            Url = e.Url,
             Published = e.Published,
         };
 

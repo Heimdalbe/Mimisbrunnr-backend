@@ -22,6 +22,8 @@ public static class EventDto
         public required ImageDto.Simple? Banner {get;set;}
 
         public required string? EntryFee { get; set; }
+
+        public required string? Url { get; set; }
         
         public required bool Published { get; set; }
     }
@@ -51,6 +53,8 @@ public static class EventDto
         public required SponsorDto.Simple[] Sponsors {get;set;}
 
         public required string? EntryFee { get; set; }
+        
+        public required string? Url { get; set; }
         
         public required bool Published { get; set; }
     }

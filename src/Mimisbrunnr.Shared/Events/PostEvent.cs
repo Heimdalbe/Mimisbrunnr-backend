@@ -35,6 +35,8 @@ public partial class EventRequest{
 
         public required string? EntryFee { get; set; }
 
+        public required string? Url { get; set; }
+
         public required bool Published { get; set; }
 
         public class Validator : AbstractValidator<PostEvent>
