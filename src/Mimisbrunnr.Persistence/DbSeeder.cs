@@ -434,35 +434,38 @@ public class DbSeeder(ApplicationDbContext dbContext, RoleManager<IdentityRole> 
         
         var date = DateTime.Today;
 
-        var e1 = new Event(Category.CULTUUR, Accessibility.OPEN, "karakoe")
+        var e1 = new Event(Category.CULTUUR, Accessibility.OPEN, "karakoe", "https://google.com")
         {
             Banner = defaultImage,
             Description = "Dit is de karakoe",
             Location = "De CS",
             Start = date + TimeSpan.FromDays(10),
             End = date + TimeSpan.FromDays(10),
+            Url = "https://google.com",
             Published = true
         };
         
         dbContext.Events.Add(e1);
 
-        var e2 = new Event(Category.SPORT, Accessibility.OPEN, "mario cart");
+        var e2 = new Event(Category.SPORT, Accessibility.OPEN, "mario cart", "https://google.com");
         e2.Banner = defaultImage;
         e2.Description = "Dit is de mario cart";
         e2.Location = "De CS";
         e2.Start = date + TimeSpan.FromDays(15);
         e2.End = date + TimeSpan.FromDays(15);;
         e2.ICal = "www.heimdal.be";
+        e2.Url = "https://google.com";
         e2.Published = true;
         
         dbContext.Events.Add(e2);
 
-        var e3 = new Event(Category.CULTUUR, Accessibility.CLOSED, "Weekend");
+        var e3 = new Event(Category.CULTUUR, Accessibility.CLOSED, "Weekend", "https://google.com");
         e3.Banner = defaultImage;
         e3.Description = "Dit is het weekend";
         e3.Location = "In de wildernis";
         e3.Start = date + TimeSpan.FromDays(23);
         e3.End = date + TimeSpan.FromDays(23);
+        e3.Url = "https://google.com";
         e3.Published = true;
         
         dbContext.Events.Add(e3);
@@ -472,7 +475,7 @@ public class DbSeeder(ApplicationDbContext dbContext, RoleManager<IdentityRole> 
         var s3 = await dbContext.Sponsors.FirstAsync(sponsor => sponsor.Id == 3);
         
 
-        var e4 = new Event(Category.FEESTENLAN, Accessibility.OPEN, "LAN")
+        var e4 = new Event(Category.FEESTENLAN, Accessibility.OPEN, "LAN", "https://google.com")
         {
             Banner = defaultImage,
             Description = "Dit is de LAN",
@@ -486,7 +489,7 @@ public class DbSeeder(ApplicationDbContext dbContext, RoleManager<IdentityRole> 
         
         dbContext.Events.Add(e4);
 
-        var e5 = new Event(Category.LEAGUE, Accessibility.OPEN, "WIP", false);
+        var e5 = new Event(Category.LEAGUE, Accessibility.OPEN, "WIP", "https://google.com", false);
         
         dbContext.Events.Add(e5);
         

@@ -28,6 +28,8 @@ namespace Mimisbrunnr.Domain.Events
 
         private string? _entryFee;
 
+        private string? _url;
+
         private bool _published;
         #endregion
 
@@ -54,16 +56,19 @@ namespace Mimisbrunnr.Domain.Events
 
         public string? EntryFee { get => _entryFee; set => _entryFee = Guard.Against.Null(value); }
         
+        public string? Url { get => _url; set => _url = Guard.Against.Null(value); }
+
         public bool Published { get => _published; set => _published = value && CheckValues() ; }
 
         #endregion
 
         #region Constructors
-        public Event(Category category, Accessibility accessibility, string name, bool published = true)
+        public Event(Category category, Accessibility accessibility, string name, string url, bool published = true)
         {
             Category = category;
             Accessibility = accessibility;
             Name = name;
+            Url = url;
             Published = published;
         }
         #endregion

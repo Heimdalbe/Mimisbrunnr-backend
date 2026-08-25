@@ -120,7 +120,7 @@ public class EventService(ApplicationDbContext dbContext) : IEventService
         if (!success)
             return Result.NotFound($"Accessibility with value {req.Accessibility} not found");
 
-        var e = new Event(category, accessibility, req.Name, req.Published);
+        var e = new Event(category, accessibility, req.Name, req.Url,req.Published);
 
 
         if (req.Location is not null)
