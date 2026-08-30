@@ -6,7 +6,7 @@ using Mimisbrunnr.Shared.Identity;
 
 namespace Mimisbrunnr.Server.Endpoints.Events;
 
-public class GetPubEventById(IEventService eventService, ISessionContextProvider sessionContextProvider) : EndpointWithoutRequest<Result<EventDto.Detailed>>
+public class GetPubEventById(IEventService eventService) : EndpointWithoutRequest<Result<EventDto.Detailed>>
 {
     public override void Configure()
     {
@@ -17,11 +17,7 @@ public class GetPubEventById(IEventService eventService, ISessionContextProvider
     public override Task<Result<EventDto.Detailed>> ExecuteAsync(CancellationToken ct)
     {
         var id = Route<int>("id");
-        var user = sessionContextProvider.User;
         
-        if (user is not null && (user.IsInRole(AppRoles.Schacht) || user.IsInRole(AppRoles.Commilitones))){
-            return eventService.GetPublishedEvent(id, ct);
-        }
-        return eventService.GetOpenEvent(id, ct);
+        return eventService.GetPublishedEvent(id,ct);
     }
 }

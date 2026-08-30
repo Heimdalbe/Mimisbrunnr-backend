@@ -12,7 +12,7 @@ using static Mimisbrunnr.Services.Mappers.Mappers;
 
 namespace Mimisbrunnr.Services.Events;
 
-public class EventService(ApplicationDbContext dbContext) : IEventService
+public class EventService(ApplicationDbContext dbContext, ISessionContextProvider sessionContextProvider) : IEventService
 {
     #region Get
 
@@ -88,13 +88,12 @@ public class EventService(ApplicationDbContext dbContext) : IEventService
         if (e is null)
             return Result.NotFound($"Event with id {id} not found");
         
-        e.Url = "https://www.youtube.com/";
-        
         return Result.Success(EventToDetailedDto(e));
     }
 
     public async Task<Result<EventDto.Detailed>> GetPublishedEvent(int id, CancellationToken ct)
     {
+        var user = sessionContextProvider.User;
         var e = await dbContext.Events
             .Include(e => e.Banner)
             .Include(e => e.Sponsors)
@@ -103,7 +102,11 @@ public class EventService(ApplicationDbContext dbContext) : IEventService
 
         if (e is null)
             return Result.NotFound($"Event with id {id} not found");
-
+        
+        if (e.Accessibility == Accessibility.CLOSED && (user is null || !user.IsInRole(AppRoles.Schacht) || !user.IsInRole(AppRoles.Commilitones))){
+            e.Url = "https://www.youtube.com/";
+        }
+        
         return Result.Success(EventToDetailedDto(e));
     }
 
