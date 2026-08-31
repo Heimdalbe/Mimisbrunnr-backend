@@ -213,6 +213,11 @@ public class AlbumService(ApplicationDbContext dbContext, IHttpClientFactory htt
         
         album.RemoveImage(image);
 
+        if (album.Images.Count == 0)
+        {
+            album.Publish(false);
+        }
+        
         await dbContext.SaveChangesAsync(ct);
         
         return Result.Success(new AlbumResponse.DeleteAlbumImage{ Id = album.Id});
