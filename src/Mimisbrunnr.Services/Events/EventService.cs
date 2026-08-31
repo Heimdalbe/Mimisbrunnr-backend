@@ -12,7 +12,7 @@ using static Mimisbrunnr.Services.Mappers.Mappers;
 
 namespace Mimisbrunnr.Services.Events;
 
-public class EventService(ApplicationDbContext dbContext) : IEventService
+public class EventService(ApplicationDbContext dbContext, ISessionContextProvider sessionContextProvider) : IEventService
 {
     #region Get
 
@@ -36,11 +36,24 @@ public class EventService(ApplicationDbContext dbContext) : IEventService
 
     public async Task<Result<EventResponse.GetEvents>> GetPublishedEvents(QueryRequest.SkipTake req, CancellationToken ct)
     {
-        var events = await dbContext.Events
+        var query = dbContext.Events
             .Include(e => e.Banner)
-            .Where(e => e.Published &&
-                        e.End >= DateTime.Now
-            ).ToListAsync(cancellationToken: ct);
+            .Where(e => e.Published && e.End >= DateTime.Now);
+
+        if (!string.IsNullOrEmpty(req.Categories))
+        {
+            var categoryList = req.Categories
+                .Split(',', StringSplitOptions.RemoveEmptyEntries)
+                .Select(c => Enum.TryParse<Category>(c, true, out var cat) ? (Category?)cat : null)
+                .Where(c => c.HasValue)
+                .Select(c => c!.Value)
+                .ToList();
+
+            if (categoryList.Count > 0)
+                query = query.Where(e => categoryList.Contains(e.Category));
+        }
+
+        var events = await query.ToListAsync(cancellationToken: ct);
 
         var dtos = events.Select(EventToSimpleDto)
             .Skip(req.Skip)
@@ -70,16 +83,17 @@ public class EventService(ApplicationDbContext dbContext) : IEventService
             .Include(e => e.Banner)
             .Include(e => e.Sponsors)
             .ThenInclude(s => s.Logo)
-            .FirstOrDefaultAsync(e => e.Id == id && e.Published && e.Accessibility == Accessibility.OPEN, ct);
-
+            .FirstOrDefaultAsync(e => e.Id == id && e.Published, ct);
+        
         if (e is null)
             return Result.NotFound($"Event with id {id} not found");
-
+        
         return Result.Success(EventToDetailedDto(e));
     }
 
     public async Task<Result<EventDto.Detailed>> GetPublishedEvent(int id, CancellationToken ct)
     {
+        var user = sessionContextProvider.User;
         var e = await dbContext.Events
             .Include(e => e.Banner)
             .Include(e => e.Sponsors)
@@ -88,7 +102,11 @@ public class EventService(ApplicationDbContext dbContext) : IEventService
 
         if (e is null)
             return Result.NotFound($"Event with id {id} not found");
-
+        
+        if (e.Accessibility == Accessibility.CLOSED && (user is null || !user.IsInRole(AppRoles.Schacht) || !user.IsInRole(AppRoles.Commilitones))){
+            e.Url = "https://www.youtube.com/";
+        }
+        
         return Result.Success(EventToDetailedDto(e));
     }
 

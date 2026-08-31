@@ -53,6 +53,11 @@ public static partial class QueryRequest
         /// </summary>
         public Dictionary<string, object?> Filters { get; set; } = new();
         
+        /// <summary>
+        /// Comma-separated lijst van category-namen om events op te filteren (bv. "SPORT,CULTUUR").
+        /// </summary>
+        public string? Categories { get; set; }
+        
         public string AsQuery()
         {
             var filterJson = JsonSerializer.Serialize(Filters);
@@ -63,6 +68,7 @@ public static partial class QueryRequest
                 $"&orderBy={OrderBy}" +
                 $"&orderDescending={OrderDescending}" +
                 $"&searchTerm={SearchTerm}" +
+                $"&categories={Categories}" +
                 $"&filters={filterJson}";
             return str;
         }
