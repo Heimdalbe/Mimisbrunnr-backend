@@ -58,8 +58,8 @@ namespace Mimisbrunnr.Domain.Events
         
         public string? Url { get => _url; set => _url = Guard.Against.Null(value); }
 
-        public bool Published { get => _published; set => _published = value && CheckValues() ; }
-
+        public bool Published { get => _published; set => _published = value; }
+        // Published moet nog gecheckt worde 
         #endregion
 
         #region Constructors
@@ -95,9 +95,16 @@ namespace Mimisbrunnr.Domain.Events
             sponsors.ForEach(RemoveSponsor);
         }
         
-        private bool CheckValues()
+        public void Publish(bool value)
         {
-            return Location is not null && Start.HasValue && End.HasValue && Description is  not null && Banner is not null;
+            if (Location is not null && Start.HasValue && End.HasValue && Description is not null && Banner is not null)
+            {
+                Published = value;
+            }
+            else
+            {
+                Published = false;
+            }
         }
         #endregion
 

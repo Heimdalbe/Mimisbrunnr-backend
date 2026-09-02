@@ -442,8 +442,9 @@ public class DbSeeder(ApplicationDbContext dbContext, RoleManager<IdentityRole> 
             Start = date + TimeSpan.FromDays(10),
             End = date + TimeSpan.FromDays(10),
             Url = "https://google.com",
-            Published = true
+            Published = false
         };
+        e1.Publish(true);
         
         dbContext.Events.Add(e1);
 

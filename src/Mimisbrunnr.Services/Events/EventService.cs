@@ -234,7 +234,7 @@ public class EventService(ApplicationDbContext dbContext, ISessionContextProvide
         e.EntryFee = req.EntryFee;
 
         if (req.Published is not null)
-            e.Published = req.Published.Value;
+            e.Publish(req.Published.Value);
 
         await dbContext.SaveChangesAsync(ct);
 
