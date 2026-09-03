@@ -49,11 +49,9 @@ public partial class EventRequest{
                 
                 RuleFor(x => x.Location).NotEmpty().When(x => x.Location is not null);
                 
-                RuleFor(x => x.Description).NotEmpty().When(x => x.Location is not null);
+                RuleFor(x => x.Description).NotEmpty().When(x => x.Description is not null);
                 
-                RuleFor(x => x.BannerUrl).NotEmpty().When(x => x.Location is not null);
-                
-                RuleFor(x => x.SponsorIds).NotEmpty().When(x => x.SponsorIds is not null);
+                RuleFor(x => x.BannerUrl).NotEmpty().When(x => x.BannerUrl is not null);
             }
         }
     }

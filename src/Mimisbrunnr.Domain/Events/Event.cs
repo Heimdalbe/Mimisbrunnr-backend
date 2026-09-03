@@ -48,13 +48,13 @@ namespace Mimisbrunnr.Domain.Events
 
         public string? Description { get => _description; set => _description = Guard.Against.NullOrEmpty(value); }
 
-        public string? ICal { get => _iCal; set => _iCal = Guard.Against.Null(value); }
+        public string? ICal { get => _iCal; set => _iCal = value; }
 
         public Image? Banner { get => _banner; set => _banner = Guard.Against.Null(value); }
 
         public ICollection<Sponsor> Sponsors { get => _sponsors; set => _sponsors = Guard.Against.Null(value); }
 
-        public string? EntryFee { get => _entryFee; set => _entryFee = Guard.Against.Null(value); }
+        public string? EntryFee { get => _entryFee; set => _entryFee = value; }
         
         public string? Url { get => _url; set => _url = Guard.Against.Null(value); }
 

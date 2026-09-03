@@ -145,10 +145,10 @@ public class EventService(ApplicationDbContext dbContext, ISessionContextProvide
             e.Location = req.Location;
 
         if (req.Start is not null)
-            e.Start = e.Start;
+            e.Start = req.Start.Value;
 
         if (req.End is not null)
-            e.End = e.End;
+            e.End = req.End.Value;
 
         if (req.Description is not null)
             e.Description = req.Description;
@@ -181,7 +181,10 @@ public class EventService(ApplicationDbContext dbContext, ISessionContextProvide
 
     public async Task<Result<EventResponse.PutEvent>> PutEvent(int id, EventRequest.PutEvent req, CancellationToken ct)
     {
-        var e = await dbContext.Events.FirstOrDefaultAsync(e => e.Id == id, ct);
+        var e = await dbContext.Events
+            .Include(e => e.Sponsors)
+            .FirstOrDefaultAsync(e => e.Id == id, ct);
+
 
         if (e is null)
             return Result.NotFound($"Event with id {id} not found");
@@ -209,10 +212,10 @@ public class EventService(ApplicationDbContext dbContext, ISessionContextProvide
             e.Location = req.Location;
 
         if (req.Start is not null)
-            e.Start = e.Start;
+            e.Start = req.Start.Value;
 
         if (req.End is not null)
-            e.End = e.End;
+            e.End = req.End.Value;
 
         if (req.Description is not null)
             e.Description = req.Description;
@@ -228,7 +231,20 @@ public class EventService(ApplicationDbContext dbContext, ISessionContextProvide
 
         if (req.SponsorIds is not null)
         {
-            e.Sponsors = await dbContext.Sponsors.Where(s => req.SponsorIds.Contains(s.Id)).ToListAsync(cancellationToken: ct);
+            var sponsors = await dbContext.Sponsors
+                .Where(s => req.SponsorIds.Contains(s.Id))
+                .ToListAsync(ct);
+
+            var sponsorsToRemove = e.Sponsors
+                .Where(existing => !sponsors.Contains(existing))
+                .ToList();
+
+            var sponsorsToAdd = sponsors
+                .Where(sponsor => !e.Sponsors.Contains(sponsor))
+                .ToList();
+
+            e.RemoveSponsors(sponsorsToRemove);
+            e.AddSponsors(sponsorsToAdd);
         }
 
         e.EntryFee = req.EntryFee;
@@ -236,7 +252,16 @@ public class EventService(ApplicationDbContext dbContext, ISessionContextProvide
         if (req.Published is not null)
             e.Publish(req.Published.Value);
 
-        await dbContext.SaveChangesAsync(ct);
+        try
+        {
+            await dbContext.SaveChangesAsync(ct);
+        }
+        catch (DbUpdateException ex)
+        {
+            Console.WriteLine(ex.InnerException?.Message);
+            throw;
+        }
+
 
         return Result.Success(new EventResponse.PutEvent { Id = e.Id });
     }
