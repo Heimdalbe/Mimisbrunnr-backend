@@ -252,17 +252,8 @@ public class EventService(ApplicationDbContext dbContext, ISessionContextProvide
         if (req.Published is not null)
             e.Publish(req.Published.Value);
 
-        try
-        {
-            await dbContext.SaveChangesAsync(ct);
-        }
-        catch (DbUpdateException ex)
-        {
-            Console.WriteLine(ex.InnerException?.Message);
-            throw;
-        }
-
-
+        await dbContext.SaveChangesAsync(ct);
+        
         return Result.Success(new EventResponse.PutEvent { Id = e.Id });
     }
 

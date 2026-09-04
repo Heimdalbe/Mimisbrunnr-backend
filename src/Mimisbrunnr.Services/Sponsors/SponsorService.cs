@@ -99,8 +99,6 @@ public class SponsorService(ApplicationDbContext dbContext) : ISponsorService
         if (req.Order is not null)
             sponsor.Order = req.Order.Value;
         
-        
-        dbContext.Sponsors.Add(sponsor);
         await dbContext.SaveChangesAsync(cancellationToken);
 
         return Result.Success(new SponsorResponse.PutSponsor { Id = sponsor.Id });
