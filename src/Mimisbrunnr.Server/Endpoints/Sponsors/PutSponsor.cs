@@ -7,7 +7,7 @@ public class PutSponsor(ISponsorService sponsorService) : Endpoint<SponsorReques
 {
     public override void Configure()
     {
-        Post("/api/sponsors/{id:int}");
+        Put("/api/sponsors/{id:int}");
         Roles(AppRoles.SponsorEditor, AppRoles.Hmdl);
     }
 
