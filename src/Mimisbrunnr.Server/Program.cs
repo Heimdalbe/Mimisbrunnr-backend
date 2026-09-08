@@ -37,6 +37,7 @@ try
         })
         .AddIdentity<IdentityUser, IdentityRole>() 
         .AddEntityFrameworkStores<ApplicationDbContext>()
+        .AddDefaultTokenProviders()
         
         .Services.AddHttpClient("SecureApi", c =>
         {
