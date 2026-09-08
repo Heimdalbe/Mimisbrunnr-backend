@@ -10,7 +10,12 @@ public static partial class AccountRequest
     public class Register
     {
         /// <summary>
-        /// The user's email address which acts as a user name.
+        /// The user's name.
+        /// </summary>
+        public string? Name { get; set; }
+        
+        /// <summary>
+        /// The user's email address.
         /// </summary>
         public string? Email { get; set; }
 
@@ -35,6 +40,7 @@ public static partial class AccountRequest
         {
             public Validator()
             {
+                RuleFor(x => x.Name).NotNull().NotEmpty();
                 RuleFor(x => x.Email).NotEmpty().EmailAddress();
                 RuleFor(x => x.Password).NotEmpty();
                 RuleFor(x => x.ConfirmPassword)

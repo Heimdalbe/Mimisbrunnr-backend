@@ -8,7 +8,7 @@ namespace Mimisbrunnr.Server.Endpoints.Identity.Accounts;
 /// See https://fast-endpoints.com/
 /// </summary>
 /// <param name="signInManager"></param>
-public class Login(SignInManager<IdentityUser> signInManager) : Endpoint<AccountRequest.Login, Result>
+public class Login(SignInManager<IdentityUser> signInManager, UserManager<IdentityUser> userManager) : Endpoint<AccountRequest.Login, Result>
 {
     private const bool UseCookies = true;
     private const bool UseSessionCookies = true;
@@ -23,8 +23,15 @@ public class Login(SignInManager<IdentityUser> signInManager) : Endpoint<Account
         var useCookieScheme = UseCookies || UseSessionCookies;
         var isPersistent = UseCookies && (UseSessionCookies != true);
         signInManager.AuthenticationScheme = useCookieScheme ? IdentityConstants.ApplicationScheme : IdentityConstants.BearerScheme;
-
-        var result = await signInManager.PasswordSignInAsync(req.Email!, req.Password!, isPersistent, lockoutOnFailure: true);
+        
+        var user = await userManager.FindByEmailAsync(req.Email!);
+        if (user == null)
+        {
+            // Don't reveal whether the account exists
+            return Result.Unauthorized(SignInResult.Failed.ToString());
+        }
+        
+        var result = await signInManager.PasswordSignInAsync(user, req.Password!, isPersistent, lockoutOnFailure: true);
 
         if (result.RequiresTwoFactor)
         {

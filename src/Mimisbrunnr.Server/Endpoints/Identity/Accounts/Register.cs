@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Identity;
 using Mimisbrunnr.Domain.Accounts;
 using Mimisbrunnr.Persistence;
+using Mimisbrunnr.Shared.Identity;
 using Mimisbrunnr.Shared.Identity.Accounts;
 
 namespace Mimisbrunnr.Server.Endpoints.Identity.Accounts;
@@ -29,13 +30,20 @@ public class Register(UserManager<IdentityUser> userManager, IUserStore<Identity
         }
         var emailStore = (IUserEmailStore<IdentityUser>)userStore;
         var user = new IdentityUser();
-        await userStore.SetUserNameAsync(user, req.Email, CancellationToken.None);
+        await userStore.SetUserNameAsync(user, req.Name, CancellationToken.None);
         await emailStore.SetEmailAsync(user, req.Email, CancellationToken.None);
         var result = await userManager.CreateAsync(user, req.Password!);
         
         if (!result.Succeeded)
         {
             return Result.Error(result.Errors.First().Description);
+        }
+        
+        var roleResult = await userManager.AddToRoleAsync(user, AppRoles.Feut);
+
+        if (!roleResult.Succeeded)
+        {
+            return Result.Error(roleResult.Errors.First().Description);
         }
         
         // You can do more stuff when injecting a DbContext and create user stuff for example:
@@ -45,6 +53,7 @@ public class Register(UserManager<IdentityUser> userManager, IUserStore<Identity
         var account = new Account(user.UserName, user.Email,user.Id);
         
         dbContext.Accounts.Add(account);
+        await dbContext.SaveChangesAsync(ctx);
         
         // You can send a confirmation email by using a SMTP server or anything in the like. 
         // await SendConfirmationEmailAsync(user, userManager, context, email); or do something that matters
