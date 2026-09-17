@@ -19,7 +19,9 @@ public partial class AlbumRequest
     {
         public Validator()
         {
-            RuleFor(x => x.AlbumUrl).NotNull().Matches(@"^(?:https?://)?(?:i\.)?imgur\.com/(?:a|gallery)/(.*)-([A-Za-z0-9]{5,7})$");
+            RuleFor(x => x.AlbumUrl)
+                .NotNull()
+                .Matches(@"^https?://(?:www\.)?imgur\.com/(?:a|gallery)/[A-Za-z0-9]+/?$");
         }
     }
 }
