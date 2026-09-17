@@ -1,6 +1,7 @@
 using System.Net.Http.Headers;
 using Destructurama;
 using FastEndpoints.Swagger;
+using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Mimisbrunnr.Persistence;
@@ -29,7 +30,9 @@ try
         {
             options.AddPolicy("Frontend", policy =>
             {
-                policy.WithOrigins("http://localhost:5173")
+                var allowedOrigin = builder.Configuration["Frontend:Origin"]
+                                    ?? throw new InvalidOperationException("Frontend:Origin not configured.");
+                policy.WithOrigins(allowedOrigin)
                     .AllowAnyHeader()
                     .AllowAnyMethod()
                     .AllowCredentials();
@@ -62,7 +65,8 @@ try
         .ConfigureApplicationCookie(o =>
         {
             o.Cookie.SameSite = SameSiteMode.None;
-            
+            o.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+
             o.Events.OnRedirectToLogin = ctx =>
             {
                 ctx.Response.StatusCode = StatusCodes.Status401Unauthorized;
@@ -92,23 +96,33 @@ try
             };
         });
 
+    builder.Services.Configure<ForwardedHeadersOptions>(options =>
+    {
+        options.ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;
+        options.KnownNetworks.Clear();
+        options.KnownProxies.Clear();
+    });
     var app = builder.Build();
     // apply Database migraticons on startup, not so wise in production (Use Generated SQL Scripts) 
     // See: https://learn.microsoft.com/en-us/ef/core/managing-schemas/migrations/applying?tabs=dotnet-core-cli
     if (app.Environment.IsDevelopment())
     {
-        using (var scope = app.Services.CreateScope())
-        {
-            var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-            var dbSeeder = scope.ServiceProvider.GetRequiredService<DbSeeder>();
-            dbContext.Database.EnsureDeleted(); // Delete the database if it exists to clean it up if needed.
-
-            await dbContext.Database.EnsureCreatedAsync(); // Creates the database if it doesn't exist and applies all migrations. See Readme.md for more info.
-            await dbSeeder.SeedAsync(); // Seeds the database with some test data.
-        }
+        using var scope = app.Services.CreateScope();
+        var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+        var dbSeeder = scope.ServiceProvider.GetRequiredService<DbSeeder>();
+        dbContext.Database.EnsureDeleted();
+        await dbContext.Database.EnsureCreatedAsync();
+        await dbSeeder.SeedAsync();
+    }
+    else
+    {
+        using var scope = app.Services.CreateScope();
+        var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+        await dbContext.Database.MigrateAsync();
     }
     // Theses middlewares are strict in order of calling!
-    app.UseHttpsRedirection()
+    app.UseForwardedHeaders()
+        .UseHttpsRedirection()
         //.UseBlazorFrameworkFiles() // Blazor is also served from the API. 
         //.UseStaticFiles()
         .UseDefaultExceptionHandler()

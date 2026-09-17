@@ -282,7 +282,7 @@ namespace Mimisbrunnr.Persistence.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime(6)")
-                        .HasDefaultValue(new DateTime(2026, 8, 22, 20, 40, 3, 981, DateTimeKind.Utc).AddTicks(2995));
+                        .HasDefaultValue(new DateTime(2026, 9, 17, 19, 2, 42, 559, DateTimeKind.Utc).AddTicks(6723));
 
                     b.Property<string>("Email")
                         .IsRequired()
@@ -301,7 +301,7 @@ namespace Mimisbrunnr.Persistence.Migrations
                     b.Property<DateTime>("UpdatedAt")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime(6)")
-                        .HasDefaultValue(new DateTime(2026, 8, 22, 20, 40, 3, 982, DateTimeKind.Utc).AddTicks(5730));
+                        .HasDefaultValue(new DateTime(2026, 9, 17, 19, 2, 42, 562, DateTimeKind.Utc).AddTicks(4712));
 
                     b.Property<string>("UserId")
                         .IsRequired()
@@ -327,12 +327,12 @@ namespace Mimisbrunnr.Persistence.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime(6)")
-                        .HasDefaultValue(new DateTime(2026, 8, 22, 20, 40, 3, 985, DateTimeKind.Utc).AddTicks(3890));
+                        .HasDefaultValue(new DateTime(2026, 9, 17, 19, 2, 42, 569, DateTimeKind.Utc).AddTicks(6011));
 
                     b.Property<DateOnly>("Date")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("date")
-                        .HasDefaultValue(new DateOnly(2026, 8, 22));
+                        .HasDefaultValue(new DateOnly(2026, 9, 17));
 
                     b.Property<string>("Description")
                         .IsRequired()
@@ -355,7 +355,7 @@ namespace Mimisbrunnr.Persistence.Migrations
                     b.Property<DateTime>("UpdatedAt")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime(6)")
-                        .HasDefaultValue(new DateTime(2026, 8, 22, 20, 40, 3, 985, DateTimeKind.Utc).AddTicks(4186));
+                        .HasDefaultValue(new DateTime(2026, 9, 17, 19, 2, 42, 569, DateTimeKind.Utc).AddTicks(6647));
 
                     b.HasKey("Id");
 
@@ -375,7 +375,7 @@ namespace Mimisbrunnr.Persistence.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime(6)")
-                        .HasDefaultValue(new DateTime(2026, 8, 22, 20, 40, 3, 997, DateTimeKind.Utc).AddTicks(8329));
+                        .HasDefaultValue(new DateTime(2026, 9, 17, 19, 2, 42, 594, DateTimeKind.Utc).AddTicks(8945));
 
                     b.Property<string>("Description")
                         .IsRequired()
@@ -390,7 +390,7 @@ namespace Mimisbrunnr.Persistence.Migrations
                     b.Property<DateTime>("UpdatedAt")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime(6)")
-                        .HasDefaultValue(new DateTime(2026, 8, 22, 20, 40, 3, 997, DateTimeKind.Utc).AddTicks(8594));
+                        .HasDefaultValue(new DateTime(2026, 9, 17, 19, 2, 42, 594, DateTimeKind.Utc).AddTicks(9488));
 
                     b.Property<string>("Url")
                         .IsRequired()
@@ -413,7 +413,7 @@ namespace Mimisbrunnr.Persistence.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime(6)")
-                        .HasDefaultValue(new DateTime(2026, 8, 22, 20, 40, 4, 1, DateTimeKind.Utc).AddTicks(1375));
+                        .HasDefaultValue(new DateTime(2026, 9, 17, 19, 2, 42, 604, DateTimeKind.Utc).AddTicks(1090));
 
                     b.Property<bool>("IsDeleted")
                         .ValueGeneratedOnAdd()
@@ -429,7 +429,7 @@ namespace Mimisbrunnr.Persistence.Migrations
                     b.Property<DateTime>("UpdatedAt")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime(6)")
-                        .HasDefaultValue(new DateTime(2026, 8, 22, 20, 40, 4, 1, DateTimeKind.Utc).AddTicks(1639));
+                        .HasDefaultValue(new DateTime(2026, 9, 17, 19, 2, 42, 604, DateTimeKind.Utc).AddTicks(1696));
 
                     b.Property<string>("Url")
                         .IsRequired()
@@ -456,7 +456,7 @@ namespace Mimisbrunnr.Persistence.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime(6)")
-                        .HasDefaultValue(new DateTime(2026, 8, 22, 20, 40, 4, 1, DateTimeKind.Utc).AddTicks(4573));
+                        .HasDefaultValue(new DateTime(2026, 9, 17, 19, 2, 42, 604, DateTimeKind.Utc).AddTicks(8242));
 
                     b.Property<bool>("IsDeleted")
                         .ValueGeneratedOnAdd()
@@ -471,7 +471,7 @@ namespace Mimisbrunnr.Persistence.Migrations
                     b.Property<DateTime>("UpdatedAt")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime(6)")
-                        .HasDefaultValue(new DateTime(2026, 8, 22, 20, 40, 4, 1, DateTimeKind.Utc).AddTicks(4800));
+                        .HasDefaultValue(new DateTime(2026, 9, 17, 19, 2, 42, 604, DateTimeKind.Utc).AddTicks(8684));
 
                     b.HasKey("Id");
 
@@ -498,7 +498,7 @@ namespace Mimisbrunnr.Persistence.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime(6)")
-                        .HasDefaultValue(new DateTime(2026, 8, 22, 20, 40, 3, 995, DateTimeKind.Utc).AddTicks(262));
+                        .HasDefaultValue(new DateTime(2026, 9, 17, 19, 2, 42, 588, DateTimeKind.Utc).AddTicks(7825));
 
                     b.Property<string>("Description")
                         .HasMaxLength(200)
@@ -538,7 +538,7 @@ namespace Mimisbrunnr.Persistence.Migrations
                     b.Property<DateTime>("UpdatedAt")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime(6)")
-                        .HasDefaultValue(new DateTime(2026, 8, 22, 20, 40, 3, 995, DateTimeKind.Utc).AddTicks(571));
+                        .HasDefaultValue(new DateTime(2026, 9, 17, 19, 2, 42, 588, DateTimeKind.Utc).AddTicks(8459));
 
                     b.Property<string>("Url")
                         .HasMaxLength(4000)
@@ -562,7 +562,7 @@ namespace Mimisbrunnr.Persistence.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime(6)")
-                        .HasDefaultValue(new DateTime(2026, 8, 22, 20, 40, 3, 998, DateTimeKind.Utc).AddTicks(1291));
+                        .HasDefaultValue(new DateTime(2026, 9, 17, 19, 2, 42, 595, DateTimeKind.Utc).AddTicks(5154));
 
                     b.Property<int>("ImageId")
                         .HasColumnType("int");
@@ -578,7 +578,7 @@ namespace Mimisbrunnr.Persistence.Migrations
                     b.Property<DateTime>("UpdatedAt")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime(6)")
-                        .HasDefaultValue(new DateTime(2026, 8, 22, 20, 40, 3, 998, DateTimeKind.Utc).AddTicks(1523));
+                        .HasDefaultValue(new DateTime(2026, 9, 17, 19, 2, 42, 595, DateTimeKind.Utc).AddTicks(5675));
 
                     b.HasKey("Id");
 
@@ -600,7 +600,7 @@ namespace Mimisbrunnr.Persistence.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime(6)")
-                        .HasDefaultValue(new DateTime(2026, 8, 22, 20, 40, 3, 998, DateTimeKind.Utc).AddTicks(5797));
+                        .HasDefaultValue(new DateTime(2026, 9, 17, 19, 2, 42, 596, DateTimeKind.Utc).AddTicks(5222));
 
                     b.Property<int>("ImageId")
                         .HasColumnType("int");
@@ -616,7 +616,7 @@ namespace Mimisbrunnr.Persistence.Migrations
                     b.Property<DateTime>("UpdatedAt")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime(6)")
-                        .HasDefaultValue(new DateTime(2026, 8, 22, 20, 40, 3, 998, DateTimeKind.Utc).AddTicks(6064));
+                        .HasDefaultValue(new DateTime(2026, 9, 17, 19, 2, 42, 596, DateTimeKind.Utc).AddTicks(5821));
 
                     b.Property<int>("Year")
                         .HasColumnType("int");
@@ -641,7 +641,7 @@ namespace Mimisbrunnr.Persistence.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime(6)")
-                        .HasDefaultValue(new DateTime(2026, 8, 22, 20, 40, 3, 999, DateTimeKind.Utc).AddTicks(1728));
+                        .HasDefaultValue(new DateTime(2026, 9, 17, 19, 2, 42, 598, DateTimeKind.Utc).AddTicks(2864));
 
                     b.Property<string>("FirstName")
                         .IsRequired()
@@ -671,7 +671,7 @@ namespace Mimisbrunnr.Persistence.Migrations
                     b.Property<DateTime>("UpdatedAt")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime(6)")
-                        .HasDefaultValue(new DateTime(2026, 8, 22, 20, 40, 3, 999, DateTimeKind.Utc).AddTicks(1972));
+                        .HasDefaultValue(new DateTime(2026, 9, 17, 19, 2, 42, 598, DateTimeKind.Utc).AddTicks(3647));
 
                     b.HasKey("Id");
 
@@ -689,7 +689,7 @@ namespace Mimisbrunnr.Persistence.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime(6)")
-                        .HasDefaultValue(new DateTime(2026, 8, 22, 20, 40, 3, 999, DateTimeKind.Utc).AddTicks(6202));
+                        .HasDefaultValue(new DateTime(2026, 9, 17, 19, 2, 42, 599, DateTimeKind.Utc).AddTicks(5890));
 
                     b.Property<string>("Email")
                         .IsRequired()
@@ -711,7 +711,7 @@ namespace Mimisbrunnr.Persistence.Migrations
                     b.Property<DateTime>("UpdatedAt")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime(6)")
-                        .HasDefaultValue(new DateTime(2026, 8, 22, 20, 40, 3, 999, DateTimeKind.Utc).AddTicks(6442));
+                        .HasDefaultValue(new DateTime(2026, 9, 17, 19, 2, 42, 599, DateTimeKind.Utc).AddTicks(6578));
 
                     b.HasKey("Id");
 
@@ -729,7 +729,7 @@ namespace Mimisbrunnr.Persistence.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime(6)")
-                        .HasDefaultValue(new DateTime(2026, 8, 22, 20, 40, 4, 0, DateTimeKind.Utc).AddTicks(6589));
+                        .HasDefaultValue(new DateTime(2026, 9, 17, 19, 2, 42, 602, DateTimeKind.Utc).AddTicks(2209));
 
                     b.Property<int>("ImageId")
                         .HasColumnType("int");
@@ -748,7 +748,7 @@ namespace Mimisbrunnr.Persistence.Migrations
                     b.Property<DateTime>("UpdatedAt")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime(6)")
-                        .HasDefaultValue(new DateTime(2026, 8, 22, 20, 40, 4, 0, DateTimeKind.Utc).AddTicks(6879));
+                        .HasDefaultValue(new DateTime(2026, 9, 17, 19, 2, 42, 602, DateTimeKind.Utc).AddTicks(2830));
 
                     b.Property<int>("Year")
                         .HasColumnType("int");
@@ -777,7 +777,7 @@ namespace Mimisbrunnr.Persistence.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime(6)")
-                        .HasDefaultValue(new DateTime(2026, 8, 22, 20, 40, 4, 0, DateTimeKind.Utc).AddTicks(1576));
+                        .HasDefaultValue(new DateTime(2026, 9, 17, 19, 2, 42, 601, DateTimeKind.Utc).AddTicks(1005));
 
                     b.Property<int>("ImageId")
                         .HasColumnType("int");
@@ -793,7 +793,7 @@ namespace Mimisbrunnr.Persistence.Migrations
                     b.Property<DateTime>("UpdatedAt")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime(6)")
-                        .HasDefaultValue(new DateTime(2026, 8, 22, 20, 40, 4, 0, DateTimeKind.Utc).AddTicks(1840));
+                        .HasDefaultValue(new DateTime(2026, 9, 17, 19, 2, 42, 601, DateTimeKind.Utc).AddTicks(1673));
 
                     b.Property<int>("Year")
                         .HasColumnType("int");
@@ -823,7 +823,7 @@ namespace Mimisbrunnr.Persistence.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime(6)")
-                        .HasDefaultValue(new DateTime(2026, 8, 22, 20, 40, 4, 1, DateTimeKind.Utc).AddTicks(9238));
+                        .HasDefaultValue(new DateTime(2026, 9, 17, 19, 2, 42, 605, DateTimeKind.Utc).AddTicks(8647));
 
                     b.Property<bool>("IsDeleted")
                         .ValueGeneratedOnAdd()
@@ -850,7 +850,7 @@ namespace Mimisbrunnr.Persistence.Migrations
                     b.Property<DateTime>("UpdatedAt")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime(6)")
-                        .HasDefaultValue(new DateTime(2026, 8, 22, 20, 40, 4, 1, DateTimeKind.Utc).AddTicks(9493));
+                        .HasDefaultValue(new DateTime(2026, 9, 17, 19, 2, 42, 605, DateTimeKind.Utc).AddTicks(9204));
 
                     b.Property<string>("Website")
                         .IsRequired()
