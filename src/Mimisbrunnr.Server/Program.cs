@@ -4,6 +4,7 @@ using FastEndpoints.Swagger;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Mimisbrunnr.Domain.Accounts;
 using Mimisbrunnr.Persistence;
 using Mimisbrunnr.Persistence.Triggers;
 using Mimisbrunnr.Server.Identity;
@@ -160,6 +161,10 @@ try
             if (result.Succeeded)
             {
                 await userManager.AddToRolesAsync(user, roles);
+
+                dbContext.Set<Account>().Add(new Account(userName, email, user.Id));
+                await dbContext.SaveChangesAsync();
+
                 Log.Warning("Seeded {Email} with roles {Roles}", email, string.Join(", ", roles));
             }
             else
