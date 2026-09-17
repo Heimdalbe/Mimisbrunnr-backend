@@ -10,6 +10,7 @@ using Mimisbrunnr.Server.Identity;
 using Mimisbrunnr.Server.Processors;
 using Mimisbrunnr.Services;
 using Mimisbrunnr.Services.Identity;
+using Mimisbrunnr.Shared.Identity;
 using Serilog.Events;
 
 Log.Logger = new LoggerConfiguration()
@@ -115,11 +116,60 @@ try
         await dbSeeder.SeedAsync();
     }
     else
+{
+    using var scope = app.Services.CreateScope();
+    var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+    await dbContext.Database.MigrateAsync();
+
+    if (builder.Configuration.GetValue<bool>("Seed:Accounts"))
     {
-        using var scope = app.Services.CreateScope();
-        var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-        await dbContext.Database.MigrateAsync();
+        var userManager = scope.ServiceProvider.GetRequiredService<UserManager<IdentityUser>>();
+        var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+        const string defaultPassword = "A1b2C3!";
+
+        var accounts = new (string Email, string[] Roles)[]
+        {
+            ("vice-praeses@heimdal.be",     new[] { AppRoles.Commilitones }),
+            ("quaestor@heimdal.be",         new[] { AppRoles.Commilitones }),
+            ("media@heimdal.be",            new[] { AppRoles.Commilitones, AppRoles.MediaEditor }),
+            ("feest-lan@heimdal.be",        new[] { AppRoles.Commilitones, AppRoles.EventEditor }),
+            ("sport@heimdal.be",            new[] { AppRoles.Commilitones, AppRoles.EventEditor }),
+            ("pr@heimdal.be",               new[] { AppRoles.Commilitones, AppRoles.SponsorEditor, AppRoles.EventEditor }),
+            ("secretaris@heimdal.be",       new[] { AppRoles.Commilitones }),
+            ("cultuur@heimdal.be",          new[] { AppRoles.Commilitones, AppRoles.EventEditor }),
+            ("ict@heimdal.be",              new[] { AppRoles.Commilitones, AppRoles.Hmdl }),
+            ("praeses@heimdal.be",          new[] { AppRoles.Commilitones, AppRoles.Hmdl }),
+            ("schachtentemmer@heimdal.be",  new[] { AppRoles.Commilitones, AppRoles.EventEditor }),
+        };
+
+        foreach (var role in accounts.SelectMany(a => a.Roles).Distinct())
+        {
+            if (!await roleManager.RoleExistsAsync(role))
+                await roleManager.CreateAsync(new IdentityRole(role));
+        }
+
+        foreach (var (email, roles) in accounts)
+        {
+            if (await userManager.FindByEmailAsync(email) is not null)
+                continue;
+
+            var userName = email.Split('@')[0];
+            var user = new IdentityUser { UserName = userName, Email = email, EmailConfirmed = true };
+            var result = await userManager.CreateAsync(user, defaultPassword);
+
+            if (result.Succeeded)
+            {
+                await userManager.AddToRolesAsync(user, roles);
+                Log.Warning("Seeded {Email} with roles {Roles}", email, string.Join(", ", roles));
+            }
+            else
+            {
+                Log.Warning("Failed to seed {Email}: {Errors}",
+                    email, string.Join(", ", result.Errors.Select(e => e.Description)));
+            }
+        }
     }
+}
     // Theses middlewares are strict in order of calling!
     app.UseForwardedHeaders()
         .UseHttpsRedirection()
