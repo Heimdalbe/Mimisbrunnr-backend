@@ -219,6 +219,9 @@ public class EventService(ApplicationDbContext dbContext, ISessionContextProvide
 
         if (req.Description is not null)
             e.Description = req.Description;
+        
+        if (req.Url is not null)
+            e.Url = req.Url;
 
         e.ICal = req.ICal;
 
