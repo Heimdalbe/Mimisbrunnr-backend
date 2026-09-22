@@ -705,7 +705,7 @@ public class PraesidiumService(ApplicationDbContext dbContext) : IPraesidiumServ
 
     public async Task<Result<PraesidiumResponse.DeleteErelid>> DeleteErelid(int id, CancellationToken ct)
     {
-        var erelid = await dbContext.PraesidiumRoles.FirstOrDefaultAsync(t => t.Id == id, ct);
+        var erelid = await dbContext.Erelids.FirstOrDefaultAsync(t => t.Id == id, ct);
         if (erelid is null)
         {
             return Result.NotFound($"Erelid with id {id} not found");
@@ -723,7 +723,7 @@ public class PraesidiumService(ApplicationDbContext dbContext) : IPraesidiumServ
 
     public async Task<Result<PraesidiumResponse.DeleteLustrumlid>> DeleteLustrumLid(int id, CancellationToken ct)
     {
-        var lustrumLid = await dbContext.PraesidiumRoles.FirstOrDefaultAsync(t => t.Id == id, ct);
+        var lustrumLid = await dbContext.LustrumLids.FirstOrDefaultAsync(t => t.Id == id, ct);
         if (lustrumLid is null)
         {
             return Result.NotFound($"Lustrum lid with id {id} not found");
