@@ -687,7 +687,7 @@ public class PraesidiumService(ApplicationDbContext dbContext) : IPraesidiumServ
 
     public async Task<Result<PraesidiumResponse.DeleteSuperSchacht>> DeleteSuperSchacht(int id, CancellationToken ct)
     {
-        var superSchacht = await dbContext.PraesidiumRoles.FirstOrDefaultAsync(t => t.Id == id, ct);
+        var superSchacht = await dbContext.SuperSchachts.FirstOrDefaultAsync(t => t.Id == id, ct);
         if (superSchacht is null)
         {
             return Result.NotFound($"Super schacht with id {id} not found");
