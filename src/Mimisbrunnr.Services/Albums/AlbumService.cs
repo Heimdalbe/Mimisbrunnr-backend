@@ -22,6 +22,8 @@ public class AlbumService(ApplicationDbContext dbContext, IHttpClientFactory htt
         var albums = await dbContext.Albums
             .Include(a => a.CoverImage)
             .Include(a => a.Images)
+            .OrderByDescending(a => a.Date)
+            .ThenByDescending(a => a.Id)
             .Where(a => a.Published)
             .Skip(req.Skip)
             .Take(req.Take)
