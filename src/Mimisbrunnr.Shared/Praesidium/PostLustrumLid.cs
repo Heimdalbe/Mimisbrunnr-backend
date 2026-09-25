@@ -23,7 +23,7 @@ public partial class PraesidiumRequest
             public Validator()
             {
                 RuleFor(x => x.MemberId).NotNull().GreaterThan(0);
-                RuleFor(x => x.Year).NotNull().GreaterThanOrEqualTo(2023);
+                RuleFor(x => x.Year).NotNull().GreaterThanOrEqualTo(2022);
                 RuleFor(x => x.ImageUrl).NotNull().NotEmpty();
             }
         }
