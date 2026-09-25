@@ -47,7 +47,7 @@ public class SponsorService(ApplicationDbContext dbContext) : ISponsorService
         if(!success)
             return Result.NotFound($"Sponsor rank {sponsorRank} not found");
         
-        success = Enum.TryParse(req.LanSponsorRank, out LanSponsorRank lanSponsorRank);
+        success = Enum.TryParse(req.LanSponsorRank, true ,  out LanSponsorRank lanSponsorRank);
         if(!success)
             return Result.NotFound($"LanSponsor rank {lanSponsorRank} not found");
 
@@ -90,9 +90,9 @@ public class SponsorService(ApplicationDbContext dbContext) : ISponsorService
             sponsor.SponsorRank = sponsorRank;
         }
 
-        else if (req.LanSponsorRank is not null)
+        if (req.LanSponsorRank is not null)
         {
-            Enum.TryParse(req.LanSponsorRank, out LanSponsorRank lanSponsorRank);
+            Enum.TryParse(req.LanSponsorRank,true, out LanSponsorRank lanSponsorRank);
             sponsor.LanSponsorRank = lanSponsorRank;
         }
 
