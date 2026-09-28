@@ -9,8 +9,8 @@ internal class ImageConfiguration : EntityConfiguration<Image>
     {
         base.Configure(builder);
         
-        builder.Property(i => i.Description).HasMaxLength(250);
+        builder.Property(i => i.Description).HasMaxLength(500);
         
-        builder.Property(i => i.Url).HasMaxLength(100);
+        builder.Property(i => i.Url).HasMaxLength(200);
     }
 }

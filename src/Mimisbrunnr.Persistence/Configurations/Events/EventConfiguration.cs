@@ -10,9 +10,9 @@ internal class EventConfiguration : EntityConfiguration<Event>
     {
         base.Configure(builder);
         
-        builder.Property(e => e.Name).IsRequired().HasMaxLength(50);
-        builder.Property(e => e.Description).HasMaxLength(200);
-        builder.Property(e => e.Location).HasMaxLength(50);
+        builder.Property(e => e.Name).IsRequired().HasMaxLength(100);
+        builder.Property(e => e.Description).HasMaxLength(2000);
+        builder.Property(e => e.Location).HasMaxLength(200);
         builder.Property(e => e.Start).HasColumnType("datetime");
         builder.Property(e => e.End).HasColumnType("datetime");
         builder.Property(e => e.EntryFee);
