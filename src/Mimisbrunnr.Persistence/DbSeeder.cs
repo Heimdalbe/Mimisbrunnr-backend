@@ -19,6 +19,16 @@ public class DbSeeder(ApplicationDbContext dbContext, RoleManager<IdentityRole> 
 {
     const string PasswordDefault = "A1b2C3!";
     private Image defaultImage;
+    private Image seppePraeses;
+    private Image zeayaPr;
+    private Image weekendAlbum;
+    private Image marioKartBanner;
+    private Image murderMysteryBanner;
+    private Image monsterSponsor;
+    private Image comicSansSponsor;
+    private Image delawareSponsor;
+    
+    
     
     public async Task SeedAsync()
     {
@@ -54,7 +64,24 @@ public class DbSeeder(ApplicationDbContext dbContext, RoleManager<IdentityRole> 
             return;
 
         defaultImage = new Image("https://i.imgur.com/aiXnDhm.png", "");
+        seppePraeses = new Image("https://i.imgur.com/MrGuJ1V.png", "");
+        zeayaPr =  new Image("https://i.imgur.com/xMghFXk.png", "");
+        weekendAlbum = new Image("https://i.imgur.com/7T5qsgF.jpeg", "");
+        marioKartBanner = new Image("https://i.imgur.com/BBX8jPd.png", "");
+        murderMysteryBanner = new Image("https://i.imgur.com/qRezNPe.jpeg", "");
+        monsterSponsor = new Image("https://www.monsterenergy.com/img/home/monster-logo.png", "");
+        comicSansSponsor = new Image("https://jormungandr-data.s3.eu-west-2.amazonaws.com/sponsor/ComicSans.png", "");
+        delawareSponsor = new Image("https://jormungandr-data.s3.eu-west-2.amazonaws.com/sponsor/delaware-logo-rgb.png");
+        
         await dbContext.Images.AddAsync(defaultImage);
+        await dbContext.Images.AddAsync(seppePraeses);
+        await dbContext.Images.AddAsync(zeayaPr);
+        await dbContext.Images.AddAsync(weekendAlbum);
+        await dbContext.Images.AddAsync(marioKartBanner);
+        await dbContext.Images.AddAsync(murderMysteryBanner);
+        await dbContext.Images.AddAsync(monsterSponsor);
+        await dbContext.Images.AddAsync(comicSansSponsor);
+        await dbContext.Images.AddAsync(delawareSponsor);
         
         await dbContext.SaveChangesAsync();
     }
@@ -285,7 +312,7 @@ public class DbSeeder(ApplicationDbContext dbContext, RoleManager<IdentityRole> 
             return;
 
         dbContext.PraesidiumTerms.Add(new PraesidiumTerm(p24, defaultImage, praeses, 2024));
-        dbContext.PraesidiumTerms.Add(new PraesidiumTerm(p25, defaultImage, praeses, 2025));
+        dbContext.PraesidiumTerms.Add(new PraesidiumTerm(p25, seppePraeses, praeses, 2025));
         
         dbContext.PraesidiumTerms.Add(new PraesidiumTerm(vp24, defaultImage, vice_praeses, 2024));
         
@@ -295,7 +322,7 @@ public class DbSeeder(ApplicationDbContext dbContext, RoleManager<IdentityRole> 
         dbContext.PraesidiumTerms.Add(new PraesidiumTerm(se24, defaultImage, secretaris, 2024));
         dbContext.PraesidiumTerms.Add(new PraesidiumTerm(se25, defaultImage, secretaris, 2025));
 
-        dbContext.PraesidiumTerms.Add(new PraesidiumTerm(pr25, defaultImage, pr, 2025));
+        dbContext.PraesidiumTerms.Add(new PraesidiumTerm(pr25, zeayaPr, pr, 2025));
         
         dbContext.PraesidiumTerms.Add(new PraesidiumTerm(m24, defaultImage, media, 2024));
         dbContext.PraesidiumTerms.Add(new PraesidiumTerm(m25, defaultImage, media, 2025));
@@ -386,7 +413,7 @@ public class DbSeeder(ApplicationDbContext dbContext, RoleManager<IdentityRole> 
             return;
 
         var a1 = new Album("A1",DateOnly.Parse("12/12/2024"),"",true );
-        a1.AddImage(defaultImage);
+        a1.AddImage(weekendAlbum);
         
         dbContext.Albums.Add(a1);
         
@@ -412,13 +439,13 @@ public class DbSeeder(ApplicationDbContext dbContext, RoleManager<IdentityRole> 
         if(dbContext.Sponsors.Any())
             return;
 
-        var s1 = new Sponsor("De CS", defaultImage, "https://cafecomicsans.be", "korting", SponsorRank.Diamond, LanSponsorRank.None, 1);
+        var s1 = new Sponsor("De CS", comicSansSponsor, "https://cafecomicsans.be", "korting", SponsorRank.Diamond, LanSponsorRank.None, 1);
         await dbContext.Sponsors.AddAsync(s1);
         
-        var s2 = new Sponsor("De VV", defaultImage, "https://www.devrolijkeviking.be", "korting", SponsorRank.Diamond, LanSponsorRank.None, 2);
+        var s2 = new Sponsor("De VV", monsterSponsor, "https://www.devrolijkeviking.be", "korting", SponsorRank.Diamond, LanSponsorRank.None, 2);
         await dbContext.Sponsors.AddAsync(s2);
         
-        var s3 = new Sponsor("Delaware", defaultImage, "https://www.delaware.pro/en-be", "", SponsorRank.None, LanSponsorRank.KiloByte, 3);
+        var s3 = new Sponsor("Delaware", delawareSponsor, "https://www.delaware.pro/en-be", "", SponsorRank.None, LanSponsorRank.KiloByte, 3);
         await dbContext.Sponsors.AddAsync(s3);
         
         var s4 = new Sponsor("Sepp De Groote", defaultImage, "https://www.linkedin.com/in/sepp-degroote/", "", SponsorRank.Silver, LanSponsorRank.None, 4);
@@ -449,7 +476,7 @@ public class DbSeeder(ApplicationDbContext dbContext, RoleManager<IdentityRole> 
         dbContext.Events.Add(e1);
 
         var e2 = new Event(Category.SPORT, Accessibility.OPEN, "mario cart", "https://google.com");
-        e2.Banner = defaultImage;
+        e2.Banner = marioKartBanner;
         e2.Description = "Dit is de mario cart";
         e2.Location = "De CS";
         e2.Start = date + TimeSpan.FromDays(15);
@@ -478,7 +505,7 @@ public class DbSeeder(ApplicationDbContext dbContext, RoleManager<IdentityRole> 
 
         var e4 = new Event(Category.FEESTENLAN, Accessibility.OPEN, "LAN", "https://google.com")
         {
-            Banner = defaultImage,
+            Banner = murderMysteryBanner,
             Description = "Dit is de LAN",
             Location = "Resto D - campus schoonmeersen",
             Start = date + TimeSpan.FromDays(7),

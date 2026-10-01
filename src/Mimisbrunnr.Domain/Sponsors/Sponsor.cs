@@ -37,7 +37,7 @@ namespace Mimisbrunnr.Domain.Sponsors
 
         public SponsorRank SponsorRank { get => _sponsorRank; set => _sponsorRank = Guard.Against.NullOrInvalidInput(value, nameof(SponsorRank), sr => sr != SponsorRank.None || LanSponsorRank != LanSponsorRank.None); }
 
-        public LanSponsorRank LanSponsorRank { get => _lanSponsorRank; set => _lanSponsorRank = Guard.Against.NullOrInvalidInput(value, nameof(SponsorRank), lsr => lsr != LanSponsorRank.None || SponsorRank != SponsorRank.None); }
+        public LanSponsorRank LanSponsorRank { get => _lanSponsorRank; set => _lanSponsorRank = Guard.Against.NullOrInvalidInput(value, nameof(LanSponsorRank), lsr => lsr != LanSponsorRank.None || SponsorRank != SponsorRank.None); }
         
         public int Order { get => _order; set => _order = Guard.Against.NegativeOrZero(value); }
         #endregion

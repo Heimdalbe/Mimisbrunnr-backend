@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Mimisbrunnr.Persistence.Migrations
 {
     /// <inheritdoc />
-    public partial class AddUrlToEvents : Migration
+    public partial class InitialCreate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -27,8 +27,8 @@ namespace Mimisbrunnr.Persistence.Migrations
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     UserId = table.Column<string>(type: "varchar(4000)", maxLength: 4000, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    CreatedAt = table.Column<DateTime>(type: "datetime(6)", nullable: false, defaultValue: new DateTime(2026, 8, 22, 20, 40, 3, 981, DateTimeKind.Utc).AddTicks(2995)),
-                    UpdatedAt = table.Column<DateTime>(type: "datetime(6)", nullable: false, defaultValue: new DateTime(2026, 8, 22, 20, 40, 3, 982, DateTimeKind.Utc).AddTicks(5730)),
+                    CreatedAt = table.Column<DateTime>(type: "datetime(6)", nullable: false, defaultValue: new DateTime(2026, 9, 17, 19, 2, 42, 559, DateTimeKind.Utc).AddTicks(6723)),
+                    UpdatedAt = table.Column<DateTime>(type: "datetime(6)", nullable: false, defaultValue: new DateTime(2026, 9, 17, 19, 2, 42, 562, DateTimeKind.Utc).AddTicks(4712)),
                     IsDeleted = table.Column<bool>(type: "tinyint(1)", nullable: false, defaultValue: false)
                 },
                 constraints: table =>
@@ -47,8 +47,8 @@ namespace Mimisbrunnr.Persistence.Migrations
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     Url = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    CreatedAt = table.Column<DateTime>(type: "datetime(6)", nullable: false, defaultValue: new DateTime(2026, 8, 22, 20, 40, 3, 997, DateTimeKind.Utc).AddTicks(8329)),
-                    UpdatedAt = table.Column<DateTime>(type: "datetime(6)", nullable: false, defaultValue: new DateTime(2026, 8, 22, 20, 40, 3, 997, DateTimeKind.Utc).AddTicks(8594)),
+                    CreatedAt = table.Column<DateTime>(type: "datetime(6)", nullable: false, defaultValue: new DateTime(2026, 9, 17, 19, 2, 42, 594, DateTimeKind.Utc).AddTicks(8945)),
+                    UpdatedAt = table.Column<DateTime>(type: "datetime(6)", nullable: false, defaultValue: new DateTime(2026, 9, 17, 19, 2, 42, 594, DateTimeKind.Utc).AddTicks(9488)),
                     IsDeleted = table.Column<bool>(type: "tinyint(1)", nullable: false, defaultValue: false)
                 },
                 constraints: table =>
@@ -71,8 +71,8 @@ namespace Mimisbrunnr.Persistence.Migrations
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     Trivia = table.Column<string>(type: "varchar(200)", maxLength: 200, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    CreatedAt = table.Column<DateTime>(type: "datetime(6)", nullable: false, defaultValue: new DateTime(2026, 8, 22, 20, 40, 3, 999, DateTimeKind.Utc).AddTicks(1728)),
-                    UpdatedAt = table.Column<DateTime>(type: "datetime(6)", nullable: false, defaultValue: new DateTime(2026, 8, 22, 20, 40, 3, 999, DateTimeKind.Utc).AddTicks(1972)),
+                    CreatedAt = table.Column<DateTime>(type: "datetime(6)", nullable: false, defaultValue: new DateTime(2026, 9, 17, 19, 2, 42, 598, DateTimeKind.Utc).AddTicks(2864)),
+                    UpdatedAt = table.Column<DateTime>(type: "datetime(6)", nullable: false, defaultValue: new DateTime(2026, 9, 17, 19, 2, 42, 598, DateTimeKind.Utc).AddTicks(3647)),
                     IsDeleted = table.Column<bool>(type: "tinyint(1)", nullable: false, defaultValue: false)
                 },
                 constraints: table =>
@@ -92,8 +92,8 @@ namespace Mimisbrunnr.Persistence.Migrations
                     Email = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     Order = table.Column<int>(type: "int", nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "datetime(6)", nullable: false, defaultValue: new DateTime(2026, 8, 22, 20, 40, 3, 999, DateTimeKind.Utc).AddTicks(6202)),
-                    UpdatedAt = table.Column<DateTime>(type: "datetime(6)", nullable: false, defaultValue: new DateTime(2026, 8, 22, 20, 40, 3, 999, DateTimeKind.Utc).AddTicks(6442)),
+                    CreatedAt = table.Column<DateTime>(type: "datetime(6)", nullable: false, defaultValue: new DateTime(2026, 9, 17, 19, 2, 42, 599, DateTimeKind.Utc).AddTicks(5890)),
+                    UpdatedAt = table.Column<DateTime>(type: "datetime(6)", nullable: false, defaultValue: new DateTime(2026, 9, 17, 19, 2, 42, 599, DateTimeKind.Utc).AddTicks(6578)),
                     IsDeleted = table.Column<bool>(type: "tinyint(1)", nullable: false, defaultValue: false)
                 },
                 constraints: table =>
@@ -129,8 +129,8 @@ namespace Mimisbrunnr.Persistence.Migrations
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     Name = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    CreatedAt = table.Column<DateTime>(type: "datetime(6)", nullable: false, defaultValue: new DateTime(2026, 8, 22, 20, 40, 4, 1, DateTimeKind.Utc).AddTicks(4573)),
-                    UpdatedAt = table.Column<DateTime>(type: "datetime(6)", nullable: false, defaultValue: new DateTime(2026, 8, 22, 20, 40, 4, 1, DateTimeKind.Utc).AddTicks(4800)),
+                    CreatedAt = table.Column<DateTime>(type: "datetime(6)", nullable: false, defaultValue: new DateTime(2026, 9, 17, 19, 2, 42, 604, DateTimeKind.Utc).AddTicks(8242)),
+                    UpdatedAt = table.Column<DateTime>(type: "datetime(6)", nullable: false, defaultValue: new DateTime(2026, 9, 17, 19, 2, 42, 604, DateTimeKind.Utc).AddTicks(8684)),
                     IsDeleted = table.Column<bool>(type: "tinyint(1)", nullable: false, defaultValue: false)
                 },
                 constraints: table =>
@@ -182,13 +182,13 @@ namespace Mimisbrunnr.Persistence.Migrations
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     Name = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    Date = table.Column<DateOnly>(type: "date", nullable: false, defaultValue: new DateOnly(2026, 8, 22)),
+                    Date = table.Column<DateOnly>(type: "date", nullable: false, defaultValue: new DateOnly(2026, 9, 17)),
                     Description = table.Column<string>(type: "varchar(500)", maxLength: 500, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     CoverImageId = table.Column<int>(type: "int", nullable: true),
                     Published = table.Column<bool>(type: "tinyint(1)", nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "datetime(6)", nullable: false, defaultValue: new DateTime(2026, 8, 22, 20, 40, 3, 985, DateTimeKind.Utc).AddTicks(3890)),
-                    UpdatedAt = table.Column<DateTime>(type: "datetime(6)", nullable: false, defaultValue: new DateTime(2026, 8, 22, 20, 40, 3, 985, DateTimeKind.Utc).AddTicks(4186)),
+                    CreatedAt = table.Column<DateTime>(type: "datetime(6)", nullable: false, defaultValue: new DateTime(2026, 9, 17, 19, 2, 42, 569, DateTimeKind.Utc).AddTicks(6011)),
+                    UpdatedAt = table.Column<DateTime>(type: "datetime(6)", nullable: false, defaultValue: new DateTime(2026, 9, 17, 19, 2, 42, 569, DateTimeKind.Utc).AddTicks(6647)),
                     IsDeleted = table.Column<bool>(type: "tinyint(1)", nullable: false, defaultValue: false)
                 },
                 constraints: table =>
@@ -226,8 +226,8 @@ namespace Mimisbrunnr.Persistence.Migrations
                     Url = table.Column<string>(type: "varchar(4000)", maxLength: 4000, nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     Published = table.Column<bool>(type: "tinyint(1)", nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "datetime(6)", nullable: false, defaultValue: new DateTime(2026, 8, 22, 20, 40, 3, 995, DateTimeKind.Utc).AddTicks(262)),
-                    UpdatedAt = table.Column<DateTime>(type: "datetime(6)", nullable: false, defaultValue: new DateTime(2026, 8, 22, 20, 40, 3, 995, DateTimeKind.Utc).AddTicks(571)),
+                    CreatedAt = table.Column<DateTime>(type: "datetime(6)", nullable: false, defaultValue: new DateTime(2026, 9, 17, 19, 2, 42, 588, DateTimeKind.Utc).AddTicks(7825)),
+                    UpdatedAt = table.Column<DateTime>(type: "datetime(6)", nullable: false, defaultValue: new DateTime(2026, 9, 17, 19, 2, 42, 588, DateTimeKind.Utc).AddTicks(8459)),
                     IsDeleted = table.Column<bool>(type: "tinyint(1)", nullable: false, defaultValue: false)
                 },
                 constraints: table =>
@@ -257,8 +257,8 @@ namespace Mimisbrunnr.Persistence.Migrations
                     SponsorRank = table.Column<int>(type: "int", nullable: false),
                     LanSponsorRank = table.Column<int>(type: "int", nullable: false),
                     Order = table.Column<int>(type: "int", nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "datetime(6)", nullable: false, defaultValue: new DateTime(2026, 8, 22, 20, 40, 4, 1, DateTimeKind.Utc).AddTicks(9238)),
-                    UpdatedAt = table.Column<DateTime>(type: "datetime(6)", nullable: false, defaultValue: new DateTime(2026, 8, 22, 20, 40, 4, 1, DateTimeKind.Utc).AddTicks(9493)),
+                    CreatedAt = table.Column<DateTime>(type: "datetime(6)", nullable: false, defaultValue: new DateTime(2026, 9, 17, 19, 2, 42, 605, DateTimeKind.Utc).AddTicks(8647)),
+                    UpdatedAt = table.Column<DateTime>(type: "datetime(6)", nullable: false, defaultValue: new DateTime(2026, 9, 17, 19, 2, 42, 605, DateTimeKind.Utc).AddTicks(9204)),
                     IsDeleted = table.Column<bool>(type: "tinyint(1)", nullable: false, defaultValue: false)
                 },
                 constraints: table =>
@@ -281,8 +281,8 @@ namespace Mimisbrunnr.Persistence.Migrations
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     MemberDetailsId = table.Column<int>(type: "int", nullable: false),
                     ImageId = table.Column<int>(type: "int", nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "datetime(6)", nullable: false, defaultValue: new DateTime(2026, 8, 22, 20, 40, 3, 998, DateTimeKind.Utc).AddTicks(1291)),
-                    UpdatedAt = table.Column<DateTime>(type: "datetime(6)", nullable: false, defaultValue: new DateTime(2026, 8, 22, 20, 40, 3, 998, DateTimeKind.Utc).AddTicks(1523)),
+                    CreatedAt = table.Column<DateTime>(type: "datetime(6)", nullable: false, defaultValue: new DateTime(2026, 9, 17, 19, 2, 42, 595, DateTimeKind.Utc).AddTicks(5154)),
+                    UpdatedAt = table.Column<DateTime>(type: "datetime(6)", nullable: false, defaultValue: new DateTime(2026, 9, 17, 19, 2, 42, 595, DateTimeKind.Utc).AddTicks(5675)),
                     IsDeleted = table.Column<bool>(type: "tinyint(1)", nullable: false, defaultValue: false)
                 },
                 constraints: table =>
@@ -312,8 +312,8 @@ namespace Mimisbrunnr.Persistence.Migrations
                     MemberDetailsId = table.Column<int>(type: "int", nullable: false),
                     ImageId = table.Column<int>(type: "int", nullable: false),
                     Year = table.Column<int>(type: "int", nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "datetime(6)", nullable: false, defaultValue: new DateTime(2026, 8, 22, 20, 40, 3, 998, DateTimeKind.Utc).AddTicks(5797)),
-                    UpdatedAt = table.Column<DateTime>(type: "datetime(6)", nullable: false, defaultValue: new DateTime(2026, 8, 22, 20, 40, 3, 998, DateTimeKind.Utc).AddTicks(6064)),
+                    CreatedAt = table.Column<DateTime>(type: "datetime(6)", nullable: false, defaultValue: new DateTime(2026, 9, 17, 19, 2, 42, 596, DateTimeKind.Utc).AddTicks(5222)),
+                    UpdatedAt = table.Column<DateTime>(type: "datetime(6)", nullable: false, defaultValue: new DateTime(2026, 9, 17, 19, 2, 42, 596, DateTimeKind.Utc).AddTicks(5821)),
                     IsDeleted = table.Column<bool>(type: "tinyint(1)", nullable: false, defaultValue: false)
                 },
                 constraints: table =>
@@ -343,8 +343,8 @@ namespace Mimisbrunnr.Persistence.Migrations
                     MemberDetailsId = table.Column<int>(type: "int", nullable: false),
                     ImageId = table.Column<int>(type: "int", nullable: false),
                     Year = table.Column<int>(type: "int", nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "datetime(6)", nullable: false, defaultValue: new DateTime(2026, 8, 22, 20, 40, 4, 0, DateTimeKind.Utc).AddTicks(1576)),
-                    UpdatedAt = table.Column<DateTime>(type: "datetime(6)", nullable: false, defaultValue: new DateTime(2026, 8, 22, 20, 40, 4, 0, DateTimeKind.Utc).AddTicks(1840)),
+                    CreatedAt = table.Column<DateTime>(type: "datetime(6)", nullable: false, defaultValue: new DateTime(2026, 9, 17, 19, 2, 42, 601, DateTimeKind.Utc).AddTicks(1005)),
+                    UpdatedAt = table.Column<DateTime>(type: "datetime(6)", nullable: false, defaultValue: new DateTime(2026, 9, 17, 19, 2, 42, 601, DateTimeKind.Utc).AddTicks(1673)),
                     IsDeleted = table.Column<bool>(type: "tinyint(1)", nullable: false, defaultValue: false)
                 },
                 constraints: table =>
@@ -375,8 +375,8 @@ namespace Mimisbrunnr.Persistence.Migrations
                     ImageId = table.Column<int>(type: "int", nullable: false),
                     RoleId = table.Column<int>(type: "int", nullable: false),
                     Year = table.Column<int>(type: "int", nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "datetime(6)", nullable: false, defaultValue: new DateTime(2026, 8, 22, 20, 40, 4, 0, DateTimeKind.Utc).AddTicks(6589)),
-                    UpdatedAt = table.Column<DateTime>(type: "datetime(6)", nullable: false, defaultValue: new DateTime(2026, 8, 22, 20, 40, 4, 0, DateTimeKind.Utc).AddTicks(6879)),
+                    CreatedAt = table.Column<DateTime>(type: "datetime(6)", nullable: false, defaultValue: new DateTime(2026, 9, 17, 19, 2, 42, 602, DateTimeKind.Utc).AddTicks(2209)),
+                    UpdatedAt = table.Column<DateTime>(type: "datetime(6)", nullable: false, defaultValue: new DateTime(2026, 9, 17, 19, 2, 42, 602, DateTimeKind.Utc).AddTicks(2830)),
                     IsDeleted = table.Column<bool>(type: "tinyint(1)", nullable: false, defaultValue: false)
                 },
                 constraints: table =>
@@ -438,8 +438,8 @@ namespace Mimisbrunnr.Persistence.Migrations
                     Url = table.Column<string>(type: "varchar(4000)", maxLength: 4000, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     MemberDetailsId = table.Column<int>(type: "int", nullable: true),
-                    CreatedAt = table.Column<DateTime>(type: "datetime(6)", nullable: false, defaultValue: new DateTime(2026, 8, 22, 20, 40, 4, 1, DateTimeKind.Utc).AddTicks(1375)),
-                    UpdatedAt = table.Column<DateTime>(type: "datetime(6)", nullable: false, defaultValue: new DateTime(2026, 8, 22, 20, 40, 4, 1, DateTimeKind.Utc).AddTicks(1639)),
+                    CreatedAt = table.Column<DateTime>(type: "datetime(6)", nullable: false, defaultValue: new DateTime(2026, 9, 17, 19, 2, 42, 604, DateTimeKind.Utc).AddTicks(1090)),
+                    UpdatedAt = table.Column<DateTime>(type: "datetime(6)", nullable: false, defaultValue: new DateTime(2026, 9, 17, 19, 2, 42, 604, DateTimeKind.Utc).AddTicks(1696)),
                     IsDeleted = table.Column<bool>(type: "tinyint(1)", nullable: false, defaultValue: false)
                 },
                 constraints: table =>

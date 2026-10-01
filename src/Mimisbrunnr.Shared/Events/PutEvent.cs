@@ -27,6 +27,8 @@ public partial class EventRequest{
 
         public string? Description { get; set; }
 
+        public string? Url { get; set; }
+        
         public string? ICal { get; set; }
 
         public string? BannerUrl { get; set; }
@@ -50,6 +52,8 @@ public partial class EventRequest{
                 RuleFor(x => x.Location).NotEmpty().When(x => x.Location is not null);
                 
                 RuleFor(x => x.Description).NotEmpty().When(x => x.Description is not null);
+                
+                RuleFor(x => x.Url).NotEmpty().When(x => x.Url is not null);
                 
                 RuleFor(x => x.BannerUrl).NotEmpty().When(x => x.BannerUrl is not null);
             }
