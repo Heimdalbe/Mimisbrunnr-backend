@@ -25,6 +25,7 @@ public static class ServiceCollectionExtensions
         services.AddScoped<ISocialService, SocialService>();
         services.AddScoped<IAlbumService, AlbumService>();
         services.AddScoped<IAccountService, AccountService>();
+        services.AddScoped<IAccountRoleService, AccountRoleService>();
         
         services.AddTransient<DbSeeder>();       
         

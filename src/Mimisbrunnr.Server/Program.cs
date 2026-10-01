@@ -64,6 +64,8 @@ try
 
             o.AddApplicationTriggers();
         })
+        // Rebuild cookie claims from Identity on each request so removed roles cannot retain access.
+        .Configure<SecurityStampValidatorOptions>(o => o.ValidationInterval = TimeSpan.Zero)
         .ConfigureApplicationCookie(o =>
         {
             o.Cookie.SameSite = SameSiteMode.None;
@@ -112,9 +114,10 @@ try
         using var scope = app.Services.CreateScope();
         var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
         var dbSeeder = scope.ServiceProvider.GetRequiredService<DbSeeder>();
-        dbContext.Database.EnsureDeleted();
-        await dbContext.Database.EnsureCreatedAsync();
-        await dbSeeder.SeedAsync();
+        await dbContext.Database.MigrateAsync();
+        // Demo seeding depends on a fresh database and must not overwrite existing accounts.
+        if (!await dbContext.Users.AnyAsync())
+            await dbSeeder.SeedAsync();
     }
     else
 {
@@ -206,5 +209,4 @@ finally
 {
     Log.CloseAndFlush();
 }
-
 
