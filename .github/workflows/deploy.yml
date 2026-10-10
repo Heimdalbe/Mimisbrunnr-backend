@@ -2,7 +2,7 @@ name: Deploy
 
 on:
   push:
-    branches: [prod]
+    branches: [main]
 
 jobs:
   deploy:
@@ -16,6 +16,6 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
             cd /opt/mimisbrunnr/backend
-            git pull origin prod
+            git pull origin main
             cd /opt/mimisbrunnr
             docker compose up -d --build backend
