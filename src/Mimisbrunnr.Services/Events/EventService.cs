@@ -57,8 +57,8 @@ public class EventService(ApplicationDbContext dbContext, ISessionContextProvide
 
         var dtos = events.Select(EventToSimpleDto)
             .Skip(req.Skip)
-            .Take(req.Take)
             .OrderBy(e => e.Start)
+            .Take(req.Take)
             .ToList().AsReadOnly();
 
         return Result.Success(new EventResponse.GetEvents { Events = dtos });
