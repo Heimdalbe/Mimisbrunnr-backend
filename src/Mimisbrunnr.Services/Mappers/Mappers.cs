@@ -291,6 +291,7 @@ public static class Mappers
             Logo = ImageToSimpleDto(sponsor.Logo),
             Website = sponsor.Website,
             Benefits = sponsor.Benefits,
+            Description =  sponsor.Description,
             Rank = sponsor.SponsorRank.ToString(),
             LanSponsorRank = sponsor.LanSponsorRank.ToString(),
             Order = sponsor.Order,

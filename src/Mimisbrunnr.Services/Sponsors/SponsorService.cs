@@ -75,7 +75,7 @@ public class SponsorService(ApplicationDbContext dbContext) : ISponsorService
         if(!success)
             return Result.NotFound($"LanSponsor rank {lanSponsorRank} not found");
 
-        var sponsor = new Sponsor(req.Name, logo, req.Website, req.Benefits, sponsorRank, lanSponsorRank, req.Order, req.OnHomePage, req.OnSponsorPage);
+        var sponsor = new Sponsor(req.Name, logo, req.Website, req.Benefits, req.Description, sponsorRank, lanSponsorRank, req.Order, req.OnHomePage, req.OnSponsorPage);
 
         dbContext.Sponsors.Add(sponsor);
         await dbContext.SaveChangesAsync(cancellationToken);
@@ -107,6 +107,9 @@ public class SponsorService(ApplicationDbContext dbContext) : ISponsorService
 
         if (req.Benefits is not null)
             sponsor.Benefits = req.Benefits;
+
+        if (req.Description is not null)
+            sponsor.Description = req.Description;
         
         if (req.SponsorRank is not null)
         {
