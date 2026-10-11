@@ -277,6 +277,8 @@ public static class Mappers
             Logo = ImageToSimpleDto(sponsor.Logo),
             Website = sponsor.Website,
             Order = sponsor.Order,
+            OnHomePage = sponsor.OnHomePage,
+            OnSponsorPage = sponsor.OnSponsorPage
         };
     }
 
@@ -291,7 +293,9 @@ public static class Mappers
             Benefits = sponsor.Benefits,
             Rank = sponsor.SponsorRank.ToString(),
             LanSponsorRank = sponsor.LanSponsorRank.ToString(),
-            Order = sponsor.Order
+            Order = sponsor.Order,
+            OnHomePage = sponsor.OnHomePage,
+            OnSponsorPage = sponsor.OnSponsorPage
         };
     }
     

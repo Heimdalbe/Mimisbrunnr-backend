@@ -5,6 +5,10 @@ namespace Mimisbrunnr.Shared.Sponsors;
 public interface ISponsorService
 {
     Task<Result<SponsorResponse.GetSponsors>> GetSponsors(CancellationToken cancellationToken = default);
+    
+    Task<Result<SponsorResponse.GetSponsorsForHomePage>> GetSponsorsForHomePage(CancellationToken cancellationToken = default);
+    
+    Task<Result<SponsorResponse.GetSponsorsForSponsorPage>> GetSponsorsForSponsorPage(CancellationToken cancellationToken = default);
 
     Task<Result<SponsorDto.Detailed>> GetSponsor(int id, CancellationToken cancellationToken = default);
 
