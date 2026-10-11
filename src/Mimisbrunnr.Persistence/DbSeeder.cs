@@ -439,19 +439,19 @@ public class DbSeeder(ApplicationDbContext dbContext, RoleManager<IdentityRole> 
         if(dbContext.Sponsors.Any())
             return;
 
-        var s1 = new Sponsor("De CS", comicSansSponsor, "https://cafecomicsans.be", "korting", SponsorRank.Diamond, LanSponsorRank.None, 1, true, true);
+        var s1 = new Sponsor("De CS", comicSansSponsor, "https://cafecomicsans.be", "korting", "description",SponsorRank.Diamond, LanSponsorRank.None, 1, true, true);
         await dbContext.Sponsors.AddAsync(s1);
         
-        var s2 = new Sponsor("De VV", monsterSponsor, "https://www.devrolijkeviking.be", "korting", SponsorRank.Diamond, LanSponsorRank.None, 2, true, false);
+        var s2 = new Sponsor("De VV", monsterSponsor, "https://www.devrolijkeviking.be", "korting", "", SponsorRank.Diamond, LanSponsorRank.None, 2, true, false);
         await dbContext.Sponsors.AddAsync(s2);
         
-        var s3 = new Sponsor("Delaware", delawareSponsor, "https://www.delaware.pro/en-be", "", SponsorRank.None, LanSponsorRank.KiloByte, 3, true, true);
+        var s3 = new Sponsor("Delaware", delawareSponsor, "https://www.delaware.pro/en-be", "",  "description",SponsorRank.None, LanSponsorRank.KiloByte, 3, true, true);
         await dbContext.Sponsors.AddAsync(s3);
         
-        var s4 = new Sponsor("Sepp De Groote", defaultImage, "https://www.linkedin.com/in/sepp-degroote/", "", SponsorRank.Silver, LanSponsorRank.None, 4, false,  true);
+        var s4 = new Sponsor("Sepp De Groote", defaultImage, "https://www.linkedin.com/in/sepp-degroote/", "", "idkbro", SponsorRank.Silver, LanSponsorRank.None, 4, false,  true);
         await dbContext.Sponsors.AddAsync(s4);
         
-        var s5 = new Sponsor("Seppe", seppePraeses, "https://www.linkedin.com/in/sepp-degroote/", "", SponsorRank.Silver, LanSponsorRank.None, 4, false,  false);
+        var s5 = new Sponsor("Seppe", seppePraeses, "https://www.linkedin.com/in/sepp-degroote/", "", "", SponsorRank.Silver, LanSponsorRank.None, 4, false,  false);
         await dbContext.Sponsors.AddAsync(s5);
         
         await dbContext.SaveChangesAsync();

@@ -18,6 +18,8 @@ namespace Mimisbrunnr.Domain.Sponsors
         private string _website;
 
         private string _benefits;
+        
+        private string _description;
 
         private SponsorRank _sponsorRank;
         
@@ -38,6 +40,8 @@ namespace Mimisbrunnr.Domain.Sponsors
         public string Website { get => _website; set => _website = Guard.Against.Url(value); }
 
         public string Benefits { get => _benefits; set => _benefits = Guard.Against.Null(value); }
+        
+        public string Description { get => _description; set => _description = Guard.Against.Null(value); }
 
         public SponsorRank SponsorRank { get => _sponsorRank; set => _sponsorRank = Guard.Against.Null(value); }
 
@@ -53,12 +57,13 @@ namespace Mimisbrunnr.Domain.Sponsors
         #region Constructors
 
         private Sponsor () { }
-        public Sponsor(string name, Image logo, string website, string benefits, SponsorRank sponsorRank, LanSponsorRank lanSponsorRank, int order, bool onHomePage, bool onSponsorPage)
+        public Sponsor(string name, Image logo, string website, string benefits, string description, SponsorRank sponsorRank, LanSponsorRank lanSponsorRank, int order, bool onHomePage, bool onSponsorPage)
         {
             Name = name;
             Logo = logo;
             Website = website;
             Benefits = benefits;
+            Description = description;
             SponsorRank = sponsorRank;
             LanSponsorRank = lanSponsorRank;
             Order = order;

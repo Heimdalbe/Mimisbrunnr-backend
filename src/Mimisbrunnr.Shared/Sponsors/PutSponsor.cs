@@ -19,6 +19,8 @@ public partial class SponsorRequest
         public string? Website { get; set; }
 
         public string? Benefits { get; set; }
+        
+        public string? Description { get; set; }
 
         public string? SponsorRank { get; set; }
         
@@ -41,6 +43,8 @@ public partial class SponsorRequest
                 RuleFor(x => x.Website).NotEmpty().When(x => x.Website is not null);
 
                 RuleFor(x => x.Benefits);
+                
+                RuleFor(x => x.Description);
                 
                 RuleFor(x => x.SponsorRank).NotEmpty().When(x => x.SponsorRank is not null);
                 

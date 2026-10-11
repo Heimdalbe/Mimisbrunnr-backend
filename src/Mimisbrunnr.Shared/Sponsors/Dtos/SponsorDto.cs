@@ -32,6 +32,8 @@ public static class SponsorDto
         public required string Website   { get; set; }
 
         public required string Benefits   { get; set; }
+        
+        public required string Description  { get; set; }
 
         public required string? Rank { get; set; }
         
