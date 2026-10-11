@@ -22,6 +22,30 @@ public class SponsorService(ApplicationDbContext dbContext) : ISponsorService
 
         return Result.Success(new SponsorResponse.GetSponsors { Sponsors = dtos });
     }
+    
+    public async Task<Result<SponsorResponse.GetSponsorsForHomePage>> GetSponsorsForHomePage(CancellationToken cancellationToken = default)
+    {
+        var sponsors = await dbContext.Sponsors
+            .Include(s => s.Logo)
+            .Where(s => s.OnHomePage)
+            .ToListAsync(cancellationToken: cancellationToken);
+        
+        var dtos = sponsors.OrderBy(s => s.Order).Select(SponsorToSimpleDto).ToList().AsReadOnly();
+
+        return Result.Success(new SponsorResponse.GetSponsorsForHomePage() { Sponsors = dtos });
+    }
+    
+    public async Task<Result<SponsorResponse.GetSponsorsForSponsorPage>> GetSponsorsForSponsorPage(CancellationToken cancellationToken = default)
+    {
+        var sponsors = await dbContext.Sponsors
+            .Include(s => s.Logo)
+            .Where(s => s.OnSponsorPage)
+            .ToListAsync(cancellationToken: cancellationToken);
+        
+        var dtos = sponsors.OrderBy(s => s.Order).Select(SponsorToSimpleDto).ToList().AsReadOnly();
+
+        return Result.Success(new SponsorResponse.GetSponsorsForSponsorPage() { Sponsors = dtos });
+    }
 
     public async Task<Result<SponsorDto.Detailed>> GetSponsor(int id, CancellationToken cancellationToken = default)
     {
@@ -51,7 +75,7 @@ public class SponsorService(ApplicationDbContext dbContext) : ISponsorService
         if(!success)
             return Result.NotFound($"LanSponsor rank {lanSponsorRank} not found");
 
-        var sponsor = new Sponsor(req.Name, logo, req.Website, req.Benefits, sponsorRank, lanSponsorRank, req.Order);
+        var sponsor = new Sponsor(req.Name, logo, req.Website, req.Benefits, sponsorRank, lanSponsorRank, req.Order, req.OnHomePage, req.OnSponsorPage);
 
         dbContext.Sponsors.Add(sponsor);
         await dbContext.SaveChangesAsync(cancellationToken);
@@ -98,6 +122,12 @@ public class SponsorService(ApplicationDbContext dbContext) : ISponsorService
 
         if (req.Order is not null)
             sponsor.Order = req.Order.Value;
+        
+        if (req.OnHomePage is not null)
+            sponsor.OnHomePage = req.OnHomePage.Value;
+        
+        if (req.OnSponsorPage is not null)
+            sponsor.OnSponsorPage = req.OnSponsorPage.Value;
         
         await dbContext.SaveChangesAsync(cancellationToken);
 

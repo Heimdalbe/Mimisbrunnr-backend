@@ -25,6 +25,10 @@ public partial class SponsorRequest
         public required string? LanSponsorRank { get; set; }
         
         public required int Order { get; set; }
+        
+        public required bool OnHomePage { get; set; }
+        
+        public required bool OnSponsorPage { get; set; }
 
         public class Validator :  AbstractValidator<PostSponsor>
         {
@@ -45,6 +49,9 @@ public partial class SponsorRequest
                 RuleFor(x => x.LanSponsorRank).NotEmpty().When(x => x.LanSponsorRank is not null);
                 
                 RuleFor(x => x.Order).NotNull().GreaterThanOrEqualTo(0);
+                
+                RuleFor(x => x.OnHomePage).NotNull();
+                RuleFor(x => x.OnSponsorPage).NotNull();
             }
         }
     }
