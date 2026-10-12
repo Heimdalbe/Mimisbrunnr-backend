@@ -259,7 +259,7 @@ public class PraesidiumService(ApplicationDbContext dbContext) : IPraesidiumServ
 
     public async Task<Result<PraesidiumResponse.PostMemberDetails>> PostMemberDetails(PraesidiumRequest.PostMemberDetails req, CancellationToken cancellationToken = default)
     {
-        var details = new MemberDetails(req.FirstName, req.LastName, req.Quote, req.Trivia);
+        var details = new MemberDetails(req.FirstName, req.LastName, req.Quote, req.Trivia, req.BirthDate, req.StudieRichting, req.FavoriteGame, req.FavoriteHeimdal);
         dbContext.MemberDetails.Add(details);
         await dbContext.SaveChangesAsync(cancellationToken);
         
@@ -427,6 +427,23 @@ public class PraesidiumService(ApplicationDbContext dbContext) : IPraesidiumServ
         if (req.Trivia is not null)
         {
             details.Trivia = req.Trivia;
+        }
+        
+        details.BirthDate = req.BirthDate;
+        
+        if (req.StudieRichting is not null)
+        {
+            details.StudieRichting = req.StudieRichting;
+        }
+
+        if (req.FavoriteGame is not null)
+        {
+            details.FavoriteGame = req.FavoriteGame;
+        }
+
+        if (req.FavoriteHeimdal is not null)
+        {
+            details.FavoriteHeimdal = req.FavoriteHeimdal;
         }
 
         await dbContext.SaveChangesAsync(cancellationToken);

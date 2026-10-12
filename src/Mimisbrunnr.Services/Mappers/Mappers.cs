@@ -103,6 +103,10 @@ public static class Mappers
             Socials = memberdetails.Socials.Select(SocialToSimpleDto).ToArray(),
             Quote = memberdetails.Quote,
             Trivia = memberdetails.Trivia,
+            BirthDate = memberdetails.BirthDate,
+            StudieRichting = memberdetails.StudieRichting,
+            FavoriteGame = memberdetails.FavoriteGame,
+            FavoriteHeimdal = memberdetails.FavoriteHeimdal,
         };
     }
     #endregion

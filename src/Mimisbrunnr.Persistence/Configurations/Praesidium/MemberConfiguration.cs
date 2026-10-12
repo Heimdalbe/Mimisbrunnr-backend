@@ -14,6 +14,11 @@ internal class MemberDetailsConfiguration : EntityConfiguration<MemberDetails>
         builder.Property(p => p.LastName).HasMaxLength(50).IsRequired();
         builder.Property(p => p.Quote).HasMaxLength(1000);
         builder.Property(p => p.Trivia).HasMaxLength(1000);
+        builder.Property(p => p.BirthDate);
+        builder.Property(p => p.StudieRichting).HasMaxLength(100);
+        builder.Property(p => p.FavoriteGame).HasMaxLength(100);
+        builder.Property(p => p.FavoriteHeimdal).HasMaxLength(100);
+        
 
         builder.HasMany(p => p.Socials).WithOne();
     }
