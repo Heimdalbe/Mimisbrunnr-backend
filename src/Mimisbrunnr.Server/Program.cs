@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using Mimisbrunnr.Domain.Accounts;
 using Mimisbrunnr.Persistence;
 using Mimisbrunnr.Persistence.Triggers;
+using Mimisbrunnr.Server;
 using Mimisbrunnr.Server.Identity;
 using Mimisbrunnr.Server.Processors;
 using Mimisbrunnr.Services;
@@ -104,6 +105,9 @@ try
         options.KnownNetworks.Clear();
         options.KnownProxies.Clear();
     });
+    
+    builder.Services.Configure<AwsOptions>(builder.Configuration.GetSection("AWS"));
+    
     var app = builder.Build();
     // apply Database migraticons on startup, not so wise in production (Use Generated SQL Scripts) 
     // See: https://learn.microsoft.com/en-us/ef/core/managing-schemas/migrations/applying?tabs=dotnet-core-cli
