@@ -17,6 +17,10 @@ public static class MemberDetailsDto
     {
         public string Quote { get; set; }
         public string Trivia { get; set; }
+        public DateOnly? BirthDate { get; set; }
+        public string StudieRichting { get; set; }
+        public string FavoriteGame { get; set; }
+        public string FavoriteHeimdal { get; set; }
     }
     
 }
