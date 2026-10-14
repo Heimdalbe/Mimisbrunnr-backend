@@ -134,6 +134,15 @@ public static class Mappers
     #endregion
 
     #region PraesidiumTerm
+    public static PraesidiumTermDto.YearRole TermToYearRoleDto(PraesidiumTerm term)
+    {
+        return new PraesidiumTermDto.YearRole
+        {
+            Role = RoleToSimpleDto(term.Role),
+            Year = term.Year,
+        };
+    }
+    
     public static PraesidiumTermDto.Simple TermToSimpleDto(PraesidiumTerm term)
     {
         return new PraesidiumTermDto.Simple

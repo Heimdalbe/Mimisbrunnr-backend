@@ -108,7 +108,63 @@ public class PraesidiumService(ApplicationDbContext dbContext) : IPraesidiumServ
 
         return Result.Success(new PraesidiumResponse.GetPraesidiaMembers { Praesidia = praesidiumDtos });
     }
+
+    public async Task<Result<PraesidiumResponse.GetPreviousPraesidiumTerms>> GetPreviousPraesidiumTerms(int id, CancellationToken cancellationToken = default)
+    {
+        var term = await dbContext.PraesidiumTerms
+            .Include(p => p.MemberDetails)
+            .FirstOrDefaultAsync(t => t.Id == id, cancellationToken: cancellationToken);
         
+        var previousPraesidiumTerms = await dbContext.PraesidiumTerms
+            .Include(p => p.MemberDetails)
+            .ThenInclude(md=>md.Socials)
+            .ThenInclude(s => s.Type)
+            .Include(p => p.Image)
+            .Include(p => p.Role)
+            .Where(t => t.Year < term.Year && t.MemberDetails.Id == term.MemberDetails.Id)
+            .ToListAsync(cancellationToken);
+        
+        var previousPraesidiumTermsDtos = previousPraesidiumTerms.OrderBy(t => t.Year)
+            .Select(TermToYearRoleDto).ToList().AsReadOnly();
+        
+        return Result.Success(new PraesidiumResponse.GetPreviousPraesidiumTerms{ PreviousPraesidiumTerms = previousPraesidiumTermsDtos });
+    }
+    
+    public async Task<Result<PraesidiumResponse.GetNextPraesidiumTerms>> GetNextPraesidiumTerms(int id, CancellationToken cancellationToken = default)
+    {
+        var term = await dbContext.PraesidiumTerms
+            .Include(p => p.MemberDetails)
+            .FirstOrDefaultAsync(t => t.Id == id, cancellationToken: cancellationToken);
+        
+        var nextPraesidiumTerms = await dbContext.PraesidiumTerms
+            .Include(p => p.MemberDetails)
+            .ThenInclude(md=>md.Socials)
+            .ThenInclude(s => s.Type)
+            .Include(p => p.Image)
+            .Include(p => p.Role)
+            .Where(t => t.Year > term.Year && t.MemberDetails.Id == term.MemberDetails.Id)
+            .ToListAsync(cancellationToken);
+        
+        var nextPraesidiumTermsDtos = nextPraesidiumTerms.OrderBy(t => t.Year)
+            .Select(TermToYearRoleDto).ToList().AsReadOnly();
+        
+        return Result.Success(new PraesidiumResponse.GetNextPraesidiumTerms{ NextPraesidiumTerms = nextPraesidiumTermsDtos });
+    }
+    
+    public async Task<Result<PraesidiumResponse.GetAllPraesidiumTerms>> GetAllPraesidiumTerms(int id, CancellationToken cancellationToken = default)
+    {
+        var allPraesidiumTerms = await dbContext.PraesidiumTerms
+            .Include(p => p.MemberDetails)
+            .Include(p => p.Role)
+            .Where(t => t.MemberDetails.Id == id)
+            .ToListAsync(cancellationToken);
+        
+        var allPraesidiumTermsDtos = allPraesidiumTerms.OrderBy(t => t.Year)
+            .Select(TermToYearRoleDto).ToList().AsReadOnly();
+        
+        return Result.Success(new PraesidiumResponse.GetAllPraesidiumTerms{ AllPraesidiumTerms = allPraesidiumTermsDtos });
+    }
+
     #endregion
 
     #region PraesidiumRole

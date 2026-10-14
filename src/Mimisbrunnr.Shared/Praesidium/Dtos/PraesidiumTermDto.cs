@@ -4,6 +4,12 @@ namespace Mimisbrunnr.Shared.Praesidium.Dtos;
 
 public class PraesidiumTermDto
 {
+    public class YearRole
+    {
+        public required PraesidiumRoleDto.Simple Role { get; set; }
+        public required int Year { get; set; }
+    }
+    
     public class Simple
     {
         public required int Id { get; set; }
