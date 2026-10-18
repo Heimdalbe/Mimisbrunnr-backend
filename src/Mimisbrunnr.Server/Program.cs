@@ -118,10 +118,9 @@ try
         using var scope = app.Services.CreateScope();
         var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
         var dbSeeder = scope.ServiceProvider.GetRequiredService<DbSeeder>();
-        await dbContext.Database.MigrateAsync();
-        // Demo seeding depends on a fresh database and must not overwrite existing accounts.
-        if (!await dbContext.Users.AnyAsync())
-            await dbSeeder.SeedAsync();
+        dbContext.Database.EnsureDeleted();
+        await dbContext.Database.EnsureCreatedAsync();
+        await dbSeeder.SeedAsync();
     }
     else
 {
@@ -213,4 +212,5 @@ finally
 {
     Log.CloseAndFlush();
 }
+
 
