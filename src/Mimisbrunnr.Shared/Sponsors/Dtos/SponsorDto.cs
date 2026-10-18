@@ -15,6 +15,10 @@ public static class SponsorDto
         public required string Website   { get; set; }
 
         public required int Order { get;set; }
+        
+        public required bool OnHomePage  { get; set; }
+        
+        public required bool OnSponsorPage  { get; set; }
     }
     
     public class Detailed
@@ -28,11 +32,17 @@ public static class SponsorDto
         public required string Website   { get; set; }
 
         public required string Benefits   { get; set; }
+        
+        public required string Description  { get; set; }
 
         public required string? Rank { get; set; }
         
         public required string? LanSponsorRank { get; set; }
         
         public required int Order { get;set; }
+        
+        public required bool OnHomePage  { get; set; }
+        
+        public required bool OnSponsorPage  { get; set; }
     }
 }

@@ -267,41 +267,41 @@ public class DbSeeder(ApplicationDbContext dbContext, RoleManager<IdentityRole> 
         if(dbContext.MemberDetails.Any())
             return;
 
-        var p24 = new MemberDetails("Hayley", "Rasschaert", "", "");
+        var p24 = new MemberDetails("Hayley", "Rasschaert", "", "", null, "", "", "");
         dbContext.MemberDetails.Add(p24);
-        var p25 = new MemberDetails("Seppe", "Landtsheer", "67", "100000000000 uur op fortnite");
+        var p25 = new MemberDetails("Seppe", "Landtsheer", "67", "100000000000 uur op fortnite", DateOnly.Parse("10/08/2020"), "Toegepaste Informatica", "Autisme", "LAN prob");
         dbContext.MemberDetails.Add(p25);
-        var vp24 = new MemberDetails("Reina", "Tanghe", "", "");
+        var vp24 = new MemberDetails("Reina", "Tanghe", "", "", DateOnly.Parse("10/08/2020"), "", "Test", "adsqd");
         dbContext.MemberDetails.Add(vp24);
-        var q25 = new MemberDetails("Karsten", "Depoorter", "I like Money", "");
+        var q25 = new MemberDetails("Karsten", "Depoorter", "I like Money", "", null, "", "", "");
         dbContext.MemberDetails.Add(q25);
-        var se24 = new MemberDetails("Tyra", "Bourgeois", "", "");
+        var se24 = new MemberDetails("Tyra", "Bourgeois", "", "", null, "", "", "");
         dbContext.MemberDetails.Add(se24);
-        var se25 = new MemberDetails("Maxe", "Adams", "", "");
+        var se25 = new MemberDetails("Maxe", "Adams", "", "", null, "", "", "");
         dbContext.MemberDetails.Add(se25);
-        var pr25 = new MemberDetails("Zeaya", "Nys", "", "");
+        var pr25 = new MemberDetails("Zeaya", "Nys", "", "", null, "", "", "");
         dbContext.MemberDetails.Add(pr25);
-        var m24 = new MemberDetails("Britt", "Emanuel", "", "");
+        var m24 = new MemberDetails("Britt", "Emanuel", "", "", null, "", "", "");
         dbContext.MemberDetails.Add(m24);
-        var m25 = new MemberDetails("Axelle", "Ducouran", "", "");
+        var m25 = new MemberDetails("Axelle", "Ducouran", "", "", null, "", "", "");
         dbContext.MemberDetails.Add(m25);
-        var st24 = new MemberDetails("Diede", "Devriendt", "", "");
+        var st24 = new MemberDetails("Diede", "Devriendt", "", "", null, "", "", "");
         dbContext.MemberDetails.Add(st24);
-        var st25 = new MemberDetails("Simon", "Tytgat", "", "");
+        var st25 = new MemberDetails("Simon", "Tytgat", "", "", null, "", "", "");
         dbContext.MemberDetails.Add(st25);
-        var c24 = new MemberDetails("Kirsten", "Pype", "", "");
+        var c24 = new MemberDetails("Kirsten", "Pype", "", "", null, "", "", "");
         dbContext.MemberDetails.Add(c24);
-        var c25 = new MemberDetails("Richardo", "De Blust", "", "");
+        var c25 = new MemberDetails("Richardo", "De Blust", "", "", null, "", "", "");
         dbContext.MemberDetails.Add(c25);
-        var sp25 = new MemberDetails("Alejandro", "De Bruyne", "", "Kan een koprol doen");
+        var sp25 = new MemberDetails("Alejandro", "De Bruyne", "", "Kan een koprol doen", null, "", "", "");
         dbContext.MemberDetails.Add(sp25);
-        var fl24 = new MemberDetails("Tanguy", "Montaine", "", "");
+        var fl24 = new MemberDetails("Tanguy", "Montaine", "", "", null, "", "", "");
         dbContext.MemberDetails.Add(fl24);
-        var fl25 = new MemberDetails("Richy", "Rahman", "", "");
+        var fl25 = new MemberDetails("Richy", "Rahman", "", "", null, "", "", "");
         dbContext.MemberDetails.Add(fl25);
-        var i24 = new MemberDetails("Aaron", "Vandeweghe", "", "");
+        var i24 = new MemberDetails("Aaron", "Vandeweghe", "", "", null, "", "", "");
         dbContext.MemberDetails.Add(i24);
-        var i25 = new MemberDetails("Yoran", "Ollevier", "", "2000 uur in BG3");
+        var i25 = new MemberDetails("Yoran", "Ollevier", "", "2000 uur in BG3", null, "", "", "");
         dbContext.MemberDetails.Add(i25);
         
         await dbContext.SaveChangesAsync();
@@ -439,17 +439,20 @@ public class DbSeeder(ApplicationDbContext dbContext, RoleManager<IdentityRole> 
         if(dbContext.Sponsors.Any())
             return;
 
-        var s1 = new Sponsor("De CS", comicSansSponsor, "https://cafecomicsans.be", "korting", SponsorRank.Diamond, LanSponsorRank.None, 1);
+        var s1 = new Sponsor("De CS", comicSansSponsor, "https://cafecomicsans.be", "korting", "description",SponsorRank.Diamond, LanSponsorRank.None, 1, true, true);
         await dbContext.Sponsors.AddAsync(s1);
         
-        var s2 = new Sponsor("De VV", monsterSponsor, "https://www.devrolijkeviking.be", "korting", SponsorRank.Diamond, LanSponsorRank.None, 2);
+        var s2 = new Sponsor("De VV", monsterSponsor, "https://www.devrolijkeviking.be", "korting", "", SponsorRank.Diamond, LanSponsorRank.None, 2, true, false);
         await dbContext.Sponsors.AddAsync(s2);
         
-        var s3 = new Sponsor("Delaware", delawareSponsor, "https://www.delaware.pro/en-be", "", SponsorRank.None, LanSponsorRank.KiloByte, 3);
+        var s3 = new Sponsor("Delaware", delawareSponsor, "https://www.delaware.pro/en-be", "",  "description",SponsorRank.None, LanSponsorRank.KiloByte, 3, true, true);
         await dbContext.Sponsors.AddAsync(s3);
         
-        var s4 = new Sponsor("Sepp De Groote", defaultImage, "https://www.linkedin.com/in/sepp-degroote/", "", SponsorRank.Silver, LanSponsorRank.None, 4);
+        var s4 = new Sponsor("Sepp De Groote", defaultImage, "https://www.linkedin.com/in/sepp-degroote/", "", "idkbro", SponsorRank.Silver, LanSponsorRank.None, 4, false,  true);
         await dbContext.Sponsors.AddAsync(s4);
+        
+        var s5 = new Sponsor("Seppe", seppePraeses, "https://www.linkedin.com/in/sepp-degroote/", "", "", SponsorRank.Silver, LanSponsorRank.None, 4, false,  false);
+        await dbContext.Sponsors.AddAsync(s5);
         
         await dbContext.SaveChangesAsync();
     }

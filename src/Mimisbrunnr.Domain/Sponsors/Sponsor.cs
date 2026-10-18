@@ -18,12 +18,18 @@ namespace Mimisbrunnr.Domain.Sponsors
         private string _website;
 
         private string _benefits;
+        
+        private string _description;
 
         private SponsorRank _sponsorRank;
         
-        private LanSponsorRank _lanSponsorRank = LanSponsorRank.KiloByte; //overwritten in constructor, prevents guard from triggering on construction if SR is NONE
+        private LanSponsorRank _lanSponsorRank;
         
         private int _order;
+
+        private bool _onHomePage;
+        
+        private bool _onSponsorPage;
         #endregion
 
         #region Properties
@@ -34,26 +40,35 @@ namespace Mimisbrunnr.Domain.Sponsors
         public string Website { get => _website; set => _website = Guard.Against.Url(value); }
 
         public string Benefits { get => _benefits; set => _benefits = Guard.Against.Null(value); }
+        
+        public string Description { get => _description; set => _description = Guard.Against.Null(value); }
 
-        public SponsorRank SponsorRank { get => _sponsorRank; set => _sponsorRank = Guard.Against.NullOrInvalidInput(value, nameof(SponsorRank), sr => sr != SponsorRank.None || LanSponsorRank != LanSponsorRank.None); }
+        public SponsorRank SponsorRank { get => _sponsorRank; set => _sponsorRank = Guard.Against.Null(value); }
 
-        public LanSponsorRank LanSponsorRank { get => _lanSponsorRank; set => _lanSponsorRank = Guard.Against.NullOrInvalidInput(value, nameof(LanSponsorRank), lsr => lsr != LanSponsorRank.None || SponsorRank != SponsorRank.None); }
+        public LanSponsorRank LanSponsorRank { get => _lanSponsorRank; set => _lanSponsorRank = Guard.Against.Null(value); }
         
         public int Order { get => _order; set => _order = Guard.Against.NegativeOrZero(value); }
+        
+        public bool OnHomePage { get => _onHomePage; set => _onHomePage = value; }
+        
+        public bool OnSponsorPage { get => _onSponsorPage; set => _onSponsorPage = value; }
         #endregion
 
         #region Constructors
 
         private Sponsor () { }
-        public Sponsor(string name, Image logo, string website, string benefits, SponsorRank sponsorRank, LanSponsorRank lanSponsorRank, int order)
+        public Sponsor(string name, Image logo, string website, string benefits, string description, SponsorRank sponsorRank, LanSponsorRank lanSponsorRank, int order, bool onHomePage, bool onSponsorPage)
         {
             Name = name;
             Logo = logo;
             Website = website;
             Benefits = benefits;
+            Description = description;
             SponsorRank = sponsorRank;
             LanSponsorRank = lanSponsorRank;
             Order = order;
+            OnHomePage = onHomePage;
+            OnSponsorPage = onSponsorPage;
         }
         #endregion
     }

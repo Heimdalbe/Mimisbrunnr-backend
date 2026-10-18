@@ -13,7 +13,13 @@ public interface IPraesidiumService
     Task<Result<PraesidiumTermDto.Detailed>> GetPraesidiumTermDetailed(int id, CancellationToken cancellationToken = default);
    
     Task<Result<PraesidiumResponse.GetYears>> GetPraesidiumYears(CancellationToken cancellationToken = default);
+    
+    Task<Result<PraesidiumResponse.GetPreviousPraesidiumTerms>> GetPreviousPraesidiumTerms(int id, CancellationToken cancellationToken = default);
+    
+    Task<Result<PraesidiumResponse.GetNextPraesidiumTerms>> GetNextPraesidiumTerms(int id, CancellationToken cancellationToken = default);
 
+    Task<Result<PraesidiumResponse.GetAllPraesidiumTerms>> GetAllPraesidiumTerms(int id, CancellationToken cancellationToken = default);
+    
     Task<Result<PraesidiumResponse.GetPraesidiaMembers>> GetPraesidiaMembers(CancellationToken cancellationToken = default);
 
     Task<Result<PraesidiumResponse.GetPraesidiumRoles>> GetPraesidiumRoles(CancellationToken cancellationToken = default);

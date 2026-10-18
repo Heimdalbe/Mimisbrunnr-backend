@@ -103,6 +103,10 @@ public static class Mappers
             Socials = memberdetails.Socials.Select(SocialToSimpleDto).ToArray(),
             Quote = memberdetails.Quote,
             Trivia = memberdetails.Trivia,
+            BirthDate = memberdetails.BirthDate,
+            StudieRichting = memberdetails.StudieRichting,
+            FavoriteGame = memberdetails.FavoriteGame,
+            FavoriteHeimdal = memberdetails.FavoriteHeimdal,
         };
     }
     #endregion
@@ -130,6 +134,15 @@ public static class Mappers
     #endregion
 
     #region PraesidiumTerm
+    public static PraesidiumTermDto.YearRole TermToYearRoleDto(PraesidiumTerm term)
+    {
+        return new PraesidiumTermDto.YearRole
+        {
+            Role = RoleToSimpleDto(term.Role),
+            Year = term.Year,
+        };
+    }
+    
     public static PraesidiumTermDto.Simple TermToSimpleDto(PraesidiumTerm term)
     {
         return new PraesidiumTermDto.Simple
@@ -277,6 +290,8 @@ public static class Mappers
             Logo = ImageToSimpleDto(sponsor.Logo),
             Website = sponsor.Website,
             Order = sponsor.Order,
+            OnHomePage = sponsor.OnHomePage,
+            OnSponsorPage = sponsor.OnSponsorPage
         };
     }
 
@@ -289,9 +304,12 @@ public static class Mappers
             Logo = ImageToSimpleDto(sponsor.Logo),
             Website = sponsor.Website,
             Benefits = sponsor.Benefits,
+            Description =  sponsor.Description,
             Rank = sponsor.SponsorRank.ToString(),
             LanSponsorRank = sponsor.LanSponsorRank.ToString(),
-            Order = sponsor.Order
+            Order = sponsor.Order,
+            OnHomePage = sponsor.OnHomePage,
+            OnSponsorPage = sponsor.OnSponsorPage
         };
     }
     

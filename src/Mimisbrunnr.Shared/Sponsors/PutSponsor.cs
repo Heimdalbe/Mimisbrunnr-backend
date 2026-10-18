@@ -19,12 +19,18 @@ public partial class SponsorRequest
         public string? Website { get; set; }
 
         public string? Benefits { get; set; }
+        
+        public string? Description { get; set; }
 
         public string? SponsorRank { get; set; }
         
         public string? LanSponsorRank { get; set; }
         
         public int? Order { get; set; }
+        
+        public bool? OnHomePage { get; set; }
+        
+        public bool? OnSponsorPage { get; set; }
 
         public class Validator :  AbstractValidator<PutSponsor>
         {
@@ -38,11 +44,17 @@ public partial class SponsorRequest
 
                 RuleFor(x => x.Benefits);
                 
+                RuleFor(x => x.Description);
+                
                 RuleFor(x => x.SponsorRank).NotEmpty().When(x => x.SponsorRank is not null);
                 
                 RuleFor(x => x.LanSponsorRank).NotEmpty().When(x => x.LanSponsorRank is not null);
                 
                 RuleFor(x => x.Order).GreaterThanOrEqualTo(0).When(x => x.Order is not null);
+                
+                RuleFor(x => x.OnHomePage).NotEmpty().When(x => x.OnHomePage is not null);
+                
+                RuleFor(x => x.OnSponsorPage).NotEmpty().When(x => x.OnSponsorPage is not null);
             }
         }
     }

@@ -108,7 +108,63 @@ public class PraesidiumService(ApplicationDbContext dbContext) : IPraesidiumServ
 
         return Result.Success(new PraesidiumResponse.GetPraesidiaMembers { Praesidia = praesidiumDtos });
     }
+
+    public async Task<Result<PraesidiumResponse.GetPreviousPraesidiumTerms>> GetPreviousPraesidiumTerms(int id, CancellationToken cancellationToken = default)
+    {
+        var term = await dbContext.PraesidiumTerms
+            .Include(p => p.MemberDetails)
+            .FirstOrDefaultAsync(t => t.Id == id, cancellationToken: cancellationToken);
         
+        var previousPraesidiumTerms = await dbContext.PraesidiumTerms
+            .Include(p => p.MemberDetails)
+            .ThenInclude(md=>md.Socials)
+            .ThenInclude(s => s.Type)
+            .Include(p => p.Image)
+            .Include(p => p.Role)
+            .Where(t => t.Year < term.Year && t.MemberDetails.Id == term.MemberDetails.Id)
+            .ToListAsync(cancellationToken);
+        
+        var previousPraesidiumTermsDtos = previousPraesidiumTerms.OrderBy(t => t.Year)
+            .Select(TermToYearRoleDto).ToList().AsReadOnly();
+        
+        return Result.Success(new PraesidiumResponse.GetPreviousPraesidiumTerms{ PreviousPraesidiumTerms = previousPraesidiumTermsDtos });
+    }
+    
+    public async Task<Result<PraesidiumResponse.GetNextPraesidiumTerms>> GetNextPraesidiumTerms(int id, CancellationToken cancellationToken = default)
+    {
+        var term = await dbContext.PraesidiumTerms
+            .Include(p => p.MemberDetails)
+            .FirstOrDefaultAsync(t => t.Id == id, cancellationToken: cancellationToken);
+        
+        var nextPraesidiumTerms = await dbContext.PraesidiumTerms
+            .Include(p => p.MemberDetails)
+            .ThenInclude(md=>md.Socials)
+            .ThenInclude(s => s.Type)
+            .Include(p => p.Image)
+            .Include(p => p.Role)
+            .Where(t => t.Year > term.Year && t.MemberDetails.Id == term.MemberDetails.Id)
+            .ToListAsync(cancellationToken);
+        
+        var nextPraesidiumTermsDtos = nextPraesidiumTerms.OrderBy(t => t.Year)
+            .Select(TermToYearRoleDto).ToList().AsReadOnly();
+        
+        return Result.Success(new PraesidiumResponse.GetNextPraesidiumTerms{ NextPraesidiumTerms = nextPraesidiumTermsDtos });
+    }
+    
+    public async Task<Result<PraesidiumResponse.GetAllPraesidiumTerms>> GetAllPraesidiumTerms(int id, CancellationToken cancellationToken = default)
+    {
+        var allPraesidiumTerms = await dbContext.PraesidiumTerms
+            .Include(p => p.MemberDetails)
+            .Include(p => p.Role)
+            .Where(t => t.MemberDetails.Id == id)
+            .ToListAsync(cancellationToken);
+        
+        var allPraesidiumTermsDtos = allPraesidiumTerms.OrderBy(t => t.Year)
+            .Select(TermToYearRoleDto).ToList().AsReadOnly();
+        
+        return Result.Success(new PraesidiumResponse.GetAllPraesidiumTerms{ AllPraesidiumTerms = allPraesidiumTermsDtos });
+    }
+
     #endregion
 
     #region PraesidiumRole
@@ -259,7 +315,7 @@ public class PraesidiumService(ApplicationDbContext dbContext) : IPraesidiumServ
 
     public async Task<Result<PraesidiumResponse.PostMemberDetails>> PostMemberDetails(PraesidiumRequest.PostMemberDetails req, CancellationToken cancellationToken = default)
     {
-        var details = new MemberDetails(req.FirstName, req.LastName, req.Quote, req.Trivia);
+        var details = new MemberDetails(req.FirstName, req.LastName, req.Quote, req.Trivia, req.BirthDate, req.StudieRichting, req.FavoriteGame, req.FavoriteHeimdal);
         dbContext.MemberDetails.Add(details);
         await dbContext.SaveChangesAsync(cancellationToken);
         
@@ -427,6 +483,23 @@ public class PraesidiumService(ApplicationDbContext dbContext) : IPraesidiumServ
         if (req.Trivia is not null)
         {
             details.Trivia = req.Trivia;
+        }
+        
+        details.BirthDate = req.BirthDate;
+        
+        if (req.StudieRichting is not null)
+        {
+            details.StudieRichting = req.StudieRichting;
+        }
+
+        if (req.FavoriteGame is not null)
+        {
+            details.FavoriteGame = req.FavoriteGame;
+        }
+
+        if (req.FavoriteHeimdal is not null)
+        {
+            details.FavoriteHeimdal = req.FavoriteHeimdal;
         }
 
         await dbContext.SaveChangesAsync(cancellationToken);

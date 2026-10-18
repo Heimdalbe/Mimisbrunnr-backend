@@ -55,7 +55,7 @@ In `Development` worden demoaccounts en voorbeeldgegevens aangemaakt als er nog 
 | `quaestor@heimdal.be` | `A1b2C3!` | Gewoon lid (`Commilitones`) |
 | `media@heimdal.be` | `A1b2C3!` | Media-/eventbeheer |
 
-Dit zijn bestaande **ontwikkelingsaccounts**, geen inloggegevens voor de live website. Voor testen op een gedeelde testomgeving is een bestaand account met de rol `Hmdl` nodig, plus een apart account waarvan de rollen gewijzigd mogen worden. Imgur-configuratie is niet nodig om accountrollen te testen; afbeeldinguploads hebben die wel nodig.
+Dit zijn bestaande **ontwikkelingsaccounts**, geen inloggegevens voor de live website. Voor testen op een gedeelde testomgeving is een bestaand account met de rol `Hmdl` nodig, plus een apart account waarvan de rollen gewijzigd mogen worden. Imgur- of AWS-configuratie is niet nodig om accountrollen te testen. Albumafbeeldingen gebruiken Imgur; uploads voor events en sponsors gebruiken AWS S3.
 
 ## Accountrollen beheren
 
@@ -91,4 +91,4 @@ Handmatige integratiecontrole: log in als beheerder, geef `quaestor@heimdal.be` 
 - `src/Mimisbrunnr.Domain`: domeinmodellen.
 - `tests/Mimisbrunnr.Tests`: regressietests voor accountrollen.
 
-Werk vanaf `main` op een aparte branch. Het bestaande deployproces gebruikt `prod`; een featurebranch publiceren deployt de website niet.
+Werk vanaf `main` op een aparte branch. Het deployproces wordt gestart bij wijzigingen op `main`; een featurebranch publiceren deployt de website niet.
