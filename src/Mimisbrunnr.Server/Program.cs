@@ -68,6 +68,8 @@ try
 
             o.AddApplicationTriggers();
         })
+        // Rebuild cookie claims from Identity on each request so removed roles cannot retain access.
+        .Configure<SecurityStampValidatorOptions>(o => o.ValidationInterval = TimeSpan.Zero)
         .ConfigureApplicationCookie(o =>
         {
             o.Cookie.SameSite = SameSiteMode.None;

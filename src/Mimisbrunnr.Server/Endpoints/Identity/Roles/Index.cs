@@ -19,7 +19,8 @@ public class Index(RoleManager<IdentityRole> roleManager) : EndpointWithoutReque
 
     public override async Task<Result<List<KeyValuePair<string, string>>>> ExecuteAsync(CancellationToken ctx)
     {
-        var roles = await roleManager.Roles.Select(r => new KeyValuePair<string, string>(r.Id, r.Name!)).ToListAsync(ctx);
+        var roles = await roleManager.Roles.OrderBy(r => r.Name)
+            .Select(r => new KeyValuePair<string, string>(r.Id, r.Name!)).ToListAsync(ctx);
         return Result.Success(roles);
     }
 }
