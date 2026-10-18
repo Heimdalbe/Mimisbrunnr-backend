@@ -85,7 +85,13 @@ public class AccountService(ApplicationDbContext dbContext, ISessionContextProvi
 
         if (account is null)
             return Result.NotFound($"Account not found");
+        
+        if (await userManager.FindByEmailAsync(req.Email) is not null && !req.Email.Equals(user.Email))
+            return Result.Error("Een account met dit e-mailadres bestaat al.");
 
+        if (await userManager.FindByNameAsync(req.Name) is not null && !req.Name.Equals(user.UserName))
+            return Result.Error("Een account met deze naam bestaat al.");
+        
         return await PutAccount(account, user, req, ct);
     }
 
