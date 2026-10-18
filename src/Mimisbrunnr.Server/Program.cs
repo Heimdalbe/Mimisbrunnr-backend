@@ -41,7 +41,10 @@ try
                     .AllowCredentials();
             });
         })
-        .AddIdentity<IdentityUser, IdentityRole>() 
+        .AddIdentity<IdentityUser, IdentityRole>(options =>
+        {
+            options.User.RequireUniqueEmail = true;
+        }) 
         .AddEntityFrameworkStores<ApplicationDbContext>()
         .AddDefaultTokenProviders()
         

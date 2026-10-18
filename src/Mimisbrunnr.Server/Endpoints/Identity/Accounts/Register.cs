@@ -28,6 +28,12 @@ public class Register(UserManager<IdentityUser> userManager, IUserStore<Identity
         {
             return Result.CriticalError("Requires a user store with email support.");
         }
+        if (await userManager.FindByEmailAsync(req.Email) is not null)
+            return Result.Error("Een account met dit e-mailadres bestaat al.");
+
+        if (await userManager.FindByNameAsync(req.Name) is not null)
+            return Result.Error("Een account met deze naam bestaat al.");
+        
         var emailStore = (IUserEmailStore<IdentityUser>)userStore;
         var user = new IdentityUser();
         await userStore.SetUserNameAsync(user, req.Name, CancellationToken.None);
