@@ -56,6 +56,8 @@ public static class EventDto
         
         public required string? Url { get; set; }
         
+        public string? RegistrationAccessError { get; set; }
+
         public required bool Published { get; set; }
     }
 }

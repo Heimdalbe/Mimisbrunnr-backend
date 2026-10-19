@@ -7,7 +7,6 @@ using Mimisbrunnr.Shared.Common;
 using Mimisbrunnr.Shared.Events;
 using Mimisbrunnr.Shared.Events.Dtos;
 using Mimisbrunnr.Shared.Identity;
-using Mimisbrunnr.Persistence;
 using static Mimisbrunnr.Services.Mappers.Mappers;
 
 namespace Mimisbrunnr.Services.Events;
@@ -55,7 +54,13 @@ public class EventService(ApplicationDbContext dbContext, ISessionContextProvide
 
         var events = await query.ToListAsync(cancellationToken: ct);
 
-        var dtos = events.Select(EventToSimpleDto)
+        var dtos = events.Select(e =>
+            {
+                var dto = EventToSimpleDto(e);
+                if (RegistrationAccessError(e) is not null)
+                    dto.Url = null;
+                return dto;
+            })
             .Skip(req.Skip)
             .OrderBy(e => e.Start)
             .Take(req.Take)
@@ -88,12 +93,11 @@ public class EventService(ApplicationDbContext dbContext, ISessionContextProvide
         if (e is null)
             return Result.NotFound($"Event with id {id} not found");
         
-        return Result.Success(EventToDetailedDto(e));
+        return Result.Success(ToPublicDetailedDto(e));
     }
 
     public async Task<Result<EventDto.Detailed>> GetPublishedEvent(int id, CancellationToken ct)
     {
-        var user = sessionContextProvider.User;
         var e = await dbContext.Events
             .Include(e => e.Banner)
             .Include(e => e.Sponsors)
@@ -103,11 +107,7 @@ public class EventService(ApplicationDbContext dbContext, ISessionContextProvide
         if (e is null)
             return Result.NotFound($"Event with id {id} not found");
         
-        if (e.Accessibility == Accessibility.CLOSED && (user is null || !user.IsInRole(AppRoles.Schacht) || !user.IsInRole(AppRoles.Commilitones))){
-            e.Url = "https://www.youtube.com/";
-        }
-        
-        return Result.Success(EventToDetailedDto(e));
+        return Result.Success(ToPublicDetailedDto(e));
     }
 
     public async Task<Result<EventDto.Detailed>> GetEvent(int id, CancellationToken ct)
@@ -124,6 +124,40 @@ public class EventService(ApplicationDbContext dbContext, ISessionContextProvide
         return Result.Success(EventToDetailedDto(e));
     }
 
+    private EventDto.Detailed ToPublicDetailedDto(Event e)
+    {
+        var dto = EventToDetailedDto(e);
+        dto.RegistrationAccessError = RegistrationAccessError(e);
+        if (dto.RegistrationAccessError is not null)
+            dto.Url = null;
+        return dto;
+    }
+
+    private string? RegistrationAccessError(Event e)
+    {
+        if (string.IsNullOrWhiteSpace(e.Url) || e.Url == "https://heimdal.be")
+            return null;
+
+        var user = sessionContextProvider.User;
+        var authenticated = user?.Identity?.IsAuthenticated == true;
+        var allowed = e.Accessibility == Accessibility.OPEN || authenticated && (
+            user!.IsInRole(AppRoles.Hmdl) || e.Accessibility switch
+            {
+                Accessibility.HEIMIES => user.IsInRole(AppRoles.Heimie) || user.IsInRole(AppRoles.Schacht) || user.IsInRole(AppRoles.Commilitones),
+                Accessibility.CLOSED => user.IsInRole(AppRoles.Schacht) || user.IsInRole(AppRoles.Commilitones),
+                _ => false
+            });
+        if (allowed)
+            return null;
+
+        var audience = e.Accessibility == Accessibility.HEIMIES
+            ? "Heimies, Schachten en Commilitones"
+            : "Schachten en Commilitones";
+        return authenticated
+            ? $"Inschrijven voor dit evenement is alleen mogelijk voor {audience}."
+            : $"Log in om je in te schrijven. Dit evenement is voor {audience}.";
+    }
+
     #endregion
 
     #region Post
@@ -134,9 +168,8 @@ public class EventService(ApplicationDbContext dbContext, ISessionContextProvide
         if (!success)
             return Result.NotFound($"Category with value {req.Category} not found");
 
-        success &= Enum.TryParse(req.Accessibility, out Accessibility accessibility);
-        if (!success)
-            return Result.NotFound($"Accessibility with value {req.Accessibility} not found");
+        if (!Enum.TryParse(req.Accessibility, out Accessibility accessibility) || !Enum.IsDefined(accessibility))
+            return Result.Invalid(new ValidationError { Identifier = "Accessibility", ErrorMessage = "Kies een geldige doelgroep voor het evenement." });
 
         var e = new Event(category, accessibility, req.Name, req.Url,req.Published);
 
@@ -202,9 +235,8 @@ public class EventService(ApplicationDbContext dbContext, ISessionContextProvide
 
         if (req.Accessibility is not null)
         {
-            var success = Enum.TryParse(req.Accessibility, out Accessibility accessibility);
-            if (!success)
-                return Result.NotFound($"Accessibility with value {req.Accessibility} not found");
+            if (!Enum.TryParse(req.Accessibility, out Accessibility accessibility) || !Enum.IsDefined(accessibility))
+                return Result.Invalid(new ValidationError { Identifier = "Accessibility", ErrorMessage = "Kies een geldige doelgroep voor het evenement." });
             e.Accessibility = accessibility;
         }
 
