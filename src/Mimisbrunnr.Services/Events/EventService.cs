@@ -24,7 +24,7 @@ public class EventService(ApplicationDbContext dbContext, ISessionContextProvide
                         e.End >= DateTime.Now
             ).ToListAsync(cancellationToken: ct);
 
-        var dtos = events.Select(EventToSimpleDto)
+        var dtos = events.Select(ToPublicSimpleDto)
             .Skip(req.Skip)
             .Take(req.Take)
             .OrderBy(e => e.Start)
@@ -54,13 +54,7 @@ public class EventService(ApplicationDbContext dbContext, ISessionContextProvide
 
         var events = await query.ToListAsync(cancellationToken: ct);
 
-        var dtos = events.Select(e =>
-            {
-                var dto = EventToSimpleDto(e);
-                if (RegistrationAccessError(e) is not null)
-                    dto.Url = null;
-                return dto;
-            })
+        var dtos = events.Select(ToPublicSimpleDto)
             .Skip(req.Skip)
             .OrderBy(e => e.Start)
             .Take(req.Take)
@@ -124,6 +118,14 @@ public class EventService(ApplicationDbContext dbContext, ISessionContextProvide
         return Result.Success(EventToDetailedDto(e));
     }
 
+    private EventDto.Simple ToPublicSimpleDto(Event e)
+    {
+        var dto = EventToSimpleDto(e);
+        if (RegistrationAccessError(e) is not null)
+            dto.Url = null;
+        return dto;
+    }
+
     private EventDto.Detailed ToPublicDetailedDto(Event e)
     {
         var dto = EventToDetailedDto(e);
@@ -138,24 +140,49 @@ public class EventService(ApplicationDbContext dbContext, ISessionContextProvide
         if (string.IsNullOrWhiteSpace(e.Url) || e.Url == "https://heimdal.be")
             return null;
 
+        var roles = EventAllowedRoles(e);
+        if (roles.Count == 0)
+            return null;
+
         var user = sessionContextProvider.User;
         var authenticated = user?.Identity?.IsAuthenticated == true;
-        var allowed = e.Accessibility == Accessibility.OPEN || authenticated && (
-            user!.IsInRole(AppRoles.Hmdl) || e.Accessibility switch
-            {
-                Accessibility.HEIMIES => user.IsInRole(AppRoles.Heimie) || user.IsInRole(AppRoles.Schacht) || user.IsInRole(AppRoles.Commilitones),
-                Accessibility.CLOSED => user.IsInRole(AppRoles.Schacht) || user.IsInRole(AppRoles.Commilitones),
-                _ => false
-            });
+        var hasPaidMembership = authenticated && user!.IsInRole(AppRoles.Heimie);
+        var allowed = authenticated && (user!.IsInRole(AppRoles.Hmdl) || roles.Any(role =>
+            user.IsInRole(role) && (role != AppRoles.Schacht && role != AppRoles.Commilitones || hasPaidMembership)));
         if (allowed)
             return null;
 
-        var audience = e.Accessibility == Accessibility.HEIMIES
-            ? "Heimies, Schachten en Commilitones"
-            : "Schachten en Commilitones";
+        if (authenticated && !hasPaidMembership && roles.Any(role =>
+                (role == AppRoles.Schacht || role == AppRoles.Commilitones) && user!.IsInRole(role)))
+            return "Je hebt ook de Heimie-rol (betaald lidmaatschap) nodig om je in te schrijven.";
+
+        var audience = string.Join(" of ", roles);
+        var membershipNote = roles.Any(role => role is AppRoles.Schacht or AppRoles.Commilitones)
+            ? " Voor Schacht of Commilitones is ook Heimie nodig." : "";
         return authenticated
-            ? $"Inschrijven voor dit evenement is alleen mogelijk voor {audience}."
-            : $"Log in om je in te schrijven. Dit evenement is voor {audience}.";
+            ? $"Inschrijven voor dit evenement vereist een van deze rollen: {audience}.{membershipNote}"
+            : $"Log in om je in te schrijven. Toegelaten rollen: {audience}.{membershipNote}";
+    }
+
+    private static Result<List<string>> ResolveAllowedRoles(string? accessibility, List<string>? requested)
+    {
+        if (requested is null)
+        {
+            if (!Enum.TryParse(accessibility, out Accessibility value) || !Enum.IsDefined(value))
+                return Result.Invalid(new ValidationError { Identifier = "Accessibility", ErrorMessage = "Kies een geldige doelgroep voor het evenement." });
+            requested = DefaultEventRoles(value);
+        }
+
+        var roles = new List<string>();
+        foreach (var name in requested)
+        {
+            var role = EventRegistrationRoles.All.FirstOrDefault(r => string.Equals(r, name, StringComparison.OrdinalIgnoreCase));
+            if (role is null)
+                return Result.Invalid(new ValidationError { Identifier = "AllowedRoles", ErrorMessage = "Kies geldige lidmaatschapsrollen voor het evenement." });
+            if (!roles.Contains(role))
+                roles.Add(role);
+        }
+        return Result.Success(roles);
     }
 
     #endregion
@@ -168,10 +195,12 @@ public class EventService(ApplicationDbContext dbContext, ISessionContextProvide
         if (!success)
             return Result.NotFound($"Category with value {req.Category} not found");
 
-        if (!Enum.TryParse(req.Accessibility, out Accessibility accessibility) || !Enum.IsDefined(accessibility))
-            return Result.Invalid(new ValidationError { Identifier = "Accessibility", ErrorMessage = "Kies een geldige doelgroep voor het evenement." });
+        var roles = ResolveAllowedRoles(req.Accessibility, req.AllowedRoles);
+        if (!roles.IsSuccess)
+            return Result.Invalid(roles.ValidationErrors);
 
-        var e = new Event(category, accessibility, req.Name, req.Url,req.Published);
+        var accessibility = roles.Value.Count == 0 ? Accessibility.OPEN : Accessibility.CLOSED;
+        var e = new Event(category, accessibility, req.Name, req.Url, req.Published) { AllowedRoles = roles.Value };
 
 
         if (req.Location is not null)
@@ -222,6 +251,15 @@ public class EventService(ApplicationDbContext dbContext, ISessionContextProvide
         if (e is null)
             return Result.NotFound($"Event with id {id} not found");
 
+        if (req.AllowedRoles is not null || req.Accessibility is not null)
+        {
+            var roles = ResolveAllowedRoles(req.Accessibility, req.AllowedRoles);
+            if (!roles.IsSuccess)
+                return Result.Invalid(roles.ValidationErrors);
+            e.AllowedRoles = roles.Value;
+            e.Accessibility = roles.Value.Count == 0 ? Accessibility.OPEN : Accessibility.CLOSED;
+        }
+
         if (req.Name is not null)
             e.Name = req.Name;
 
@@ -231,13 +269,6 @@ public class EventService(ApplicationDbContext dbContext, ISessionContextProvide
             if (!success)
                 return Result.NotFound($"Category with value {req.Category} not found");
             e.Category = category;
-        }
-
-        if (req.Accessibility is not null)
-        {
-            if (!Enum.TryParse(req.Accessibility, out Accessibility accessibility) || !Enum.IsDefined(accessibility))
-                return Result.Invalid(new ValidationError { Identifier = "Accessibility", ErrorMessage = "Kies een geldige doelgroep voor het evenement." });
-            e.Accessibility = accessibility;
         }
 
         if (req.Location is not null)

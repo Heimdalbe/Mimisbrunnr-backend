@@ -36,6 +36,8 @@ namespace Mimisbrunnr.Domain.Events
         #region Properties
         public Category Category {get => _category; set => _category = Guard.Against.Null(value); }
         
+        public List<string>? AllowedRoles { get; set; }
+
         public Accessibility Accessibility {get => _accessibility; set => _accessibility = Guard.Against.Null(value); }
         
         public string Name { get => _name; set => _name = Guard.Against.NullOrEmpty(value); }
