@@ -10,7 +10,7 @@ public class GetAccountBySelf(IAccountService accountService) : EndpointWithoutR
     public override void Configure()
     {
         Get("/api/accounts/self");
-        Roles(AppRoles.Feut, AppRoles.Schacht, AppRoles.Commilitones);
+        Roles(AppRoles.Heimie, AppRoles.Feut, AppRoles.Schacht, AppRoles.Commilitones);
     }
 
     public override Task<Result<AccountDto.Detailed>> ExecuteAsync(CancellationToken ct)

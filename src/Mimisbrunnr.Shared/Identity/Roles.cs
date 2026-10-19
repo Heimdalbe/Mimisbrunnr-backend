@@ -8,6 +8,7 @@ namespace Mimisbrunnr.Shared.Identity;
 public static class AppRoles
 {
     public const string Feut = "Feut";
+    public const string Heimie = "Heimie";
     public const string Schacht = "Schacht";
     public const string Commilitones = "Commilitones";
     public const string Hmdl = "Hmdl"; // Praeses, ICT

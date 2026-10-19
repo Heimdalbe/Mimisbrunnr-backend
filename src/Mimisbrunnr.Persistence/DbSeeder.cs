@@ -48,6 +48,7 @@ public class DbSeeder(ApplicationDbContext dbContext, RoleManager<IdentityRole> 
         if (dbContext.Roles.Any())
             return;
 
+        await roleManager.CreateAsync(new IdentityRole("Heimie"));
         await roleManager.CreateAsync(new IdentityRole("Feut"));            // Ziet open events
         await roleManager.CreateAsync(new IdentityRole("Schacht"));         // Ziet open + gesloten events
         await roleManager.CreateAsync(new IdentityRole("Commilitones"));    // Ziet open + gesloten events

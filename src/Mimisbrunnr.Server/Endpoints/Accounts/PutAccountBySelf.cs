@@ -8,7 +8,7 @@ public class PutAccountBySelf(IAccountService accountService) : Endpoint<Account
     public override void Configure()
     {
         Put("/api/accounts/self");
-        Roles(AppRoles.Feut, AppRoles.Schacht, AppRoles.Commilitones);
+        Roles(AppRoles.Heimie, AppRoles.Feut, AppRoles.Schacht, AppRoles.Commilitones);
     }
 
     public override Task<Result<AccountResponse.PutAccount>> ExecuteAsync(AccountRequest.PutAccount req, CancellationToken ct)
