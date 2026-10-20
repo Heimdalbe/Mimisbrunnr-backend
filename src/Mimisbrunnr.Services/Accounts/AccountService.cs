@@ -86,17 +86,35 @@ public class AccountService(ApplicationDbContext dbContext, ISessionContextProvi
         if (account is null)
             return Result.NotFound($"Account not found");
         
-        if (await userManager.FindByEmailAsync(req.Email) is not null && !req.Email.Equals(user.Email))
+        if (req.Email is not null && await userManager.FindByEmailAsync(req.Email) is not null && !req.Email.Equals(user.Email))
             return Result.Error("Een account met dit e-mailadres bestaat al.");
 
-        if (await userManager.FindByNameAsync(req.Name) is not null && !req.Name.Equals(user.UserName))
+        if (req.Name is not null && await userManager.FindByNameAsync(req.Name) is not null && !req.Name.Equals(user.UserName))
             return Result.Error("Een account met deze naam bestaat al.");
         
-        return await PutAccount(account, user, req, ct);
+        return await PutAccount(account, user, req, ct, requireCurrentPassword: true);
     }
 
-    private async Task<Result<AccountResponse.PutAccount>> PutAccount(Account account, IdentityUser user, AccountRequest.PutAccount req, CancellationToken ct)
+    private async Task<Result<AccountResponse.PutAccount>> PutAccount(Account account, IdentityUser user, AccountRequest.PutAccount req, CancellationToken ct, bool requireCurrentPassword = false)
     {
+        // Check the password before changing any profile fields.
+        if (req.Password is not null)
+        {
+            if (requireCurrentPassword && string.IsNullOrEmpty(req.CurrentPassword))
+                return Result.Invalid(new ValidationError { Identifier = "CurrentPassword", ErrorMessage = "Vul je huidige wachtwoord in." });
+
+            var result = requireCurrentPassword
+                ? await userManager.ChangePasswordAsync(user, req.CurrentPassword!, req.Password)
+                : await userManager.ResetPasswordAsync(user, await userManager.GeneratePasswordResetTokenAsync(user), req.Password);
+
+            if (!result.Succeeded)
+                return Result.Invalid(result.Errors.Select(e => new ValidationError
+                {
+                    Identifier = e.Code == "PasswordMismatch" ? "CurrentPassword" : "Password",
+                    ErrorMessage = e.Code == "PasswordMismatch" ? "Je huidige wachtwoord klopt niet." : e.Description
+                }).ToList());
+        }
+
         if (req.Name is not null)
         {
             account.Name = req.Name;
@@ -107,12 +125,6 @@ public class AccountService(ApplicationDbContext dbContext, ISessionContextProvi
         {
             account.Email = new MailAddress(req.Email);
             await userManager.SetEmailAsync(user, req.Email);
-        }
-
-        if (req.Password is not null)
-        {
-            var token = await userManager.GeneratePasswordResetTokenAsync(user);
-            await userManager.ResetPasswordAsync(user, token, req.Password!);
         }
 
         await dbContext.SaveChangesAsync(ct);

@@ -1,9 +1,10 @@
+using Microsoft.AspNetCore.Identity;
 using Mimisbrunnr.Shared.Accounts;
 using Mimisbrunnr.Shared.Identity;
 
 namespace Mimisbrunnr.Server.Endpoints.Accounts;
 
-public class PutAccountBySelf(IAccountService accountService) : Endpoint<AccountRequest.PutAccount, Result<AccountResponse.PutAccount>>
+public class PutAccountBySelf(IAccountService accountService, SignInManager<IdentityUser> signInManager) : Endpoint<AccountRequest.PutAccount, Result<AccountResponse.PutAccount>>
 {
     public override void Configure()
     {
@@ -11,8 +12,11 @@ public class PutAccountBySelf(IAccountService accountService) : Endpoint<Account
         Roles(AppRoles.Feut, AppRoles.Schacht, AppRoles.Commilitones);
     }
 
-    public override Task<Result<AccountResponse.PutAccount>> ExecuteAsync(AccountRequest.PutAccount req, CancellationToken ct)
+    public override async Task<Result<AccountResponse.PutAccount>> ExecuteAsync(AccountRequest.PutAccount req, CancellationToken ct)
     {
-        return accountService.PutAccountBySelf(req,ct);
+        var result = await accountService.PutAccountBySelf(req, ct);
+        if (result.IsSuccess && req.Password is not null && await signInManager.UserManager.GetUserAsync(User) is { } user)
+            await signInManager.RefreshSignInAsync(user);
+        return result;
     }
 }

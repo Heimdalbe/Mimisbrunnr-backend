@@ -1,3 +1,5 @@
+using Destructurama.Attributed;
+
 namespace Mimisbrunnr.Shared.Accounts;
 
 public partial class AccountResponse
@@ -14,7 +16,10 @@ public partial class AccountRequest
     {
         public string? Name { get; set; }
         public string? Email { get; set; }
+        [LogMasked]
         public string? Password { get; set; }
+        [LogMasked]
+        public string? CurrentPassword { get; set; }
 
         public class Validator : AbstractValidator<PutAccount>
         {
