@@ -6,6 +6,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Mimisbrunnr.Domain.Accounts;
 using Mimisbrunnr.Persistence;
+using Mimisbrunnr.Persistence.Migrations;
+using Microsoft.EntityFrameworkCore.Migrations.Operations;
 using Mimisbrunnr.Services.Accounts;
 using Mimisbrunnr.Services.Identity;
 using Mimisbrunnr.Shared.Accounts;
@@ -183,6 +185,31 @@ public class AccountRoleTests : IAsyncLifetime
         var reloaded = (await users.FindByIdAsync(member.Id))!;
         Assert.Equal(new[] { AppRoles.Commilitones, AppRoles.MediaEditor },
             (await users.GetRolesAsync(reloaded)).OrderBy(r => r));
+    }
+
+    [Fact]
+    public async Task HeimieMigrationMakesRoleAssignableWithoutDuplicatingExistingRoles()
+    {
+        var sql = Assert.IsType<SqlOperation>(Assert.Single(new AddHeimieRole().UpOperations)).Sql;
+        await db.Database.ExecuteSqlRawAsync(sql);
+        await db.Database.ExecuteSqlRawAsync(sql);
+        Assert.Equal(1, await db.Roles.CountAsync(r => r.NormalizedName == "HEIMIE"));
+        Assert.Equal(ResultStatus.Ok, (await Update(memberId, AppRoles.Heimie)).Status);
+        Assert.True(await users.IsInRoleAsync(member, AppRoles.Heimie));
+        Assert.True(await users.IsInRoleAsync(admin, AppRoles.Hmdl));
+    }
+
+    [Fact]
+    public async Task HeimieMigrationPreservesManuallyCreatedRoleAndAssignments()
+    {
+        var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+        var existing = new IdentityRole(AppRoles.Heimie);
+        Assert.True((await roleManager.CreateAsync(existing)).Succeeded);
+        Assert.True((await users.AddToRoleAsync(member, AppRoles.Heimie)).Succeeded);
+        var sql = Assert.IsType<SqlOperation>(Assert.Single(new AddHeimieRole().UpOperations)).Sql;
+        await db.Database.ExecuteSqlRawAsync(sql);
+        Assert.Equal(existing.Id, (await roleManager.FindByNameAsync(AppRoles.Heimie))!.Id);
+        Assert.True(await users.IsInRoleAsync(member, AppRoles.Heimie));
     }
 
     private Task<Result<AccountRoles>> Update(int id, params string[] names) =>

@@ -9,7 +9,7 @@ public class PutAccountBySelf(IAccountService accountService, SignInManager<Iden
     public override void Configure()
     {
         Put("/api/accounts/self");
-        Roles(AppRoles.Feut, AppRoles.Schacht, AppRoles.Commilitones);
+        Roles(AppRoles.Heimie, AppRoles.Feut, AppRoles.Schacht, AppRoles.Commilitones);
     }
 
     public override async Task<Result<AccountResponse.PutAccount>> ExecuteAsync(AccountRequest.PutAccount req, CancellationToken ct)
