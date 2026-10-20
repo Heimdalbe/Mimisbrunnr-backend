@@ -2,7 +2,8 @@
 {
     public enum Accessibility
     {
-        OPEN,
-        CLOSED
+        OPEN = 0,
+        CLOSED = 1, // Schachten en Commilitones; preserve existing stored values.
+        HEIMIES = 2
     }
 }

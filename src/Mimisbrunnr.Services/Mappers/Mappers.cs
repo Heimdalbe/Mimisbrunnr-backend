@@ -8,6 +8,7 @@ using Mimisbrunnr.Shared.Albums.Dtos;
 using Mimisbrunnr.Shared.Accounts.Dtos;
 using Mimisbrunnr.Shared.Common.Dtos;
 using Mimisbrunnr.Shared.Events.Dtos;
+using Mimisbrunnr.Shared.Identity;
 using Mimisbrunnr.Shared.Praesidium.Dtos;
 using Mimisbrunnr.Shared.Socials.Dtos;
 using Mimisbrunnr.Shared.Sponsors.Dtos;
@@ -239,6 +240,17 @@ public static class Mappers
     #endregion
 
     #region Event
+    // Legacy events have no stored role selection yet.
+    public static IReadOnlyList<string> EventAllowedRoles(Event e) => e.AllowedRoles ?? DefaultEventRoles(e.Accessibility);
+
+    public static List<string> DefaultEventRoles(Accessibility accessibility) => accessibility switch
+    {
+        Accessibility.OPEN => [],
+        Accessibility.HEIMIES => [AppRoles.Heimie],
+        Accessibility.CLOSED => [AppRoles.Schacht, AppRoles.Commilitones],
+        _ => ["Unknown"] // Fail closed for an unsupported stored audience.
+    };
+
     public static EventDto.Simple EventToSimpleDto(Event e)
     {
         return new EventDto.Simple
@@ -246,6 +258,7 @@ public static class Mappers
             Id = e.Id,
             Category = e.Category.ToString(),
             Accessibility = e.Accessibility.ToString(),
+            AllowedRoles = EventAllowedRoles(e),
             Name = e.Name,
             Start = e.Start,
             End = e.End,
@@ -263,6 +276,7 @@ public static class Mappers
             Id = e.Id,
             Category = e.Category.ToString(),
             Accessibility = e.Accessibility.ToString(),
+            AllowedRoles = EventAllowedRoles(e),
             Name = e.Name,
             Location = e.Location,
             Start = e.Start,

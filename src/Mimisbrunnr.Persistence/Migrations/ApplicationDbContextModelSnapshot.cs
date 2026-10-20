@@ -489,6 +489,9 @@ namespace Mimisbrunnr.Persistence.Migrations
                     b.Property<int>("Accessibility")
                         .HasColumnType("int");
 
+                    b.Property<string>("AllowedRoles")
+                        .HasColumnType("longtext");
+
                     b.Property<int?>("BannerId")
                         .HasColumnType("int");
 

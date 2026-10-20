@@ -13,6 +13,8 @@ public static class EventDto
 
         public required string Accessibility { get; set; }
 
+        public required IReadOnlyList<string> AllowedRoles { get; set; }
+
         public required string Name { get; set; }
 
         public required DateTime? Start { get; set; }
@@ -36,6 +38,8 @@ public static class EventDto
 
         public required string Accessibility { get; set; }
 
+        public required IReadOnlyList<string> AllowedRoles { get; set; }
+
         public required string Name { get; set; }
 
         public required string? Location { get; set; }
@@ -56,6 +60,8 @@ public static class EventDto
         
         public required string? Url { get; set; }
         
+        public string? RegistrationAccessError { get; set; }
+
         public required bool Published { get; set; }
     }
 }

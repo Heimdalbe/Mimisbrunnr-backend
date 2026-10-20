@@ -17,6 +17,8 @@ public partial class EventRequest{
 
         public required string  Accessibility { get; set; }
 
+        public List<string>? AllowedRoles { get; set; }
+
         public required string Name { get; set; }
 
         public required string? Location { get;set; }
