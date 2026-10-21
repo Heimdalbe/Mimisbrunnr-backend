@@ -139,7 +139,7 @@ try
 
         var accounts = new (string Email, string[] Roles)[]
         {
-            ("vice-praeses@heimdal.be",     new[] { AppRoles.Heimie, AppRoles.Commilitones }),
+            ("vice-praeses@heimdal.be",     new[] { AppRoles.Heimie, AppRoles.Commilitones, AppRoles.MediaEditor, AppRoles.EventEditor, AppRoles.SponsorEditor }),
             ("quaestor@heimdal.be",         new[] { AppRoles.Heimie, AppRoles.Commilitones }),
             ("media@heimdal.be",            new[] { AppRoles.Heimie, AppRoles.Commilitones, AppRoles.MediaEditor }),
             ("feest-lan@heimdal.be",        new[] { AppRoles.Heimie, AppRoles.Commilitones, AppRoles.EventEditor }),
