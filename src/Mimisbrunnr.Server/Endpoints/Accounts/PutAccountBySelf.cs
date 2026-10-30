@@ -15,7 +15,7 @@ public class PutAccountBySelf(IAccountService accountService, SignInManager<Iden
     public override async Task<Result<AccountResponse.PutAccount>> ExecuteAsync(AccountRequest.PutAccount req, CancellationToken ct)
     {
         var result = await accountService.PutAccountBySelf(req, ct);
-        if (result.IsSuccess && req.Password is not null && await signInManager.UserManager.GetUserAsync(User) is { } user)
+        if (result.IsSuccess && await signInManager.UserManager.GetUserAsync(User) is { } user)
             await signInManager.RefreshSignInAsync(user);
         return result;
     }

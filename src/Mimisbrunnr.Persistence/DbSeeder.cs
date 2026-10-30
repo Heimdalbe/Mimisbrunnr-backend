@@ -212,7 +212,11 @@ public class DbSeeder(ApplicationDbContext dbContext, RoleManager<IdentityRole> 
             return;
         
         var users = await dbContext.Users.ToListAsync();
-        users.ForEach(u => dbContext.Accounts.Add(new Account(u.UserName!, u.Email!, u.Id)));
+        users.ForEach(u => dbContext.Accounts.Add(new Account(u.UserName!, u.Email!, u.Id)
+        {
+            FirstName = "Demo",
+            LastName = "Heimdal"
+        }));
         
         await dbContext.SaveChangesAsync();
     }

@@ -86,17 +86,17 @@ public class AccountService(ApplicationDbContext dbContext, ISessionContextProvi
         if (account is null)
             return Result.NotFound($"Account not found");
         
-        if (req.Email is not null && await userManager.FindByEmailAsync(req.Email) is not null && !req.Email.Equals(user.Email))
-            return Result.Error("Een account met dit e-mailadres bestaat al.");
-
-        if (req.Name is not null && await userManager.FindByNameAsync(req.Name) is not null && !req.Name.Equals(user.UserName))
-            return Result.Error("Een account met deze naam bestaat al.");
-        
         return await PutAccount(account, user, req, ct, requireCurrentPassword: true);
     }
 
     private async Task<Result<AccountResponse.PutAccount>> PutAccount(Account account, IdentityUser user, AccountRequest.PutAccount req, CancellationToken ct, bool requireCurrentPassword = false)
     {
+        if (req.Name is not null && await userManager.FindByNameAsync(req.Name) is { } namedUser && namedUser.Id != user.Id)
+            return Result.Invalid(new ValidationError("Name", "Een account met deze gebruikersnaam bestaat al."));
+
+        if (req.Email is not null && await userManager.FindByEmailAsync(req.Email) is { } emailUser && emailUser.Id != user.Id)
+            return Result.Invalid(new ValidationError("Email", "Een account met dit e-mailadres bestaat al."));
+
         // Check the password before changing any profile fields.
         if (req.Password is not null)
         {
@@ -115,13 +115,21 @@ public class AccountService(ApplicationDbContext dbContext, ISessionContextProvi
                 }).ToList());
         }
 
-        if (req.Name is not null)
+        if (req.Name is not null && req.Name != user.UserName)
         {
+            var result = await userManager.SetUserNameAsync(user, req.Name);
+            if (!result.Succeeded)
+                return Result.Invalid(result.Errors.Select(e => new ValidationError("Name", e.Description)));
             account.Name = req.Name;
-            await userManager.SetUserNameAsync(user, req.Name);
         }
 
-        if (req.Email is not null)
+        if (req.FirstName is not null)
+            account.FirstName = string.IsNullOrWhiteSpace(req.FirstName) ? null : req.FirstName.Trim();
+
+        if (req.LastName is not null)
+            account.LastName = string.IsNullOrWhiteSpace(req.LastName) ? null : req.LastName.Trim();
+
+        if (req.Email is not null && req.Email != user.Email)
         {
             account.Email = new MailAddress(req.Email);
             await userManager.SetEmailAsync(user, req.Email);

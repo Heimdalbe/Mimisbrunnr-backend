@@ -12,6 +12,8 @@ internal class AccountConfiguration : EntityConfiguration<Account>
 
         builder.Property(a => a.UserId).IsRequired();
         builder.Property(a => a.Name).HasMaxLength(50).IsRequired();
+        builder.Property(a => a.FirstName).HasMaxLength(100);
+        builder.Property(a => a.LastName).HasMaxLength(100);
         builder.Property(r => r.Email).HasConversion(m => m.Address, value => new MailAddress(value));
     }
 }
