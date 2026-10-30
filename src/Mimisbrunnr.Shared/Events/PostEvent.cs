@@ -29,7 +29,7 @@ public partial class EventRequest{
 
         public required string? Description { get; set; }
 
-        public required string? ICal { get; set; }
+        public string? ICal { get; set; }
 
         public required string? BannerUrl { get; set; }
 
@@ -60,8 +60,6 @@ public partial class EventRequest{
                 
                 RuleFor(x => x.Description).NotNull().When(x => x.Published);
                 RuleFor(x => x.Description).NotEmpty().When(x => x.Description is not null);
-                
-                RuleFor(x => x.ICal).NotNull().When(x => x.Published);
                 
                 RuleFor(x => x.BannerUrl).NotNull().When(x => x.Published);
                 RuleFor(x => x.BannerUrl).NotEmpty().When(x => x.BannerUrl is not null);
