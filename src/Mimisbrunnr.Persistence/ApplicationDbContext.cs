@@ -6,6 +6,7 @@ using Mimisbrunnr.Domain.Accounts;
 using Mimisbrunnr.Domain.Albums;
 using Mimisbrunnr.Domain.Common;
 using Mimisbrunnr.Domain.Events;
+using Mimisbrunnr.Domain.Membership;
 using Mimisbrunnr.Domain.Praesidium;
 using Mimisbrunnr.Domain.Sponsors;
 
@@ -35,6 +36,7 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> opts) :
     public DbSet<LustrumLid> LustrumLids => Set<LustrumLid>();
     public DbSet<SuperSchacht> SuperSchachts => Set<SuperSchacht>();
     public DbSet<Sponsor> Sponsors => Set<Sponsor>();
+    public DbSet<MembershipFees> MembershipFees => Set<MembershipFees>();
     
     protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)
     {

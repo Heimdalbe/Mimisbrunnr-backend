@@ -22,6 +22,16 @@ namespace Mimisbrunnr.Persistence.Migrations
 
             MySqlModelBuilderExtensions.AutoIncrementColumns(modelBuilder);
 
+            modelBuilder.Entity("Mimisbrunnr.Domain.Membership.MembershipFees", b =>
+                {
+                    b.Property<int>("Id").HasColumnType("int");
+                    b.Property<decimal>("FirstYearFee").HasPrecision(18, 2).HasColumnType("decimal(18,2)");
+                    b.Property<decimal>("RenewalFee").HasPrecision(18, 2).HasColumnType("decimal(18,2)");
+                    b.HasKey("Id");
+                    b.ToTable("MembershipFees");
+                    b.HasData(new { Id = 1, FirstYearFee = 12m, RenewalFee = 7m });
+                });
+
             modelBuilder.Entity("AlbumImage", b =>
                 {
                     b.Property<int>("AlbumId")
