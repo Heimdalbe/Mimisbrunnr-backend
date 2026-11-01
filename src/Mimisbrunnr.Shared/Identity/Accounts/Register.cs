@@ -13,6 +13,8 @@ public static partial class AccountRequest
         /// The user's name.
         /// </summary>
         public string? Name { get; set; }
+        public string? FirstName { get; set; }
+        public string? LastName { get; set; }
         
         /// <summary>
         /// The user's email address.
@@ -31,8 +33,6 @@ public static partial class AccountRequest
         [LogMasked]
         public string? ConfirmPassword { get; set; }
         
-        // Other needed stuff here, like Role(s), Firstname, lastname etc.
-
         /// <summary>
         /// Provides validation rules for the Register class fields such as email and password.
         /// </summary>
@@ -40,7 +40,9 @@ public static partial class AccountRequest
         {
             public Validator()
             {
-                RuleFor(x => x.Name).NotNull().NotEmpty();
+                RuleFor(x => x.Name).NotNull().NotEmpty().MaximumLength(50);
+                RuleFor(x => x.FirstName).MaximumLength(100);
+                RuleFor(x => x.LastName).MaximumLength(100);
                 RuleFor(x => x.Email).NotEmpty().EmailAddress();
                 RuleFor(x => x.Password).NotEmpty();
                 RuleFor(x => x.ConfirmPassword)

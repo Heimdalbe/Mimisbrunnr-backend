@@ -367,6 +367,8 @@ public static class Mappers
         {
             Id = account.Id,
             Name = account.Name,
+            FirstName = account.FirstName,
+            LastName = account.LastName,
         };
     }
 
@@ -376,6 +378,8 @@ public static class Mappers
         {
             Id = account.Id,
             Name = account.Name,
+            FirstName = account.FirstName,
+            LastName = account.LastName,
             Email = account.Email.Address
         };
     }

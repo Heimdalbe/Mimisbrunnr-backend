@@ -56,7 +56,11 @@ public class Register(UserManager<IdentityUser> userManager, IUserStore<Identity
         // dbContext.Technicians.Add(new Technician("Fname", "Lname", user.Id));
         // or assinging a specific role etc using the RoleManager<IdentityUser> (inject it in the primary constructor).
 
-        var account = new Account(user.UserName, user.Email,user.Id);
+        var account = new Account(user.UserName, user.Email,user.Id)
+        {
+            FirstName = string.IsNullOrWhiteSpace(req.FirstName) ? null : req.FirstName.Trim(),
+            LastName = string.IsNullOrWhiteSpace(req.LastName) ? null : req.LastName.Trim()
+        };
         
         dbContext.Accounts.Add(account);
         await dbContext.SaveChangesAsync(ctx);

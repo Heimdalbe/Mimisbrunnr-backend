@@ -12,6 +12,9 @@ public class Account : Entity
     #endregion
 
     #region Properties
+    public string? FirstName { get; set; }
+    public string? LastName { get; set; }
+
     public string Name
     {
         get { return _name; }
