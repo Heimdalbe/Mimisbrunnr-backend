@@ -13,6 +13,8 @@ using Mimisbrunnr.Shared.Events;
 using Mimisbrunnr.Shared.Socials;
 using Mimisbrunnr.Shared.Sponsors;
 using Mimisbrunnr.Services.Membership;
+using Mimisbrunnr.Services.Games;
+using Mimisbrunnr.Shared.Games;
 using Mimisbrunnr.Shared.Membership;
 
 namespace Mimisbrunnr.Services;
@@ -29,6 +31,7 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IAccountService, AccountService>();
         services.AddScoped<IAccountRoleService, AccountRoleService>();
         services.AddScoped<IMembershipFeesService, MembershipFeesService>();
+        services.AddScoped<ISnakeService, SnakeService>();
         
         services.AddTransient<DbSeeder>();       
         
