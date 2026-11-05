@@ -7,6 +7,7 @@ using Mimisbrunnr.Domain.Albums;
 using Mimisbrunnr.Domain.Common;
 using Mimisbrunnr.Domain.Events;
 using Mimisbrunnr.Domain.Membership;
+using Mimisbrunnr.Domain.Games;
 using Mimisbrunnr.Domain.Praesidium;
 using Mimisbrunnr.Domain.Sponsors;
 
@@ -23,6 +24,7 @@ namespace Mimisbrunnr.Persistence;
 /// <param name="opts"></param>
 public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> opts) : IdentityDbContext<IdentityUser>(opts)
 {
+    public DbSet<SnakeScore> SnakeScores => Set<SnakeScore>();
     public DbSet<Account> Accounts => Set<Account>();
     public DbSet<Album> Albums => Set<Album>();
     public DbSet<Image> Images => Set<Image>();
