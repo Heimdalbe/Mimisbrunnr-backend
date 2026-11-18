@@ -32,6 +32,22 @@ namespace Mimisbrunnr.Persistence.Migrations
                     b.HasData(new { Id = 1, FirstYearFee = 12m, RenewalFee = 7m });
                 });
 
+            modelBuilder.Entity("Mimisbrunnr.Domain.Games.SnakeScore", b =>
+                {
+                    b.Property<int>("Id").ValueGeneratedOnAdd().HasColumnType("int");
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
+                    b.Property<string>("UserId").IsRequired().HasMaxLength(255).HasColumnType("varchar(255)");
+                    b.Property<int>("Width").HasColumnType("int");
+                    b.Property<int>("Height").HasColumnType("int");
+                    b.Property<int>("Score").HasColumnType("int");
+                    b.HasKey("Id");
+                    b.HasIndex("UserId");
+                    b.HasIndex("Width", "Height", "UserId", "Score");
+                    b.ToTable("SnakeScores");
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", null).WithMany()
+                        .HasForeignKey("UserId").OnDelete(DeleteBehavior.Cascade).IsRequired();
+                });
+
             modelBuilder.Entity("AlbumImage", b =>
                 {
                     b.Property<int>("AlbumId")
@@ -912,6 +928,22 @@ namespace Mimisbrunnr.Persistence.Migrations
                     b.HasIndex("LogoId");
 
                     b.ToTable("Sponsor", (string)null);
+                });
+
+            modelBuilder.Entity("Mimisbrunnr.Domain.Games.SnakeScore", b =>
+                {
+                    b.Property<int>("Id").ValueGeneratedOnAdd().HasColumnType("int");
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
+                    b.Property<string>("UserId").IsRequired().HasMaxLength(255).HasColumnType("varchar(255)");
+                    b.Property<int>("Width").HasColumnType("int");
+                    b.Property<int>("Height").HasColumnType("int");
+                    b.Property<int>("Score").HasColumnType("int");
+                    b.HasKey("Id");
+                    b.HasIndex("UserId");
+                    b.HasIndex("Width", "Height", "UserId", "Score");
+                    b.ToTable("SnakeScores");
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", null).WithMany()
+                        .HasForeignKey("UserId").OnDelete(DeleteBehavior.Cascade).IsRequired();
                 });
 
             modelBuilder.Entity("AlbumImage", b =>
