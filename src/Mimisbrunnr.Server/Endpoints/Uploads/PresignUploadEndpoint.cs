@@ -1,9 +1,7 @@
-﻿using Mimisbrunnr.Shared.Identity;
+using Mimisbrunnr.Shared.Identity;
 
 namespace Mimisbrunnr.Server.Endpoints.Uploads;
 
-using Amazon;
-using Amazon.Runtime;
 using Amazon.S3;
 using Amazon.S3.Model;
 using FastEndpoints;
@@ -66,9 +64,7 @@ public class PresignUploadEndpoint(IOptions<AwsOptions> options) : Endpoint<Pres
         var aws = options.Value;
         var key = $"{req.Folder}/{Guid.NewGuid():N}.{ext}";
 
-        using var client = new AmazonS3Client(
-            new BasicAWSCredentials(aws.AccessKey, aws.SecretKey),
-            RegionEndpoint.GetBySystemName(aws.Region));
+        using var client = aws.CreateClient();
 
         var uploadUrl = client.GetPreSignedURL(new GetPreSignedUrlRequest
         {
@@ -82,7 +78,7 @@ public class PresignUploadEndpoint(IOptions<AwsOptions> options) : Endpoint<Pres
         await Send.OkAsync(new PresignResponse
         {
             UploadUrl = uploadUrl,
-            PublicUrl = $"https://{aws.Bucket}.s3.{aws.Region}.amazonaws.com/{key}"
+            PublicUrl = $"{aws.PublicBaseUrl}/{key}"
         }, ct);
     }
 }

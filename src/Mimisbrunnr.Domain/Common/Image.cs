@@ -25,6 +25,8 @@ namespace Mimisbrunnr.Domain.Common
             get => _url;
             private set => _url = Guard.Against.Url(value);
         }
+        public string? ThumbnailUrl { get; set; }
+        public DateTime? ThumbnailRetryAfter { get; set; }
         #endregion
 
         #region Constructors

@@ -5,6 +5,7 @@ public static class ImageDto
     public class Simple
     {
         public required string Url { get; set; }
+        public string? ThumbnailUrl { get; set; }
         public string? Description { get; set; }
     }
     
