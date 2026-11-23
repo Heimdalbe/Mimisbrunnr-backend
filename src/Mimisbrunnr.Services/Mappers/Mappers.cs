@@ -25,6 +25,7 @@ public static class Mappers
         return new ImageDto.Simple
         {
             Url = image.Url,
+            ThumbnailUrl = image.ThumbnailUrl,
             Description = image.Description,
         };
     }
@@ -34,6 +35,7 @@ public static class Mappers
         {
             Id = image.Id,
             Url = image.Url,
+            ThumbnailUrl = image.ThumbnailUrl,
             Description = image.Description,
         };
     }

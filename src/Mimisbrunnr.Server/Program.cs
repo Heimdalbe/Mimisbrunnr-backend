@@ -9,6 +9,7 @@ using Mimisbrunnr.Persistence;
 using Mimisbrunnr.Persistence.Triggers;
 using Mimisbrunnr.Server;
 using Mimisbrunnr.Server.Identity;
+using Mimisbrunnr.Server.Uploads;
 using Mimisbrunnr.Server.Processors;
 using Mimisbrunnr.Services;
 using Mimisbrunnr.Services.Identity;
@@ -112,6 +113,9 @@ try
     });
     
     builder.Services.Configure<AwsOptions>(builder.Configuration.GetSection("AWS"));
+    builder.Services.AddHttpClient(AlbumThumbnailWorker.HttpClientName)
+        .ConfigurePrimaryHttpMessageHandler(() => new HttpClientHandler { AllowAutoRedirect = false });
+    builder.Services.AddHostedService<AlbumThumbnailWorker>();
     
     var app = builder.Build();
     // apply Database migraticons on startup, not so wise in production (Use Generated SQL Scripts) 
